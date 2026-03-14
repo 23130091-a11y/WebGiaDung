@@ -1,0 +1,128 @@
+/*Css trang slide*/
+.image-sale {
+    margin-top: 20px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.image-sale .logo__img {
+    width: 100%;
+    height: 500px;
+    display: block;
+    object-fit: cover;
+}
+
+.slide-content {
+    margin: 25px 0px;
+    width: 100%;
+    background-color: #f8f5b0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+}
+
+.head-content {
+    width: 100%;
+    background: linear-gradient(135deg, #ffcc00, #f7573b);
+    padding: 22px 24px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.head-content .title {
+    color: #c40000;
+    font-size: 30px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.head-content .time {
+    color: #c40000;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+
+.head-content .apply {
+    color: #c40000;
+    font-size: 15px;
+    font-weight: 300;
+}
+
+
+.head-content .note {
+    color: #b20000;
+    font-size: 14px;
+    font-weight: 200;
+   
+}
+
+.slide-wrapper {
+    width: 100%;
+    /* Bỏ height cố định và overflow hidden */
+    height: auto;
+    position: relative;
+    transition: all 0.4s ease;
+}
+
+
+.slide-list-product {
+    width: 100%;
+    padding: 20px 28px;
+    display: flex;
+    flex-wrap: wrap;
+}
+.head-content .ti,
+.head-content .name,
+.head-content .date {
+    color: #ff0000 !important;
+    margin: 5px 0;
+}
+
+.head-content .ti {
+    font-size: 30px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.head-content .name {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.head-content .date {
+    font-size: 15px;
+}
+.slide-wrapper.active {
+    height: 780px;
+}
+
+.slide-list-product {
+    width: 100%;
+    padding: 20px 28px;
+
+}
+
+.button-view {
+    position: absolute;
+    bottom: 0px; 
+    left: 50%;
+    width: 40px;
+    height: 35px;
+    background-color: var(--soft-color);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 16px;
+    transition: 0.3s;
+
+}
+
+.button-view:hover {
+    background-color: var(--primary-color);
+}

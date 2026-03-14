@@ -1,0 +1,3900 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: nguye
+  Date: 07/12/2025
+  Time: 3:05 CH
+  To change this template use File | Settings | File Templates.
+--%>
+<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang admin</title>
+
+    <!-- Link Reset CSS -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/reset.css">
+    <!-- Link font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+            rel="stylesheet">
+    <!-- Link icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+          integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Link CSS -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/grid.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/base.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css?v=99">
+    <!-- Include stylesheet -->
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+</head>
+<body>
+<header class="header">
+    <div class="grid wide">
+        <nav class="navbar">
+            <ul class="navbar__list">
+                <li class="navbar__item">
+                    <span class="navbar__greeting">Xin chào Admin</span>
+                </li>
+            </ul>
+
+            <ul class="navbar__list">
+                <li class="navbar__item">
+                    <i class="navbar__icon fa-solid fa-house"></i>
+                    <a href="${pageContext.request.contextPath}/list-product" class="navbar__link">Trang chủ</a>
+                </li>
+                <li class="navbar__item">
+                    <i class="navbar__icon fa-solid fa-right-from-bracket"></i>
+                    <a href="${pageContext.request.contextPath}/logout" class="navbar__link">Đăng xuất</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="main">
+    <div class="manage">
+        <div class="grid wide">
+            <div class="row small-gutter">
+                <div class="col l-2 m-0 c-0">
+                    <section class="manage-nav">
+                        <h2 class="manage__heading">Danh mục quản lý</h2>
+
+                        <ul class="manage-nav__list">
+                            <li class="manage-nav__item">
+                                <a href="#config" class="manage-nav__link">Cấu hình</a>
+                            </li>
+                            <li class="manage-nav__item">
+                                <a href="#news" class="manage-nav__link">Tin tức</a>
+                            </li>
+                            <li class="manage-nav__item">
+                                <a href="${pageContext.request.contextPath}/admin/customers" class="manage-nav__link">Khách hàng</a>
+
+                            </li>
+
+                            <li class="manage-nav__item">
+                                <a href="#product" class="manage-nav__link manage-nav__link--active">Sản phẩm</a>
+                            </li>
+                            <li class="manage-nav__item">
+                                <a href="#order" class="manage-nav__link">Đơn hàng</a>
+                            </li>
+                        </ul>
+
+                    </section>
+                </div>
+
+                <div class="col l-10 m-12 c-12">
+                    <section id="config" class="manage-detail">
+                        <h2 class="manage__heading">Cấu hình hệ thống</h2>
+
+                        <div class="config-card">
+                            <div class="config-card__header">
+                                <div>
+                                    <h3 class="config-title">Thiết lập cửa hàng</h3>
+                                    <p class="config-subtitle">
+                                        Cấu hình các thông tin hiển thị ngoài trang chủ, header/footer và các chế độ hệ thống.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Lưu ý: hiện form này mới là UI. Khi bạn làm backend thì đổi action thành URL controller của bạn. -->
+                            <form class="config-form-ui" method="post" action="#">
+                                <!-- 1) THÔNG TIN CỬA HÀNG -->
+                                <div class="config-block">
+                                    <h4 class="config-block__title">Thông tin cửa hàng</h4>
+
+                                    <div class="config-grid">
+                                        <div class="config-field">
+                                            <label class="config-label">Tên cửa hàng</label>
+                                            <input class="config-input" type="text" name="storeName" placeholder="VD: WebGiaDung" />
+                                        </div>
+
+                                        <div class="config-field">
+                                            <label class="config-label">Slogan</label>
+                                            <input class="config-input" type="text" name="slogan" placeholder="VD: Đồ gia dụng chính hãng - Giá tốt" />
+                                        </div>
+
+                                        <div class="config-field">
+                                            <label class="config-label">Hotline</label>
+                                            <input class="config-input" type="text" name="hotline" placeholder="VD: 0909 000 000" />
+                                        </div>
+
+                                        <div class="config-field">
+                                            <label class="config-label">Email hỗ trợ</label>
+                                            <input class="config-input" type="email" name="email" placeholder="support@tenweb.com" />
+                                        </div>
+
+                                        <div class="config-field config-col-2">
+                                            <label class="config-label">Địa chỉ cửa hàng</label>
+                                            <input class="config-input" type="text" name="address" placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành" />
+                                        </div>
+
+                                        <div class="config-field">
+                                            <label class="config-label">Giờ làm việc</label>
+                                            <input class="config-input" type="text" name="openHours" placeholder="VD: 08:00 - 22:00 (T2 - CN)" />
+                                        </div>
+
+                                        <div class="config-field">
+                                            <label class="config-label">Bản đồ (Google Map Embed link)</label>
+                                            <input class="config-input" type="text" name="mapEmbed" placeholder="Dán link embed (nếu có)" />
+                                        </div>
+
+                                        <div class="config-field">
+                                            <label class="config-label">Logo</label>
+                                            <input class="config-input" type="file" name="logo" />
+                                            <span class="config-note">Gợi ý: PNG nền trong.</span>
+                                        </div>
+
+                                        <div class="config-field">
+                                            <label class="config-label">Favicon</label>
+                                            <input class="config-input" type="file" name="favicon" />
+                                            <span class="config-note">Gợi ý: 32x32, PNG/ICO.</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="config-divider-ui"></div>
+
+                                <!-- 2) THÔNG TIN DOANH NGHIỆP -->
+                                <div class="config-block">
+                                    <h4 class="config-block__title">Thông tin doanh nghiệp</h4>
+
+                                    <div class="config-grid">
+                                        <div class="config-field">
+                                            <label class="config-label">Tên công ty / Hộ kinh doanh</label>
+                                            <input class="config-input" type="text" name="companyName" placeholder="VD: CÔNG TY TNHH ABC" />
+                                        </div>
+
+                                        <div class="config-field">
+                                            <label class="config-label">Mã số thuế</label>
+                                            <input class="config-input" type="text" name="taxCode" placeholder="VD: 031xxxxxxx" />
+                                        </div>
+
+                                        <div class="config-field">
+                                            <label class="config-label">Người đại diện</label>
+                                            <input class="config-input" type="text" name="legalRep" placeholder="VD: Nguyễn Văn A" />
+                                        </div>
+
+                                        <div class="config-field">
+                                            <label class="config-label">Email nhận hóa đơn</label>
+                                            <input class="config-input" type="email" name="invoiceEmail" placeholder="invoice@tenweb.com" />
+                                        </div>
+
+                                        <div class="config-field config-col-2">
+                                            <label class="config-label">Chính sách đổi trả (ngắn)</label>
+                                            <textarea class="config-input config-textarea" name="returnPolicy" placeholder="VD: Đổi trả trong 7 ngày nếu sản phẩm lỗi do NSX..."></textarea>
+                                        </div>
+
+                                        <div class="config-field config-col-2">
+                                            <label class="config-label">Chính sách bảo hành (ngắn)</label>
+                                            <textarea class="config-input config-textarea" name="warrantyPolicy" placeholder="VD: Bảo hành 12 tháng, hỗ trợ đổi mới trong 7 ngày..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="config-divider-ui"></div>
+
+                                <!-- 3) BÁN HÀNG & ĐƠN HÀNG -->
+                                <div class="config-block">
+                                    <h4 class="config-block__title">Bán hàng &amp; đơn hàng</h4>
+
+                                    <div class="config-grid">
+                                        <div class="config-field">
+                                            <label class="config-label">VAT (%)</label>
+                                            <input class="config-input" type="number" name="vatRate" min="0" max="20" step="0.5" placeholder="VD: 10" />
+                                        </div>
+
+                                        <div class="config-field">
+                                            <label class="config-label">Cảnh báo tồn kho &lt;=</label>
+                                            <input class="config-input" type="number" name="lowStockThreshold" min="0" step="1" placeholder="VD: 5" />
+                                        </div>
+
+                                        <div class="config-field">
+                                            <label class="config-label">Tự hủy đơn chờ thanh toán (giờ)</label>
+                                            <input class="config-input" type="number" name="autoCancelHours" min="0" step="1" placeholder="VD: 24" />
+                                        </div>
+
+                                        <div class="config-field">
+                                            <label class="config-label">Cho phép mua không cần đăng nhập</label>
+                                            <select class="config-input" name="guestCheckout">
+                                                <option value="1">Bật</option>
+                                                <option value="0">Tắt</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="config-toggles">
+                                        <label class="toggle">
+                                            <input type="checkbox" name="allowRegister" checked>
+                                            <span class="toggle-ui"></span>
+                                            <span class="toggle-text">
+                                                <b>Cho phép đăng ký</b>
+                                                <small>Bật/tắt chức năng tạo tài khoản.</small>
+                                            </span>
+                                        </label>
+
+                                        <label class="toggle">
+                                            <input type="checkbox" name="autoConfirmOrder">
+                                            <span class="toggle-ui"></span>
+                                            <span class="toggle-text">
+                                                <b>Tự động xác nhận đơn</b>
+                                                <small>Chỉ nên bật khi quy trình đã ổn định.</small>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="config-divider-ui"></div>
+
+                                <!-- 4) THANH TOÁN & VẬN CHUYỂN -->
+                                <div class="config-block">
+                                    <h4 class="config-block__title">Thanh toán &amp; vận chuyển</h4>
+
+                                    <div class="config-grid">
+                                        <div class="config-field">
+                                            <label class="config-label">Phí ship mặc định (VNĐ)</label>
+                                            <input class="config-input" type="number" name="shippingFee" min="0" step="1000" placeholder="VD: 30000" />
+                                        </div>
+
+                                        <div class="config-field">
+                                            <label class="config-label">Miễn phí ship từ (VNĐ)</label>
+                                            <input class="config-input" type="number" name="freeShipFrom" min="0" step="1000" placeholder="VD: 399000" />
+                                        </div>
+
+                                        <div class="config-field config-col-2">
+                                            <label class="config-label">Ghi chú vận chuyển</label>
+                                            <input class="config-input" type="text" name="shippingNote" placeholder="VD: Giao hàng 1-3 ngày, nội thành nhanh hơn..." />
+                                        </div>
+                                    </div>
+
+                                    <div class="config-toggles">
+                                        <label class="toggle">
+                                            <input type="checkbox" name="payCOD" checked>
+                                            <span class="toggle-ui"></span>
+                                            <span class="toggle-text">
+                                                <b>Thanh toán COD</b>
+                                                <small>Nhận hàng rồi thanh toán.</small>
+                                            </span>
+                                        </label>
+
+                                        <label class="toggle">
+                                            <input type="checkbox" name="payBank">
+                                            <span class="toggle-ui"></span>
+                                            <span class="toggle-text">
+                                                <b>Chuyển khoản ngân hàng</b>
+                                                <small>Hiển thị thông tin tài khoản khi đặt hàng.</small>
+                                            </span>
+                                        </label>
+
+                                        <label class="toggle">
+                                            <input type="checkbox" name="payOnline">
+                                            <span class="toggle-ui"></span>
+                                            <span class="toggle-text">
+                                                <b>Thanh toán online</b>
+                                                <small>VNPAY/Momo... (khi bạn tích hợp).</small>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="config-divider-ui"></div>
+
+                                <!-- 6) GIAO DIỆN -->
+                                <div class="config-block">
+                                    <h4 class="config-block__title">Giao diện</h4>
+
+                                    <div class="config-grid">
+                                        <div class="config-field">
+                                            <label class="config-label">Màu chính (primary)</label>
+                                            <input class="config-input" type="text" name="primaryColor" placeholder="VD: #f6a500" />
+                                        </div>
+
+                                        <div class="config-field">
+                                            <label class="config-label">Màu phụ (soft)</label>
+                                            <input class="config-input" type="text" name="softColor" placeholder="VD: #E06A1C" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="config-divider-ui"></div>
+
+                                <!-- 7) CHẾ ĐỘ HỆ THỐNG -->
+                                <div class="config-block">
+                                    <h4 class="config-block__title">Chế độ hệ thống</h4>
+
+                                    <div class="config-toggles">
+                                        <label class="toggle">
+                                            <input type="checkbox" name="maintenance">
+                                            <span class="toggle-ui"></span>
+                                            <span class="toggle-text">
+                                                <b>Bảo trì</b>
+                                                <small>Khóa người dùng truy cập ngoài trang.</small>
+                                            </span>
+                                        </label>
+                                    </div>
+
+                                    <div class="config-grid" style="margin-top:12px;">
+                                        <div class="config-field config-col-2">
+                                            <label class="config-label">Thông báo bảo trì</label>
+                                            <textarea class="config-input config-textarea" name="maintenanceMsg" placeholder="VD: Website đang bảo trì, vui lòng quay lại sau."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="config-actions-ui">
+                                    <button type="submit" class="btn-ui btn-ui--primary">Lưu cấu hình</button>
+                                    <button type="reset" class="btn-ui btn-ui--ghost">Đặt lại</button>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+
+
+                    <section id="customer" class="admin-section">
+                        <div class="section-header">
+                            <h2>Khách hàng</h2>
+
+                            <!-- Search -->
+                            <form class="customer-search" method="get" action="${pageContext.request.contextPath}/admin/customers">
+                                <input type="text" name="q" placeholder="Tìm kiếm (tên/email/sđt)..." value="${param.q}">
+                                <button type="submit">Tìm</button>
+                            </form>
+                        </div>
+
+                        <div class="customer-table-wrap">
+                            <table class="customer-table">
+                                <thead>
+                                <tr>
+                                    <th>Avatar</th>
+                                    <th>Tên</th>
+                                    <th>Email</th>
+                                    <th>Địa chỉ</th>
+                                    <th>Xem</th>
+                                    <th>Sửa</th>
+                                    <th>Xóa</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <c:choose>
+                                    <c:when test="${empty users}">
+                                        <tr>
+                                            <td colspan="7" style="text-align:center;padding:14px;">Không có khách hàng.</td>
+                                        </tr>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <c:forEach var="u" items="${users}">
+                                            <tr>
+                                                <td>
+                                                    <img class="customer-table__img customer-avatar"
+                                                         src="${pageContext.request.contextPath}/${empty u.avatar ? 'assets/img/default-avatar.png' : u.avatar}"
+                                                         alt="avatar"
+                                                         onerror="this.src='${pageContext.request.contextPath}/assets/img/default-avatar.png'">
+                                                </td>
+                                                <td>${fn:escapeXml(u.name)}</td>
+                                                <td>${fn:escapeXml(u.email)}</td>
+                                                <td>${fn:escapeXml(u.address)}</td>
+
+                                                <!-- Xem -->
+                                                <td>
+                                                    <button type="button"
+                                                            class="customer-table__view"
+                                                            data-id="${u.id}"
+                                                            data-name="${fn:escapeXml(u.name)}"
+                                                            data-email="${fn:escapeXml(u.email)}"
+                                                            data-phone="${fn:escapeXml(u.phone)}"
+                                                            data-address="${fn:escapeXml(u.address)}"
+                                                            data-role="${u.role}"
+                                                            data-status="${u.status}"
+                                                            data-created="${u.createdAt}"
+                                                            data-updated="${u.updatedAt}">
+                                                        Xem
+                                                    </button>
+                                                </td>
+
+                                                <!-- Sửa -->
+                                                <td>
+                                                    <button type="button"
+                                                            class="customer-table__edit"
+                                                            data-id="${u.id}"
+                                                            data-name="${fn:escapeXml(u.name)}"
+                                                            data-email="${fn:escapeXml(u.email)}"
+                                                            data-phone="${fn:escapeXml(u.phone)}"
+                                                            data-address="${fn:escapeXml(u.address)}"
+                                                            data-role="${u.role}"
+                                                            data-status="${u.status}">
+                                                        Sửa
+                                                    </button>
+                                                </td>
+
+                                                <!-- Xóa/Khóa -->
+                                                <td>
+                                                    <form method="post" action="${pageContext.request.contextPath}/admin/customers/lock"
+                                                          onsubmit="return confirm('Khóa khách hàng này?');">
+                                                        <input type="hidden" name="id" value="${u.id}">
+                                                        <button type="submit" class="customer-table__delete">Xóa</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </c:otherwise>
+                                </c:choose>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- DETAIL -->
+
+
+                        <!-- EDIT FORM -->
+
+                    </section>
+
+                    <!-- Chi tiết khách hàng -->
+                    <section id="customer-detail" class="customer-detail hidden">
+                        <h2 class="manage__heading">Chi tiết khách hàng</h2>
+
+                        <div class="customer-detail__card">
+                            <!-- Avatar -->
+                            <div class="customer-detail__avatar">
+                                <img id="customerDetailAvatar" src="assets/img/avatar-default.png" alt="Avatar">
+                                <span id="customerDetailStatus" class="customer-detail__status online">Hoạt động</span>
+
+                            </div>
+
+                            <!-- Thông tin -->
+                            <div class="customer-detail__info">
+                                <div class="customer-detail__row">
+                                    <span class="label">Tên:</span>
+                                    <span class="value" id="customerDetailName"></span>
+
+                                </div>
+
+                                <div class="customer-detail__row">
+                                    <span class="label">Email:</span>
+                                    <span class="value" id="customerDetailEmail"></span>
+
+                                </div>
+
+
+                                <div class="customer-detail__row">
+                                    <span class="label">Số điện thoại:</span>
+                                    <span class="value" id="customerDetailPhone"></span>
+
+                                </div>
+
+                                <div class="customer-detail__row">
+                                    <span class="label">Địa chỉ:</span>
+                                    <span class="value" id="customerDetailAddress"></span>
+
+                                </div>
+
+                                <div class="customer-detail__row">
+                                  <span class="label">Quyền:</span>
+                                  <span class="value" id="customerDetailRole"></span>
+                                </div>
+
+                                <div class="customer-detail__row">
+                                  <span class="label">Hoạt động:</span>
+                                  <span class="value" id="customerDetailStatusText"></span>
+                                </div>
+
+                                <div class="customer-detail__row">
+                                    <span class="label">Ngày tạo:</span>
+                                    <span class="value" id="customerDetailCreatedAt">-</span>
+                                </div>
+
+                                <div class="customer-detail__row">
+                                    <span class="label">Ngày cập nhật:</span>
+                                    <span class="value" id="customerDetailUpdatedAt">-</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nút đóng -->
+                        <div class="customer-detail__actions">
+                            <button class="btn btn--default-color" onclick="hideCustomerDetail()">
+                                Đóng
+                            </button>
+                        </div>
+                    </section>
+                    <!-- Sửa khách hàng -->
+                    <section id="customer-edit" class="customer-detail hidden">
+                        <h2 class="manage__heading">Sửa thông tin khách hàng</h2>
+
+                        <div class="customer-detail__card">
+                            <!-- Avatar -->
+                            <div class="customer-detail__avatar">
+                                <img src="${pageContext.request.contextPath}/assets/img/avatar4.jpg" alt="Avatar">
+                                <span class="customer-detail__status online">Đang hoạt động</span>
+                            </div>
+
+                            <!-- Form thông tin -->
+                            <form class="customer-detail__info"
+                                  id="customerEditForm"
+                                  method="post"
+                                  action="${pageContext.request.contextPath}/admin/customers/update">
+                                <input type="hidden" name="id" id="editId">
+
+
+                                <div class="customer-detail__row">
+                                    <label class="label">Tên:</label>
+                                    <input type="text" class="input" name="name" id="editName" required>
+
+                                </div>
+
+                                <div class="customer-detail__row">
+                                    <label class="label">Email:</label>
+                                    <input type="email" class="input" name="email" id="editEmail" required>
+
+                                </div>
+
+                                <div class="customer-detail__row">
+                                    <label class="label">Password:</label>
+                                    <input type="password" class="input" name="password" id="editPassword" placeholder="Bỏ trống nếu không đổi">
+
+                                </div>
+
+                                <div class="customer-detail__row">
+                                    <label class="label">Số điện thoại:</label>
+                                    <input type="text" class="input" name="phone" id="editPhone">
+
+                                </div>
+
+                                <div class="customer-detail__row">
+                                    <label class="label">Địa chỉ:</label>
+                                    <input type="text" class="input" name="address" id="editAddress">
+
+                                </div>
+                                <div class="customer-detail__row">
+                                  <label class="label">Quyền:</label>
+                                  <select class="input" name="role" id="editRole" required>
+                                    <option value="0">User</option>
+                                    <option value="1">Admin</option>
+                                  </select>
+                                </div>
+
+                                <div class="customer-detail__row">
+                                  <label class="label">Trạng thái:</label>
+                                  <select class="input" name="status" id="editStatus" required>
+                                    <option value="1">Đang hoạt động</option>
+                                    <option value="0">Bị khóa</option>
+                                  </select>
+                                </div>
+                                <div class="customer-detail__row">
+                                    <label class="label">Ngày tạo:</label>
+                                    <input type="text" class="input" value="01/12/2025" disabled>
+                                </div>
+
+                                <div class="customer-detail__row">
+                                    <label class="label">Ngày cập nhật:</label>
+                                    <input type="text" class="input" value="10/12/2025" disabled>
+                                </div>
+
+                                <!-- Action -->
+                                <div class="customer-detail__actions">
+                                    <button type="submit" class="btn btn--default-color">
+                                        Lưu thay đổi
+                                    </button>
+
+                                    <button type="button"
+                                            class="btn btn--default-color"
+                                            onclick="hideCustomerEdit()">
+                                        Hủy
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                    <section id="news" class="manage-detail">
+                        <h2 class="manage__heading">Danh mục tin tức</h2>
+
+                        <!-- Menu danh mục -->
+                        <div class="news-menu">
+                            <button class="news-menu__btn active" data-target="news-slide">Slide quảng cáo</button>
+                            <button class="news-menu__btn" data-target="news-blog">Blog tin tức</button>
+                        </div>
+
+                        <!-- Slide quảng cáo -->
+                        <div class="news-table" id="news-slide">
+                            <!-- Tìm kiếm -->
+                            <div class="news-search">
+                                <input type="text" placeholder="Tìm kiếm slide..." class="news-search__input" id="searchSlide">
+                            </div>
+                            <div class="add-table__header">
+                                <button class="btn btn--default-color add-table__btn">Thêm Slide</button>
+                            </div>
+
+                            <div class="news-table__inner">
+                                <!-- Header -->
+                                <div class="news-table__row news-table__row--header">
+                                    <div class="news-table__cell">Ảnh</div>
+                                    <div class="news-table__cell">Tên slide</div>
+                                    <div class="news-table__cell">Trạng thái</div>
+                                    <div class="news-table__cell">Ngày tạo</div>
+                                    <div class="news-table__cell">Ngày cập nhật</div>
+                                    <div class="news-table__cell">Post</div>
+                                    <div class="news-table__cell">Xem</div>
+                                    <div class="news-table__cell">Sửa</div>
+                                    <div class="news-table__cell">Xóa</div>
+                                </div>
+
+                                <!-- Dữ liệu mẫu -->
+                                <article class="news-table__row">
+                                    <div class="news-table__cell"><img src="${pageContext.request.contextPath}/assets/img/hero_slide-01.jpg" class="news-table__img" alt=""></div>
+                                    <div class="news-table__cell">Slide khuyến mãi 12.12</div>
+                                    <div class="news-table__cell"><span class="status status--active">Đang post</span></div>
+                                    <div class="news-table__cell">01/12/2025</div>
+                                    <div class="news-table__cell">10/12/2025</div>
+                                    <div class="news-table__cell"><input type="checkbox" checked></div>
+                                    <div class="news-table__cell"><button class="news-table__view">Xem</button></div>
+                                    <div class="news-table__cell"><button class="news-table__edit">Sửa</button></div>
+                                    <div class="news-table__cell"><button class="news-table__delete">Xóa</button></div>
+                                </article>
+
+                                <article class="news-table__row">
+                                    <div class="news-table__cell"><img src="${pageContext.request.contextPath}/assets/img/hero_slide-02.jpg" class="news-table__img" alt=""></div>
+                                    <div class="news-table__cell">Slide Black Friday</div>
+                                    <div class="news-table__cell"><span class="status status--inactive">Chưa post</span></div>
+                                    <div class="news-table__cell">15/11/2025</div>
+                                    <div class="news-table__cell">20/11/2025</div>
+                                    <div class="news-table__cell"><input type="checkbox"></div>
+                                    <div class="news-table__cell"><button class="news-table__view">Xem</button></div>
+                                    <div class="news-table__cell"><button class="news-table__edit">Sửa</button></div>
+                                    <div class="news-table__cell"><button class="news-table__delete">Xóa</button></div>
+                                </article>
+                            </div>
+                        </div>
+
+                        <!-- Blog tin tức -->
+                        <div class="news-table hidden" id="news-blog">
+                            <!-- Tìm kiếm -->
+                            <div class="news-search">
+                                <input type="text" placeholder="Tìm kiếm blog..." class="news-search__input" id="searchBlog">
+                            </div>
+                            <div class="add-table__header">
+                                <button class="btn btn--default-color add-table__btn">Thêm Blog</button>
+                            </div>
+
+                            <div class="news-table__inner">
+                                <!-- Header -->
+                                <div class="news-table__row news-table__row--header">
+                                    <div class="news-table__cell">Ảnh</div>
+                                    <div class="news-table__cell">Tiêu đề</div>
+                                    <div class="news-table__cell">Trạng thái</div>
+                                    <div class="news-table__cell">Ngày tạo</div>
+                                    <div class="news-table__cell">Ngày cập nhật</div>
+                                    <div class="news-table__cell">Post</div>
+                                    <div class="news-table__cell">Xem</div>
+                                    <div class="news-table__cell">Sửa</div>
+                                    <div class="news-table__cell">Xóa</div>
+                                </div>
+
+                                <!-- Dữ liệu mẫu -->
+                                <article class="news-table__row">
+                                    <div class="news-table__cell"><img src="${pageContext.request.contextPath}/assets/img/blog1.jpg" class="news-table__img" alt=""></div>
+                                    <div class="news-table__cell">Ra mắt sản phẩm mới 2025</div>
+                                    <div class="news-table__cell"><span class="status status--active">Đang post</span></div>
+                                    <div class="news-table__cell">05/12/2025</div>
+                                    <div class="news-table__cell">10/12/2025</div>
+                                    <div class="news-table__cell"><input type="checkbox" checked></div>
+                                    <div class="news-table__cell"><button class="news-table__view">Xem</button></div>
+                                    <div class="news-table__cell"><button class="news-table__edit">Sửa</button></div>
+                                    <div class="news-table__cell"><button class="news-table__delete">Xóa</button></div>
+                                </article>
+
+                                <article class="news-table__row">
+                                    <div class="news-table__cell"><img src="${pageContext.request.contextPath}/assets/img/blog2.jpg" class="news-table__img" alt=""></div>
+                                    <div class="news-table__cell">Cập nhật chương trình ưu đãi</div>
+                                    <div class="news-table__cell"><span class="status status--inactive">Chưa post</span></div>
+                                    <div class="news-table__cell">20/11/2025</div>
+                                    <div class="news-table__cell">25/11/2025</div>
+                                    <div class="news-table__cell"><input type="checkbox"></div>
+                                    <div class="news-table__cell"><button class="news-table__view">Xem</button></div>
+                                    <div class="news-table__cell"><button class="news-table__edit">Sửa</button></div>
+                                    <div class="news-table__cell"><button class="news-table__delete">Xóa</button></div>
+                                </article>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Chi tiết Slide -->
+                    <section id="slide-detail" class="slide-detail hidden">
+                        <h2 class="manage__heading">Chi tiết Slide</h2>
+
+                        <div class="slide-detail__card">
+                            <!-- Hình Slide -->
+                            <div class="slide-detail__image">
+                                <img src="${pageContext.request.contextPath}/assets/img/hero_slide-01.jpg" alt="Slide Image">
+                                <span class="slide-detail__status active">Đang post</span>
+                            </div>
+
+                            <!-- Thông tin Slide -->
+                            <div class="slide-detail__info">
+                                <div class="slide-detail__row">
+                                    <span class="label">Tên slide:</span>
+                                    <span class="value">Slide khuyến mãi 12.12</span>
+                                </div>
+                                <div class="slide-detail__row">
+                                    <span class="label">Trạng thái:</span>
+                                    <span class="value">Đang post</span>
+                                </div>
+                                <div class="slide-detail__row">
+                                    <span class="label">Ngày tạo:</span>
+                                    <span class="value">01/12/2025</span>
+                                </div>
+                                <div class="slide-detail__row">
+                                    <span class="label">Ngày cập nhật:</span>
+                                    <span class="value">10/12/2025</span>
+                                </div>
+                                <div class="slide-detail__row">
+                                    <span class="label">Post:</span>
+                                    <span class="value"><input type="checkbox" checked></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nút đóng -->
+                        <div class="slide-detail__actions">
+                            <button class="btn btn--default-color" onclick="hideSlideDetail()">Đóng</button>
+                        </div>
+                    </section>
+
+                    <!-- Chi tiết Blog -->
+                    <section id="blog-detail" class="blog-detail hidden">
+                        <h2 class="manage__heading">Chi tiết Blog</h2>
+
+                        <div class="blog-detail__card">
+                            <!-- Hình Blog -->
+                            <div class="blog-detail__image">
+                                <img src="${pageContext.request.contextPath}/assets/img/blog1.jpg" alt="Blog Image">
+                                <span class="blog-detail__status active">Đang post</span>
+                            </div>
+
+                            <!-- Thông tin Blog -->
+                            <div class="blog-detail__info">
+                                <div class="blog-detail__row">
+                                    <span class="label">Tiêu đề:</span>
+                                    <span class="value">Ra mắt sản phẩm mới 2025</span>
+                                </div>
+                                <div class="blog-detail__row">
+                                    <span class="label">Trạng thái:</span>
+                                    <span class="value">Đang post</span>
+                                </div>
+                                <div class="blog-detail__row">
+                                    <span class="label">Ngày tạo:</span>
+                                    <span class="value">05/12/2025</span>
+                                </div>
+                                <div class="blog-detail__row">
+                                    <span class="label">Ngày cập nhật:</span>
+                                    <span class="value">10/12/2025</span>
+                                </div>
+                                <div class="blog-detail__row">
+                                    <span class="label">Post:</span>
+                                    <span class="value"><input type="checkbox" checked></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nút đóng -->
+                        <div class="blog-detail__actions">
+                            <button class="btn btn--default-color" onclick="hideBlogDetail()">Đóng</button>
+                        </div>
+                    </section>
+                    <!-- Sửa Slide -->
+                    <section id="slide-edit" class="slide-detail hidden">
+                        <h2 class="manage__heading">Sửa Slide</h2>
+
+                        <div class="slide-detail__card">
+                            <!-- Hình Slide -->
+                            <div class="slide-detail__image">
+                                <img src="${pageContext.request.contextPath}/assets/img/slide1.jpg" alt="Slide Image">
+                                <span class="slide-detail__status active">Đang post</span>
+                            </div>
+
+                            <!-- Form thông tin -->
+                            <form class="slide-detail__info" id="slideEditForm">
+                                <div class="slide-detail__row">
+                                    <label class="label">Tên slide:</label>
+                                    <input type="text" class="input" value="Slide khuyến mãi 12.12">
+                                </div>
+
+                                <div class="slide-detail__row">
+                                    <label class="label">Trạng thái:</label>
+                                    <select class="input">
+                                        <option value="active" selected>Đang post</option>
+                                        <option value="inactive">Chưa post</option>
+                                    </select>
+                                </div>
+
+                                <div class="slide-detail__row">
+                                    <label class="label">Ngày tạo:</label>
+                                    <input type="text" class="input" value="01/12/2025" disabled>
+                                </div>
+
+                                <div class="slide-detail__row">
+                                    <label class="label">Ngày cập nhật:</label>
+                                    <input type="text" class="input" value="10/12/2025" disabled>
+                                </div>
+
+                                <div class="slide-detail__row">
+                                    <label class="label">Hình ảnh mới:</label>
+                                    <input type="file" class="input">
+                                </div>
+
+                                <!-- Action -->
+                                <div class="slide-detail__actions">
+                                    <button type="submit" class="btn btn--default-color">Lưu thay đổi</button>
+                                    <button type="button" class="btn btn--default-color" onclick="hideSlideEdit()">Hủy</button>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+
+                    <!-- Sửa Blog -->
+                    <section id="blog-edit" class="blog-detail hidden">
+                        <h2 class="manage__heading">Sửa Blog</h2>
+
+                        <div class="blog-detail__card">
+                            <!-- Hình Blog -->
+                            <div class="blog-detail__image">
+                                <img src="${pageContext.request.contextPath}/assets/img/blog1.jpg" alt="Blog Image">
+                                <span class="blog-detail__status active">Đang post</span>
+                            </div>
+
+                            <!-- Form thông tin -->
+                            <form class="blog-detail__info" id="blogEditForm">
+                                <div class="blog-detail__row">
+                                    <label class="label">Tiêu đề:</label>
+                                    <input type="text" class="input" value="Ra mắt sản phẩm mới 2025">
+                                </div>
+
+                                <div class="blog-detail__row">
+                                    <label class="label">Trạng thái:</label>
+                                    <select class="input">
+                                        <option value="active" selected>Đang post</option>
+                                        <option value="inactive">Chưa post</option>
+                                    </select>
+                                </div>
+
+                                <div class="blog-detail__row">
+                                    <label class="label">Ngày tạo:</label>
+                                    <input type="text" class="input" value="05/12/2025" disabled>
+                                </div>
+
+                                <div class="blog-detail__row">
+                                    <label class="label">Ngày cập nhật:</label>
+                                    <input type="text" class="input" value="10/12/2025" disabled>
+                                </div>
+
+                                <div class="blog-detail__row">
+                                    <label class="label">Hình ảnh mới:</label>
+                                    <input type="file" class="input">
+                                </div>
+
+                                <!-- Action -->
+                                <div class="blog-detail__actions">
+                                    <button type="submit" class="btn btn--default-color ">Lưu thay đổi</button>
+                                    <button type="button" class="btn btn--default-color" onclick="hideBlogEdit()">Hủy</button>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                    <!-- ================= THÊM SLIDE ================= -->
+                    <section id="add-slide" class="manage-detail" style="display:none;">
+                        <h2 class="manage__heading">Thêm slide</h2>
+
+                        <div class="slide-table">
+                            <div class="slide-table__header">
+                                <button type="submit" form="addSlideForm" class="slide-table__save">
+                                    <i class="fa-solid fa-floppy-disk"></i> Lưu slide
+                                </button>
+                            </div>
+
+                            <div class="slide-table__inner">
+                                <form id="addSlideForm" class="add-slide-form" enctype="multipart/form-data">
+
+                                    <div class="add-slide-form__field">
+                                        <label class="add-slide-form__label">Tên slide:</label>
+                                        <input type="text" name="name" class="add-slide-form__input" placeholder="Nhập tên slide..." required>
+                                    </div>
+
+                                    <div class="add-slide-form__field">
+                                        <label class="add-slide-form__label">Mô tả ngắn:</label>
+                                        <input type="text" name="text" class="add-slide-form__input" placeholder="Nhập mô tả slide...">
+                                    </div>
+
+                                    <div class="add-slide-form__field">
+                                        <label class="add-slide-form__label">Trạng thái:</label>
+                                        <select name="status" class="add-slide-form__input">
+                                            <option value="1">Đang post</option>
+                                            <option value="0">Chưa post</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="add-slide-form__field">
+                                        <label class="add-slide-form__label">Ảnh slide:</label>
+                                        <input type="file" name="avatar" class="add-slide-form__input" accept="image/*" required>
+                                    </div>
+
+                                    <button type="button"
+                                            class="btn btn--default-color product-table__back-btn"
+                                            onclick="hideSlideAdd()">
+                                        Quay lại
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- ================= THÊM BLOG ================= -->
+                    <section id="add-blog" class="manage-detail" style="display:none;">
+                        <h2 class="manage__heading">Thêm blog</h2>
+
+                        <div class="blog-table">
+                            <div class="blog-table__header">
+                                <button type="submit" form="addBlogForm" class="blog-table__save">
+                                    <i class="fa-solid fa-floppy-disk"></i>
+                                </button>
+                            </div>
+
+                            <div class="blog-table__inner">
+                                <form id="addBlogForm" class="add-blog-form">
+
+                                    <!-- Tiêu đề -->
+                                    <div class="add-blog-form__field">
+                                        <label class="add-blog-form__label">Tiêu đề:</label>
+                                        <input type="text" class="add-blog-form__input" required>
+                                    </div>
+
+                                    <!-- Trạng thái -->
+                                    <div class="add-blog-form__field">
+                                        <label class="add-blog-form__label">Trạng thái:</label>
+                                        <select class="add-blog-form__input">
+                                            <option value="active">Đang post</option>
+                                            <option value="inactive">Chưa post</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Ảnh đại diện -->
+                                    <div class="add-blog-form__field">
+                                        <label class="add-blog-form__label">Ảnh đại diện:</label>
+                                        <input type="file" class="add-blog-form__input" accept="image/*">
+                                    </div>
+
+                                    <!-- Nội dung -->
+                                    <div class="add-blog-form__field">
+                                        <label class="add-blog-form__label">Nội dung:</label>
+                                        <div id="blogEditor" class="add-blog-form__editor"></div>
+                                    </div>
+
+                                    <button type="button"
+                                            class="btn btn--default-color product-table__back-btn"
+                                            onclick="hideBlogAdd()">
+                                        Quay lại
+                                    </button>
+
+                                </form>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="product" class="manage-detail" style="display:none;">
+                        <h2 class="manage__heading">Sản phẩm</h2>
+                        <div class="product-menu">
+                            <button class="product-menu__btn active" data-target="product-list">Danh mục sản phẩm</button>
+                            <button class="product-menu__btn" data-target="product-event">Sự kiện giảm giá</button>
+                        </div>
+                        <div class="product-layout">
+                            <aside class="product-sidebar">
+                                <h3 class="product-sidebar__heading">Danh mục</h3>
+                                <ul class="product-sidebar__list" id="category-list">
+                                    <li class="product-sidebar__item">
+                                        <a href="#!" class="product-sidebar__link">Đang tải...</a>
+                                    </li>
+                                </ul>
+                            </aside>
+                            <div class="product-main-content">
+                                <div id="product-list-section">
+                                    <div class="product-table">
+                                        <div class="event-search">
+                                            <div class="event-search__wrapper">
+                                                <input type="text" id="productSearchInput" class="event-search__input" placeholder="Tìm kiếm tên sản phẩm...">
+                                                <button class="event-search__btn" id="productSearchBtn">
+                                                    <i class="fas fa-search"></i> Tìm kiếm
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="product-table__header">
+                                            <button class="btn btn--default-color product-table__btn">Thêm sản phẩm</button>
+                                        </div>
+                                        <div class="product-table__inner">
+
+                                            <div class="product-table__row table-header">
+                                                <div class="product-table__cell">Ảnh</div>
+                                                <div class="product-table__cell">Tên sản phẩm</div>
+                                                <div class="product-table__cell">Post</div> <div class="product-table__cell">Giá</div>
+                                                <div class="product-table__cell">Xem</div>
+                                                <div class="product-table__cell">Sửa</div>
+                                                <div class="product-table__cell">Xóa</div>
+                                            </div>
+
+                                            <div id="product-list-container">
+                                                <div style="text-align: center; padding: 20px;">Đang tải dữ liệu...</div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="product-event-section" style="display: none;">
+                            <div class="event-manager">
+                                <div class="event-header">
+                                    <button class="btn btn--default-color event-header__btn">Thêm sự kiện giảm giá</button>
+                                </div>
+                                <div class="event-search">
+                                    <div class="event-search__wrapper">
+                                        <input type="text" class="event-search__input" placeholder="Tìm kiếm tên sự kiện hoặc mức giảm giá...">
+                                        <button class="event-search__btn">
+                                            <i class="fas fa-search"></i> Tìm kiếm
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="event-table">
+
+                                    <div class="product-table">
+                                        <div id="discount-list-container">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section id="add-event-page" class="manage-detail" style="display: none;">
+                        <h2 class="manage__heading">Thêm sự kiện giảm giá mới</h2>
+
+                        <div class="event-card">
+                            <button type="submit" form="addEventForm" class="event-btn event-btn--save">
+                                <i class="fa-solid fa-floppy-disk"></i> Lưu sự kiện
+                            </button>
+
+                            <div class="event-card__body">
+                                <form id="addEventForm" class="event-form">
+                                    <div class="event-form__group">
+                                        <label class="event-form__label">Tên sự kiện:</label>
+                                        <input type="text" name="eventName" class="event-form__input" placeholder="Ví dụ: Sale Hè Rực Rỡ" required>
+                                    </div>
+
+                                    <div class="event-form__row">
+                                        <div class="event-form__group">
+                                            <label class="event-form__label">Loại giảm giá:</label>
+                                            <select name="discountType" id="discountType" class="event-form__input">
+                                                <option value="percentage">Giảm theo phần trăm (%)</option>
+                                                <option value="amount">Giảm theo số tiền (đ)</option>
+                                            </select>
+                                        </div>
+                                        <div class="event-form__group">
+                                            <label class="event-form__label">Mức giảm:</label>
+                                            <div class="event-form__input-wrapper">
+                                                <input type="number" name="discountValue" class="event-form__input" placeholder="0" required>
+                                                <span id="discountUnit" class="event-form__unit">%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="event-form__row">
+                                        <div class="event-form__group">
+                                            <label class="event-form__label">Ngày bắt đầu:</label>
+                                            <input type="date" name="startDate" class="event-form__input" required>
+                                        </div>
+                                        <div class="event-form__group">
+                                            <label class="event-form__label">Ngày kết thúc:</label>
+                                            <input type="date" name="endDate" class="event-form__input" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="event-form__group">
+                                        <label class="event-form__label1">Mô tả sự kiện:</label>
+                                        <textarea name="eventDesc" class="event-form__input event-form__input--textarea" rows="3" placeholder="Mô tả ngắn gọn chương trình..."></textarea>
+                                    </div>
+
+                                    <div class="event-form__group" style="display: none">
+                                        <label class="event-form__label">Chọn Slide cho sự kiện:</label>
+                                        <div class="event-select" id="eventSlideSelect">
+                                            <div class="event-select__selected">-- Đang tải danh sách Slide... --</div>
+
+                                            <div class="event-select__options" id="listSlideOptions">
+                                                <div class="event-option">
+                                                    <span>Đang tải dữ liệu...</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="eventSlideTarget" id="eventSlideTargetHidden" value="0">
+                                    </div>
+                                    <label class="event-form__label2">Phạm vi áp dụng giảm giá:</label>
+                                    <div class="event-form__apply-type">
+
+                                        <div class="event-form__apply-row">
+                                            <label class="event-radio">
+                                                <input type="radio" name="applyScope" value="all" checked>
+                                                <span>Tất cả sản phẩm</span>
+                                            </label>
+                                        </div>
+
+                                        <div class="event-form__apply-row">
+                                            <label class="event-radio">
+                                                <input type="radio" name="applyScope" value="category">
+                                                <span>Theo danh mục</span>
+                                            </label>
+
+                                            <div id="scopeCategory" class="event-scope-box" style="display: none;">
+                                                <div class="category-select-wrapper">
+                                                    <select name="applyCategories" class="event-form__input">
+                                                        <option value="">-- Chọn một danh mục --</option>
+                                                        <option value="1">Gia dụng - Nhà cửa</option>
+                                                        <option value="2">Phụ kiện ô tô</option>
+                                                        <option value="3">Thời trang</option>
+                                                        <option value="4">Âm thanh - Camera</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="event-card__footer">
+                                <button type="button" class="bton btn--primary event-btn--cancel" onclick="backToEventList()">Hủy bỏ</button>
+                            </div>
+                        </div>
+                    </section>
+
+
+                    <section id="discount-list-page">
+                        <div id="discount-list-container"></div>
+                    </section>
+
+                    <section id="view-event-page" class="ev-container" style="display: none;">
+                        <div class="ev-header">
+                            <h2 class="ev-title">Chi tiết chương trình</h2>
+                        </div>
+
+                        <div class="ev-card">
+                            <div class="ev-grid">
+                                <div class="ev-group ev-col-2">
+                                    <label class="ev-label">Tên sự kiện</label>
+                                    <div class="ev-view-box ev-view-box--bold" id="view-eventName"></div>
+                                </div>
+
+                                <div class="ev-group ev-col-2">
+                                    <label class="ev-label">Phạm vi áp dụng (Danh mục)</label>
+                                    <div class="ev-view-box" id="view-categoryName" style="color: #0056b3; font-weight: 600; background: #eef6ff;"></div>
+                                </div>
+
+                                <div class="ev-group">
+                                    <label class="ev-label">Loại giảm giá</label>
+                                    <div class="ev-view-box" id="view-discountType"></div>
+                                </div>
+
+                                <div class="ev-group">
+                                    <label class="ev-label">Mức giảm</label>
+                                    <div class="ev-view-box ev-view-box--red" id="view-discountValue"></div>
+                                </div>
+
+                                <div class="ev-group">
+                                    <label class="ev-label">Ngày bắt đầu</label>
+                                    <div class="ev-view-box" id="view-startDate"></div>
+                                </div>
+
+                                <div class="ev-group">
+                                    <label class="ev-label">Ngày kết thúc</label>
+                                    <div class="ev-view-box" id="view-endDate"></div>
+                                </div>
+
+                                <div class="ev-group ev-col-2">
+                                    <label class="ev-label">Mô tả</label>
+                                    <div class="ev-view-box" id="view-descrip"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ev-footer">
+                            <button class="ev-btn ev-btn--outline" onclick="backToEventList()">Quay lại danh sách</button>
+                        </div>
+                    </section>
+
+                    <section id="edit-event-page" class="ev-container" style="display: none;">
+                        <div class="ev-header">
+                            <h2 class="ev-title">Cập nhật sự kiện</h2>
+                            <button class="ev-btn ev-btn--blue" onclick="saveDiscountUpdate()">
+                                <i class="fa-solid fa-check"></i> Lưu thay đổi
+                            </button>
+                        </div>
+
+                        <div class="ev-card">
+                            <form id="editEventForm">
+                                <div class="ev-grid">
+                                    <div class="ev-group ev-col-2">
+                                        <label class="ev-label">Tên sự kiện</label>
+                                        <input type="text" class="ev-input" id="edit-eventName" placeholder="Ví dụ: Sale Tết Nguyên Đán 2026">
+                                    </div>
+
+                                    <div class="ev-group ev-col-2">
+                                        <label class="ev-label" style="color: #0056b3;">Phạm vi áp dụng hiện tại:</label>
+                                        <div id="edit-currentCategoryName" class="ev-view-box" style="background: #f0f7ff; font-weight: 600; padding: 10px; border-radius: 4px; border: 1px solid #d0e3ff;">
+                                        </div>
+                                    </div>
+
+                                    <div class="ev-group">
+                                        <label class="ev-label">Loại giảm giá</label>
+                                        <div class="ev-input" style="background: #f5f5f5; color: #666; cursor: not-allowed; display: flex; align-items: center;">
+                                            Phần trăm (%)
+                                        </div>
+                                        <input type="hidden" id="edit-discountType" value="percentage">
+                                    </div>
+
+                                    <div class="ev-group">
+                                        <label class="ev-label">Mức giảm (%)</label>
+                                        <input type="number" class="ev-input" id="edit-discountValue" min="1" max="100" placeholder="20">
+                                    </div>
+
+                                    <div class="ev-group">
+                                        <label class="ev-label">Ngày bắt đầu</label>
+                                        <input type="date" class="ev-input" id="edit-startDate">
+                                    </div>
+
+                                    <div class="ev-group">
+                                        <label class="ev-label">Ngày kết thúc</label>
+                                        <input type="date" class="ev-input" id="edit-endDate">
+                                    </div>
+
+                                    <div class="ev-group ev-col-2">
+                                        <label class="ev-label">Mô tả sự kiện</label>
+                                        <textarea class="ev-input" id="edit-eventDesc" rows="3" style="height: auto;" placeholder="Mô tả nội dung khuyến mãi..."></textarea>
+                                    </div>
+
+                                    <div class="ev-group ev-col-2">
+                                        <label class="ev-label" style="font-weight: 600; margin-bottom: 10px; display: block;">Thay đổi phạm vi áp dụng</label>
+                                        <div class="ev-radio-group" style="display: flex; gap: 20px;">
+                                            <label class="ev-radio" style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                                                <input type="radio" name="editApplyScope" value="all">
+                                                <span>Tất cả sản phẩm</span>
+                                            </label>
+                                            <label class="ev-radio" style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                                                <input type="radio" name="editApplyScope" value="category">
+                                                <span>Theo danh mục</span>
+                                            </label>
+                                        </div>
+
+                                        <div id="editScopeCategory" class="ev-scope-box" style="display: none; margin-top: 15px; padding: 15px; border: 1px dashed #ddd; border-radius: 8px;">
+                                            <label class="ev-label">Chọn danh mục mới:</label>
+                                            <select class="ev-input" id="editApplyCategories">
+                                                <option value="0">-- Chọn một danh mục --</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="ev-footer" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px;">
+                            <button class="ev-btn ev-btn--outline" onclick="backToEventList()">Hủy bỏ</button>
+                        </div>
+                    </section>
+                    <section id="add-product" class="manage-detail" style="display:none;">
+                        <h2 class="manage__heading">Thêm sản phẩm mới</h2>
+
+                        <div class="product-table">
+                            <div class="product-table__header">
+                                <button type="button" onclick="saveFullProduct()" class="product-table__save">
+                                    <i class="fa-solid fa-floppy-disk"></i> Lưu sản phẩm
+                                </button>
+                            </div>
+
+                            <div class="product-table__inner">
+                                <form id="addProductFormInline"
+                                      class="add-product-form"
+                                      method="POST"
+                                      action="api/add-product"
+                                      enctype="multipart/form-data">
+
+                                    <div class="add-product-form__row">
+                                        <div class="add-product-form__field">
+                                            <label class="add-product-form__label">Tên sản phẩm:</label>
+                                            <input type="text" name="productName" class="add-product-form__input" required>
+                                        </div>
+                                        <div class="add-product-form__field">
+                                            <label class="add-product-form__label">Giá sản phẩm:</label>
+                                            <input type="number" name="productPrice" class="add-product-form__input" required>
+                                        </div>
+                                        <div class="add-product-form__field">
+                                            <label class="add-product-form__label">Số lượng:</label>
+                                            <input type="number" name="productStock" class="add-product-form__input" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="add-product-form__row" style="align-items: center;">
+                                        <div class="add-product-form__field" style="flex: 1;">
+                                            <label class="add-product-form__label">Ảnh đại diện:</label>
+                                            <input type="file" name="productImage" class="add-product-form__input" accept="image/*" required>
+                                        </div>
+                                        <div class="add-product-form__field" style="width: 100px;">
+                                            <label class="add-product-form__label">Post ngay:</label>
+                                            <input type="checkbox" id="postStatus" name="isPost" value="1" class="product-table__checkbox" style="width: 20px; height: 20px;">
+                                        </div>
+                                    </div>
+
+                                    <div class="add-product-form__field">
+                                        <label class="add-product-form__label">Nhãn hiệu:</label>
+                                        <select name="brandID" class="add-product-form__input" id="brandSelect" required>
+                                            <option value="">-- Đang tải dữ liệu... --</option>
+                                            <option value="add-new">+ Thêm nhãn hiệu mới</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="add-product-form__field">
+                                        <label class="add-product-form__label">Từ khóa (Tag):</label>
+                                        <select name="tagID" class="add-product-form__input" id="tagSelect">
+                                            <option value="">-- Đang tải dữ liệu... --</option>
+                                            <option value="add-new">+ Thêm từ khóa mới</option>
+                                        </select>
+                                    </div>
+                                    <div class="add-product-form__field">
+                                        <label class="add-product-form__label">Danh mục:</label>
+                                        <select name="cateID" class="add-product-form__input" id="cateSelect">
+                                            <option value="">-- Đang tải dữ liệu... --</option>
+                                            <option value="add-new">+ Thêm danh mục mới</option>
+                                        </select>
+                                    </div>
+                                    <div class="add-product-form__section">
+                                        <label class="add-product-form__label">Mô tả sản phẩm:</label>
+                                        <div class="add-product-input-group">
+                                            <input type="text" id="descTitle" placeholder="Tiêu đề mô tả" class="add-product-form__input">
+                                            <textarea id="descContent" placeholder="Nội dung mô tả" class="add-product-form__input"></textarea>
+                                            <button type="button" class="bton btn--primary" onclick="addDescription()">Thêm mô tả</button>
+                                        </div>
+                                        <div id="descriptionList" class="added-items-list"></div>
+                                    </div>
+
+                                    <div class="add-product-form__section">
+                                        <label class="add-product-form__label">Chi tiết sản phẩm (Ảnh & Nội dung):</label>
+                                        <div class="add-product-input-group">
+                                            <input type="file" id="detailImg" class="add-product-form__input">
+                                            <input type="text" id="detailTitle" placeholder="Tiêu đề chi tiết" class="add-product-form__input">
+                                            <textarea id="detailContent" placeholder="Nội dung chi tiết" class="add-product-form__input"></textarea>
+                                            <button type="button" class="bton btn--primary" onclick="addDetail()">Thêm chi tiết</button>
+                                        </div>
+                                        <div id="detailList" class="added-items-list"></div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div id="brandModal" class="admin-modal" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
+                        <div class="admin-modal__content" style="background: #fff; padding: 20px; border-radius: 8px; width: 400px;">
+                            <h3>Thêm Nhãn Hiệu Mới</h3>
+                            <form id="addBrandFormQuick">
+                                <input type="text" name="brandName" placeholder="Tên nhãn hiệu" class="add-product-form__input" required style="width: 100%; margin-bottom: 10px;">
+                                <input type="text" name="brandCountry" placeholder="Quốc gia" class="add-product-form__input" style="width: 100%; margin-bottom: 10px;">
+                                <input type="file" name="brandLogo" accept="image/*" class="add-product-form__input" style="width: 100%; margin-bottom: 10px;">
+                                <div class="admin-modal__actions" style="display: flex; justify-content: flex-end; gap: 10px;">
+                                    <button type="button" class="bton btn--primary" onclick="closeModal('brandModal')">Hủy</button>
+                                    <button type="button" class="bton btn--primary" onclick="saveNewBrand()">Lưu nhãn hiệu</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div id="tagModal" class="admin-modal" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
+                        <div class="admin-modal__content" style="background: #fff; padding: 20px; border-radius: 8px; width: 400px;">
+                            <h3>Thêm Từ Khóa Mới</h3>
+                            <form id="addTagFormQuick">
+                                <input type="text" id="newTagName" name="tagName" placeholder="Tên từ khóa" class="add-product-form__input" required style="width: 100%; margin-bottom: 10px;">
+                                <textarea id="newTagDesc" name="tagDesc" placeholder="Mô tả từ khóa" class="add-product-form__input" style="width: 100%; margin-bottom: 10px;"></textarea>
+                                <div class="admin-modal__actions" style="display: flex; justify-content: flex-end; gap: 10px;">
+                                    <button type="button" class="bton btn--primary" onclick="closeModal('tagModal')">Hủy</button>
+                                    <button type="button" class="bton btn--primary" onclick="saveNewTag()">Lưu từ khóa</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="cateModal" class="admin-modal" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
+                        <div class="admin-modal__content" style="background: #fff; padding: 20px; border-radius: 8px; width: 400px;">
+                            <h3>Thêm Danh mục Mới</h3>
+                            <form id="addCateFormQuick">
+                                <input type="text" id="newCateName" name="cateName" placeholder="Tên danh mục" class="add-product-form__input" required style="width: 100%; margin-bottom: 10px;">
+                                <textarea id="newCateDesc" name="cateDesc" placeholder="Mô tả danh mục" class="add-product-form__input" style="width: 100%; margin-bottom: 10px;"></textarea>
+                                <div class="admin-cate__actions" style="display: flex; justify-content: flex-end; gap: 10px;">
+                                    <button type="button" class="bton btn--primary" onclick="closeModal('cateModal')">Hủy</button>
+                                    <button type="button" class="bton btn--primary" onclick="saveNewCategory()">Lưu từ khóa</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="viewProductModal" class="admin-modal">
+                        <div class="admin-modal__content admin-modal__content--large">
+                            <div class="modal-header">
+                                <h3 class="manage__heading">Chi tiết sản phẩm</h3>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="view-grid">
+                                    <div class="view-col">
+                                        <div class="view-image-box">
+                                            <img id="v-image" src="" alt="Ảnh sản phẩm" class="view-img-main" onerror="this.src='assets/img/no-image.png'">
+                                        </div>
+                                        <div class="view-time">
+                                            <p><strong>Ngày tạo:</strong> <span id="v-createdAt">---</span></p>
+                                            <p><strong>Cập nhật:</strong> <span id="v-updatedAt">---</span></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="view-col">
+                                        <h2 id="v-name" class="view-product-title">---</h2>
+
+                                        <div class="view-info-group">
+                                            <p><strong>Nhãn hiệu:</strong> <span class="badge" id="v-brand">---</span></p>
+                                            <p><strong>Từ khóa:</strong> <span class="badge badge--tag" id="v-tags">---</span></p>
+                                        </div>
+
+                                        <div class="view-price-card">
+                                            <div id="box-oldPrice" style="display:none">
+                                                <label>Giá gốc:</label>
+                                                <span id="v-oldPrice"></span>
+                                            </div>
+                                            <div id="box-discount" style="display:none">
+                                                <label>Giảm giá:</label>
+                                                <span id="v-discount"></span>%
+                                            </div>
+                                            <div class="price-item price-item--main">
+                                                <span>Giá mới:</span><span id="v-newPrice" class="text-price">0đ</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="view-inventory">
+                                            <p><strong>Số lượng còn lại:</strong> <span id="v-stock">0</span></p>
+                                            <p><strong>Số lượng đã bán:</strong> <span id="v-sold">0</span></p>
+                                            <p><strong>Trạng thái Post:</strong> <input type="checkbox" id="v-isPost" class="product-table__checkbox" disabled></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="view-section">
+                                    <h4 class="view-section-title">Mô tả sản phẩm</h4>
+                                    <div id="v-descriptionList" class="view-list"></div>
+                                </div>
+
+                                <div class="view-section">
+                                    <h4 class="view-section-title">Chi tiết kỹ thuật</h4>
+                                    <div id="v-detailList" class="view-detail-grid"></div>
+                                </div>
+                            </div>
+                            <div class="product-view-footer">
+                                <button type="button" class="btn btn--primary btn--back-rect" onclick="backToList()">
+                                    Quay lại
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="editProductPage" class="admin-content-page" style="display: none;">
+                        <div class="admin-modal__content--large">
+                            <div class="modal-header">
+                                <h3 class="manage__heading">Chỉnh sửa sản phẩm</h3>
+                            </div>
+
+                            <div class="modal-body">
+                                <form id="editProductForm" enctype="multipart/form-data">
+
+                                    <input type="hidden" id="edit-id" name="id" value="">
+                                    <input type="hidden" id="edit-oldImageName" name="oldImageName" value="">
+
+                                    <div class="view-grid">
+                                        <div class="view-col">
+                                            <div class="view-image-box">
+                                                <img id="edit-v-image" src="assets/img/no-image.png" alt="Ảnh sản phẩm" class="view-img-main">
+                                                <div class="upload-action">
+                                                    <label for="input-file-edit" class="btn-upload">
+                                                        <i class="fa-solid fa-camera"></i> Thay đổi ảnh
+                                                    </label>
+                                                    <input type="file" id="input-file-edit" name="image" hidden onchange="previewImage(this, 'edit-v-image')">
+                                                </div>
+                                            </div>
+                                            <div class="view-time">
+                                                <p><strong>Ngày tạo:</strong> <span id="view-created-at">---</span></p>
+                                            </div>
+                                        </div>
+
+                                        <div class="view-col">
+                                            <div class="edit-info-list">
+                                                <div class="info-row">
+                                                    <label class="info-label">Tên sản phẩm:</label>
+                                                    <input type="text" id="edit-name" name="name" class="form-input primary-focus" placeholder="Nhập tên sản phẩm">
+                                                </div>
+
+                                                <div class="info-row">
+                                                    <label class="info-label">Nhãn hiệu:</label>
+                                                    <select id="edit-brand" name="brandId" class="form-input">
+                                                        <option value="">Đang tải...</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="info-row">
+                                                    <label class="info-label">Từ khóa (Tags):</label>
+                                                    <select id="edit-tags" name="keywordId" class="form-input">
+                                                        <option value="">Đang tải...</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="view-price-card">
+                                                    <div class="price-edit-row">
+                                                        <label class="price-label">Giá gốc (đ):</label>
+                                                        <input type="number" id="edit-oldPrice" name="oldPrice" class="form-input-small" value="0">
+                                                    </div>
+                                                    <div class="price-edit-row">
+                                                        <label class="price-label">Giảm giá (%):</label>
+                                                        <input type="number" id="edit-discount" name="discount" class="form-input-small" value="0" readonly style="background-color: #f0f0f0;">
+                                                    </div>
+                                                    <div class="price-edit-row">
+                                                        <label class="price-label primary-text">Giá mới (đ):</label>
+                                                        <input type="number" id="edit-newPrice" class="form-input-small price-edit-input" readonly style="background-color: #f0f0f0;">
+                                                    </div>
+                                                </div>
+
+                                                <div class="view-inventory" style="margin-top: 20px; border-top: 1px dashed #ddd; padding-top: 15px;">
+                                                    <div class="inventory-row">
+                                                        <div class="info-row no-border">
+                                                            <label class="info-label">Kho hàng:</label>
+                                                            <input type="number" id="edit-stock" name="stock" class="form-input-small" style="width: 80px;" value="0">
+                                                        </div>
+                                                        <div class="info-row no-border">
+                                                            <label class="info-label">Đã bán:</label>
+                                                            <input type="number" id="edit-sold" name="sold" class="form-input-small" style="width: 80px;" value="0">
+                                                        </div>
+                                                    </div>
+                                                    <div class="info-row no-border mt-10">
+                                                        <label class="info-label">Trạng thái Post:</label>
+                                                        <input type="checkbox" id="edit-isPost" name="isPost" class="product-table__checkbox" style="width: 20px; height: 20px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="view-section">
+                                        <h4 class="view-section-title">Mô tả sản phẩm</h4>
+                                        <div id="edit-v-descriptionList" class="edit-mode-list">
+                                        </div>
+                                        <button type="button" class="btn-add-more" onclick="addDescriptionRow()">+ Thêm dòng mô tả</button>
+                                    </div>
+
+                                    <div class="view-section">
+                                        <h4 class="view-section-title">Chi tiết sản phẩm</h4>
+                                        <div id="edit-v-detailList" class="edit-mode-list">
+                                        </div>
+                                        <button type="button" class="btn-add-more" onclick="addDetailRow()">+ Thêm khối chi tiết</button>
+                                    </div>
+
+                                    <div class="product-view-footer" style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; text-align: right;">
+                                        <button type="button" class="bton btn-cancel" onclick="closeEditModal()">Hủy bỏ</button>
+
+                                        <button type="button" class="bton btn--primary btn--back-rect btn-save" onclick="updateProduct()">Lưu thay đổi</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <section id="order" class="manage-detail">
+                        <h2 class="manage__heading">Đơn hàng</h2>
+
+                        <div class="order-table">
+
+                            <!-- Form tìm kiếm -->
+                            <form id="searchOrderForm" action="${pageContext.request.contextPath}/order-search" method="get">
+                                <div class="order-table__filter">
+                                    <div class="order-table__filter-label">
+                                        Điều kiện lọc
+                                        <i class="order-table__filter-icon fa-solid fa-caret-down"></i>
+                                    </div>
+
+                                    <input type="text"
+                                           name="keyword"
+                                           class="order-table__search"
+                                           placeholder="Nhập mã đơn hoặc tên khách"
+                                           value="${keyword}">
+
+                                    <button type="submit"
+                                            class="btn btn--default-color order-table__search-btn">
+                                        Tìm kiếm
+                                    </button>
+                                    <button type="button" id="btnReloadAll" class="btn btn--default-color" style="margin-left: 10px; min-width: 130px; --height: 30px;">
+                                        Tất cả đơn hàng
+                                    </button>
+                                </div>
+                            </form>
+
+                            <div class="order-table" id="order-main-content">
+                                <jsp:include page="_order_list.jsp" />
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+
+<script>
+    const sectionConfig = document.getElementById("config");
+    const sectionProduct = document.getElementById("product");
+    const sectionAdd = document.getElementById("add-product");
+    const sectionOrder = document.getElementById("order");
+    const sectionCustomer = document.getElementById("customer");
+    const sectionCustomerDetail = document.getElementById("customer-detail");
+    const sectionCustomerEdit = document.getElementById("customer-edit");
+    const sectionNews = document.getElementById("news");
+    const newsMenuButtons = document.querySelectorAll(".news-menu__btn");
+    const sectionSlideDetail = document.getElementById("slide-detail");
+    const sectionBlogDetail = document.getElementById("blog-detail");
+    const sectionSlideEdit = document.getElementById("slide-edit");
+    const sectionBlogEdit = document.getElementById("blog-edit");
+    const sectionSlide = document.getElementById("news-slide");
+    const sectionBlog = document.getElementById("news-blog");
+    const sectionSlideAdd = document.getElementById("add-slide");
+    const sectionBlogAdd  = document.getElementById("add-blog");
+    const btnAddSlide = document.querySelector("#news-slide .add-table__btn");
+    const btnAddBlog  = document.querySelector("#news-blog .add-table__btn");
+    const productMenuButtons = document.querySelectorAll(".product-menu__btn");
+    const sectionProductDetail = document.getElementById("viewProductModal");
+    const sectionProductEdit = document.getElementById("editProductPage");
+    const sectionProductList = document.getElementById("product-list-section");
+    const sectionProductEvent = document.getElementById("product-event-section");
+    const sectionEventAdd = document.getElementById("add-event-page");
+    const btnAddEventTrigger = document.querySelector(".event-header__btn");
+
+    const slideSelect = document.getElementById('eventSlideSelect');
+    const selectedBox = slideSelect.querySelector('.event-select__selected');
+    const optionsBox = slideSelect.querySelector('.event-select__options');
+    const hiddenInput = document.getElementById('eventSlideTargetHidden');
+    const options = slideSelect.querySelectorAll('.event-option')
+    const uploadGroup = document.getElementById('eventUploadGroup');
+    const editScopeRadios = document.querySelectorAll('input[name="editApplyScope"]');
+    const editBoxCategory = document.getElementById('editScopeCategory');
+    const editBoxSpecific = document.getElementById('editScopeSpecific');
+    const sectionEventView = document.getElementById("view-event-page");
+    const sectionEventEdit = document.getElementById("edit-event-page");
+    const editSlideSelect = document.getElementById('editEventSlideSelect');
+    const sidebarItems = document.querySelectorAll(".product-sidebar__item");
+    const sidebarSubLinks = document.querySelectorAll(".product-sub__link");
+
+
+
+    const newsSections = {
+        "news-slide": document.getElementById("news-slide"),
+        "news-blog": document.getElementById("news-blog")
+    };
+    const menuLinks = document.querySelectorAll(".manage-nav__link");
+    const btnAdd = document.querySelector(".product-table__btn");
+
+    // Hàm ẩn tất cả section
+    function hideAllSections() {
+        sectionProduct.style.display = "none";
+        sectionAdd.style.display = "none";
+        sectionOrder.style.display = "none";
+        sectionConfig.style.display = "none";
+        sectionCustomer.style.display = "none";
+        sectionCustomerDetail.style.display = "none";
+        sectionCustomerEdit.style.display = "none";
+        sectionNews.style.display = "none";
+        sectionProductDetail.style.display = "none";
+        sectionProductEdit.style.display = "none";
+        sectionProductEvent.style.display = "none";
+        sectionEventAdd.style.display = "none";
+        sectionEventView.style.display = "none";
+        sectionEventEdit.style.display = "none";
+
+    }
+    // Mở đúng tab theo controller
+    const serverTab = "${tab}"; // controller đang set "customers"
+
+    window.addEventListener("DOMContentLoaded", () => {
+        if (!serverTab) return; // nếu không có tab thì thôi
+
+        hideAllSections();
+
+        if (serverTab === "customers") {
+            sectionCustomer.style.display = "block";
+        } else if (serverTab === "product") {
+            sectionProduct.style.display = "block";
+        } else if (serverTab === "order") {
+            sectionOrder.style.display = "block";
+        } else {
+            sectionConfig.style.display = "block";
+        }
+    });
+    // Click menu
+    menuLinks.forEach(link => {
+        link.addEventListener("click", function (e) {
+            const href = this.getAttribute("href") || "";
+            if (!href.startsWith("#")) return;
+            e.preventDefault();
+            const targetId = href.substring(1);
+            hideAllSections(); // ẩn tất cả trước
+
+            if (targetId === "config") sectionConfig.style.display = "block";
+            if (targetId === "product") sectionProduct.style.display = "block";
+            if (targetId === "order") sectionOrder.style.display = "block";
+            if (targetId === "customer") sectionCustomer.style.display = "block";
+            if (targetId === "news") showNewsDefault();
+        });
+    });
+    productMenuButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const targetId = btn.getAttribute("data-target");
+
+            // Ẩn các content trong product
+            Object.values(productContents).forEach(content => {
+                if(content) content.style.display = "none";
+            });
+            productMenuButtons.forEach(b => b.classList.remove("active"));
+
+            if(productContents[targetId]) {
+                productContents[targetId].style.display = "block";
+            }
+            btn.classList.add("active");
+        });
+    });
+
+    sidebarItems.forEach(item => {
+        const parentLink = item.querySelector(".product-sidebar__link");
+
+        parentLink.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            const isActive = item.classList.contains("active") || item.classList.contains("product-sidebar__item--active");
+
+            sidebarItems.forEach(i => {
+                i.classList.remove("active");
+                i.classList.remove("product-sidebar__item--active");
+
+
+                const childLinks = i.querySelectorAll(".product-sub__link");
+                childLinks.forEach(link => link.classList.remove("active"));
+            });
+
+            if (!isActive) {
+
+                item.classList.add("active");
+
+                const firstSub = item.querySelector(".product-sub__link");
+                if (firstSub) {
+                    firstSub.classList.add("active");
+                }
+            } else {
+                console.log("Đã đóng menu");
+            }
+        });
+    });
+
+
+    sidebarSubLinks.forEach(sub => {
+        sub.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            sidebarSubLinks.forEach(s => s.classList.remove("active"));
+
+            sub.classList.add("active");
+        });
+    });
+
+    function initProductDefault() {
+        Object.values(productContents).forEach(c => { if(c) c.style.display = "none"; });
+        productContents["product-list"].style.display = "block";
+        productMenuButtons.forEach(b => b.classList.remove("active"));
+        document.querySelector(".product-menu__btn[data-target='product-list']").classList.add("active");
+
+        sidebarItems.forEach(i => i.classList.remove("active"));
+        sidebarSubLinks.forEach(s => s.classList.remove("active"));
+
+        if(sidebarItems[0]) sidebarItems[0].classList.add("active");
+        if(sidebarSubLinks[0]) sidebarSubLinks[0].classList.add("active");
+    }
+    productMenuButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            productMenuButtons.forEach(btn => btn.classList.remove("active"));
+            this.classList.add("active");
+
+            const target = this.getAttribute("data-target");
+
+            if (target === "product-list") {
+
+                sectionProductList.style.display = "block";
+                sectionProductEvent.style.display = "none";
+                document.querySelector(".product-sidebar").style.display = "block";
+            }
+            else if (target === "product-event") {
+
+                sectionProductList.style.display = "none";
+                sectionProductEvent.style.display = "block";
+                document.querySelector(".product-sidebar").style.display = "none";
+            }
+        });
+    });
+    // 1. Khi bấm nút "Thêm sự kiện giảm giá" (Nút xanh ở trang quản lý sự kiện)
+    if (btnAddEventTrigger) {
+        btnAddEventTrigger.addEventListener("click", () => {
+            hideAllSections();
+            sectionEventAdd.style.display = "block";
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    }
+
+    function backToEventList() {
+        // Ẩn trang thêm sự kiện
+        sectionEventAdd.style.display = "none";
+
+        // Hiển thị lại trang Sản phẩm (cha)
+        sectionProduct.style.display = "block";
+
+        // Kích hoạt hiển thị Tab Sự kiện bên trong trang Sản phẩm
+        sectionProductEvent.style.display = "block";
+        sectionProductList.style.display = "none";
+        sectionEventView.style.display = "none";
+        sectionEventEdit.style.display = "none";
+
+        // Ẩn sidebar vì trang sự kiện của bạn không dùng sidebar
+        const sidebar = document.querySelector(".product-sidebar");
+        if (sidebar) sidebar.style.display = "none";
+
+        // Cập nhật trạng thái Active cho menu con
+        productMenuButtons.forEach(btn => {
+            if (btn.getAttribute("data-target") === "product-event") {
+                btn.classList.add("active");
+            } else {
+                btn.classList.remove("active");
+            }
+        });
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // 3. Xử lý Radio "Phạm vi áp dụng" để ẩn hiện nội dung theo dòng
+    const scopeRadios = document.querySelectorAll('input[name="applyScope"]');
+    const boxCategory = document.getElementById('scopeCategory');
+    const boxSpecific = document.getElementById('scopeSpecific');
+
+    scopeRadios.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            const val = e.target.value;
+
+            // Ẩn tất cả trước
+            boxCategory.style.display = "none";
+            boxSpecific.style.display = "none";
+
+            // Hiện theo lựa chọn
+            if (val === "category") {
+                boxCategory.style.display = "block";
+            } else if (val === "specific") {
+                boxSpecific.style.display = "block";
+            }
+        });
+    });
+    // --- XỬ LÝ CHỌN SLIDE CHO SỰ KIỆN ---
+    if (slideSelect) {
+
+        selectedBox.addEventListener('click', (e) => {
+            e.stopPropagation();
+            slideSelect.classList.toggle('active');
+
+            if (slideSelect.classList.contains('active')) {
+                optionsBox.style.display = 'block';
+            } else {
+                optionsBox.style.display = 'none';
+            }
+        });
+
+        options.forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+
+                const val = option.getAttribute('data-value')
+                selectedBox.innerHTML = option.innerHTML;
+
+                hiddenInput.value = val;
+
+                slideSelect.classList.remove('active');
+                optionsBox.style.display = 'none';
+            });
+        });
+
+        document.addEventListener('click', () => {
+            if (slideSelect.classList.contains('active')) {
+                slideSelect.classList.remove('active');
+                optionsBox.style.display = 'none';
+            }
+        });
+    }
+    editScopeRadios.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            editBoxCategory.style.display = (e.target.value === "category") ? "block" : "none";
+            editBoxSpecific.style.display = (e.target.value === "specific") ? "block" : "none";
+        });
+    });
+    document.querySelectorAll(".event-table__row .event-col-action:nth-child(5)").forEach(btn => {
+
+        btn.addEventListener("click", function() {
+            hideAllSections();
+
+
+            if (sectionEventView) {
+                sectionEventView.style.display = "block";
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+        });
+    });
+
+    // Chức năng Sửa sự kiện
+    document.querySelectorAll(".event-table__row .event-col-action:nth-child(6)").forEach(btn => {
+        // Tìm cột Sửa (thường là cột thứ 6 trong hàng)
+        btn.addEventListener("click", function() {
+            hideAllSections();
+
+            if (sectionEventEdit) {
+                sectionEventEdit.style.display = "block";
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+        });
+    });
+    if (editSlideSelect) {
+        const editSelectedBox = editSlideSelect.querySelector('.ev-slide-sel__selected');
+        const editOptionsBox = editSlideSelect.querySelector('.ev-slide-sel__options');
+        const editHiddenInput = document.getElementById('editEventSlideTargetHidden');
+        const editOptions = editSlideSelect.querySelectorAll('.ev-slide-opt');
+
+        // Click vào hộp đã chọn để sổ menu ra hoặc đóng lại
+        editSelectedBox.addEventListener('click', (e) => {
+            e.stopPropagation(); // Ngăn sự kiện nổi bọt lên document
+
+            // Đóng các dropdown khác nếu có (tùy chọn)
+            const isOpen = editOptionsBox.style.display === 'block';
+            editOptionsBox.style.display = isOpen ? 'none' : 'block';
+            editSlideSelect.classList.toggle('active', !isOpen);
+        });
+
+        // Click chọn từng Option
+        editOptions.forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+
+                // Lấy giá trị data-value
+                const val = option.getAttribute('data-value');
+                if (val === null) return; // Bỏ qua nếu click trúng phần header không có value
+
+                // Cập nhật giao diện của hộp "Đã chọn" (Copy toàn bộ nội dung HTML của option vào hộp chính)
+                editSelectedBox.innerHTML = option.innerHTML;
+
+                // Cập nhật giá trị vào input hidden để gửi đi khi lưu form
+                editHiddenInput.value = val;
+
+                // Đóng menu sổ xuống
+                editOptionsBox.style.display = 'none';
+                editSlideSelect.classList.remove('active');
+
+                console.log("Đã chọn slide:", val);
+            });
+        });
+
+        document.addEventListener('click', () => {
+            if (editOptionsBox.style.display === 'block') {
+                editOptionsBox.style.display = 'none';
+                editSlideSelect.classList.remove('active');
+            }
+        });
+    }
+    // Click "Thêm sản phẩm"
+    btnAdd.addEventListener("click", () => {
+        hideAllSections();       // ẩn tất cả trước
+        sectionAdd.style.display = "block"; // chỉ hiện form thêm sản phẩm
+    });
+
+    // Nếu muốn quay lại bảng sản phẩm, có thể thêm nút "Quay lại"
+    const backBtn = document.createElement("button");
+    backBtn.textContent = "Quay lại danh sách sản phẩm";
+    backBtn.className = "btn btn--default-color product-table__back-btn";
+    sectionAdd.appendChild(backBtn);
+
+    backBtn.addEventListener("click", () => {
+        sectionAdd.style.display = "none";
+        sectionProduct.style.display = "block";
+    });
+    //  Gán sự kiện cho các nút "Xem" trong bảng sản phẩm
+    document.querySelectorAll(".product-table__row .product-table__view").forEach(btn => {
+        if (btn.textContent.trim() === "Xem") {
+            btn.addEventListener("click", function() {
+                hideAllSections();
+
+                sectionProductDetail.style.display = "block";
+                sectionProductDetail.style.position = "static";
+                sectionProductDetail.style.backgroundColor = "transparent";
+                sectionProductDetail.style.padding = "0";
+
+                window.scrollTo({ top: 0, behavior: "smooth" });
+
+            });
+        }
+    });
+
+
+    document.querySelectorAll(".product-table__row .product-table__edit").forEach(btn => {
+        if (btn.textContent.trim() === "Sửa") {
+            btn.addEventListener("click", function() {
+                hideAllSections(); // Bước này sẽ ẩn trang Product (Danh sách)
+
+                sectionProductEdit.style.display = "block"; // Hiện trang Edit
+                sectionProductEdit.style.position = "static";
+                sectionProductEdit.style.backgroundColor = "transparent";
+                sectionProductEdit.style.padding = "0";
+
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            });
+        }
+    });
+
+    function backToList() {
+        sectionProductDetail.style.display = "none";
+        sectionProduct.style.display = "block";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // Hàm quay lại cho trang SỬA sản phẩm
+    function backFromEdit() {
+        // Ẩn trang Edit
+        sectionProductEdit.style.display = "none";
+        // Hiện lại trang danh sách
+        sectionProduct.style.display = "block";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // Hàm Đóng dùng chung (CHỈ GIỮ LẠI 1 HÀM NÀY)
+    function closeModal(id) {
+        if (id === 'viewProductModal') {
+            backToList();
+        } else if (id === 'editProductPage') {
+            backFromEdit();
+        } else {
+            // Xử lý cho các modal khác nếu có (như brandModal, tagModal)
+            const modal = document.getElementById(id);
+            if (modal) modal.style.display = "none";
+        }
+    }
+    // Xử lý submit form
+    const formInline = document.getElementById("addProductFormInline");
+    formInline.addEventListener("submit", (e) => {
+        e.preventDefault();
+        console.log("Thêm sản phẩm inline:", {
+            name: document.getElementById("productNameInline").value,
+            image: document.getElementById("productImageInline").files[0],
+            date: document.getElementById("productDateInline").value
+        });
+
+        // Sau khi submit xong, quay lại bảng sản phẩm
+        sectionAdd.style.display = "none";
+        sectionProduct.style.display = "block";
+        formInline.reset();
+    });
+
+
+    // Click nút "Đóng"
+    const btnBackCustomer = document.querySelector(
+        "#customer-detail .btn--default-color"
+    );
+
+    if (btnBackCustomer) {
+        btnBackCustomer.addEventListener("click", () => {
+            sectionCustomerDetail.style.display = "none";
+            sectionCustomer.style.display = "block";
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    }
+    // SỬA KHÁCH HÀNG (mở form + đổ dữ liệu)
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".customer-table__edit").forEach(btn => {
+        btn.addEventListener("click", () => {
+          hideAllSections();
+          sectionCustomerEdit.style.display = "block";
+          window.scrollTo({ top: 0, behavior: "smooth" });
+
+          // đổ dữ liệu từ data-* vào form
+          document.getElementById("editId").value = btn.dataset.id || "";
+          document.getElementById("editName").value = btn.dataset.name || "";
+          document.getElementById("editEmail").value = btn.dataset.email || "";
+          document.getElementById("editPhone").value = btn.dataset.phone || "";
+          document.getElementById("editAddress").value = btn.dataset.address || "";
+
+          // role/status -> đổ vào SELECT (phải chắc id không trùng)
+          const roleEl = document.getElementById("editRole");
+          if (roleEl) roleEl.value = (btn.dataset.role ?? "0");
+
+          const statusEl = document.getElementById("editStatus");
+          if (statusEl) statusEl.value = (btn.dataset.status ?? "1");
+
+          // password luôn để trống
+          const passEl = document.getElementById("editPassword");
+          if (passEl) passEl.value = "";
+        });
+      });
+
+      // XEM KHÁCH HÀNG (mở detail + đổ dữ liệu)
+      document.querySelectorAll(".customer-table__view").forEach(btn => {
+        btn.addEventListener("click", () => {
+          hideAllSections();
+          sectionCustomerDetail.style.display = "block";
+          window.scrollTo({ top: 0, behavior: "smooth" });
+
+          document.getElementById("customerDetailName").textContent = btn.dataset.name || "";
+          document.getElementById("customerDetailEmail").textContent = btn.dataset.email || "";
+          document.getElementById("customerDetailPhone").textContent = btn.dataset.phone || "";
+          document.getElementById("customerDetailAddress").textContent = btn.dataset.address || "";
+          document.getElementById("customerDetailCreatedAt").textContent = btn.dataset.created || "-";
+          document.getElementById("customerDetailUpdatedAt").textContent = btn.dataset.updated || "-";
+
+          // status badge (online/offline)
+          const st = btn.dataset.status; // "1" hoặc "0"
+          const statusBadge = document.getElementById("customerDetailStatus");
+          if (statusBadge) {
+            if (st === "1") {
+              statusBadge.textContent = "Đang hoạt động";
+              statusBadge.classList.remove("offline");
+              statusBadge.classList.add("online");
+            } else {
+              statusBadge.textContent = "Bị khóa";
+              statusBadge.classList.remove("online");
+              statusBadge.classList.add("offline");
+            }
+          }
+
+          // avatar (nếu có)
+          const av = btn.dataset.avatar;
+          const avatarEl = document.getElementById("customerDetailAvatar");
+          if (avatarEl && av) avatarEl.src = av;
+
+          // role text
+          const r = btn.dataset.role; // "1" hoặc "0"
+          const roleEl = document.getElementById("customerDetailRole");
+          if (roleEl) roleEl.textContent = (r === "1") ? "Admin" : "User";
+
+          // status text riêng
+          const stTextEl = document.getElementById("customerDetailStatusText");
+          if (stTextEl) stTextEl.textContent = (st === "1") ? "Đang hoạt động" : "Bị khóa";
+        });
+      });
+    });
+
+
+    function hideCustomerEdit() {
+        hideAllSections();
+        sectionCustomer.style.display = "block";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    // Ẩn tất cả section News
+    function hideAllNewsSections() {
+        Object.values(newsSections).forEach(sec => sec.style.display = "none");
+        newsMenuButtons.forEach(btn => btn.classList.remove("active"));
+    }
+
+    // Mặc định show Slide khi vào News
+    function showNewsDefault() {
+        sectionNews.style.display = "block";
+        hideAllNewsSections();
+        newsSections["news-slide"].style.display = "block";
+        document.querySelector(".news-menu__btn[data-target='news-slide']").classList.add("active");
+    }
+
+    // Click menu sidebar trong News
+    newsMenuButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const targetId = btn.getAttribute("data-target");
+            hideAllNewsSections();
+            if(newsSections[targetId]) newsSections[targetId].style.display = "block";
+            btn.classList.add("active");
+        });
+    });
+    function hideAllDetailSections() {
+        sectionSlideDetail.style.display = "none";
+        sectionBlogDetail.style.display = "none";
+        sectionSlideEdit.style.display = "none";
+        sectionBlogEdit.style.display = "none";
+    }
+    // === Xem chi tiết Slide ===
+    document.querySelectorAll("#news-slide .news-table__view").forEach(btn => {
+        btn.addEventListener("click", () => {
+            hideAllSections();
+            hideAllDetailSections();
+            sectionSlideDetail.style.display = "block";
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    });
+
+    // === Xem chi tiết Blog ===
+    document.querySelectorAll("#news-blog .news-table__view").forEach(btn => {
+        btn.addEventListener("click", () => {
+            hideAllSections();
+            hideAllDetailSections();
+            sectionBlogDetail.style.display = "block";
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    });
+
+    // === Sửa Slide/Blog ===
+    document.querySelectorAll(".news-table__edit").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const parentTable = btn.closest(".news-table");
+            hideAllSections();
+            hideAllDetailSections();
+            if (parentTable.id === "news-slide") sectionSlideEdit.style.display = "block";
+            if (parentTable.id === "news-blog") sectionBlogEdit.style.display = "block";
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    });
+
+    function showNewsWithTab(tabId) {
+        sectionNews.style.display = "block";
+
+        hideAllNewsSections();
+
+        if (newsSections[tabId]) {
+            newsSections[tabId].style.display = "block";
+            document
+                .querySelector(`.news-menu__btn[data-target='${tabId}']`)
+                .classList.add("active");
+        }
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // === Nút đóng chi tiết Slide/Blog ===
+    function hideSlideDetail() {
+        sectionSlideDetail.style.display = "none";
+        showNewsWithTab("news-slide");
+    }
+
+    function hideBlogDetail() {
+        sectionBlogDetail.style.display = "none";
+        showNewsWithTab("news-blog");
+    }
+
+    // === Nút hủy Slide/Blog Edit ===
+    function hideSlideEdit() {
+        sectionSlideEdit.style.display = "none";
+        showNewsWithTab("news-slide");
+    }
+
+    function hideBlogEdit() {
+        sectionBlogEdit.style.display = "none";
+        showNewsWithTab("news-blog");
+    }
+    function hideAllNewsViews() {
+        sectionSlide.style.display = "none";
+        sectionBlog.style.display  = "none";
+
+        sectionSlideAdd.style.display = "none";
+        sectionBlogAdd.style.display  = "none";
+
+        sectionSlideDetail.style.display = "none";
+        sectionBlogDetail.style.display  = "none";
+        sectionSlideEdit.style.display   = "none";
+        sectionBlogEdit.style.display    = "none";
+
+        newsMenuButtons.forEach(btn => btn.classList.remove("active"));
+    }
+    if (btnAddSlide) {
+        btnAddSlide.addEventListener("click", () => {
+            hideAllSections();
+            hideAllNewsViews();
+
+            sectionNews.style.display = "block";
+            sectionSlideAdd.style.display = "block";
+
+            document
+                .querySelector(".news-menu__btn[data-target='news-slide']")
+                .classList.add("active");
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    }
+    if (btnAddBlog) {
+        btnAddBlog.addEventListener("click", () => {
+            hideAllSections();
+            hideAllNewsViews();
+
+            sectionNews.style.display = "block";
+            sectionBlogAdd.style.display = "block";
+
+            document
+                .querySelector(".news-menu__btn[data-target='news-blog']")
+                .classList.add("active");
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    }
+    function hideSlideAdd() {
+        hideAllNewsViews();
+        sectionNews.style.display = "block";
+        sectionSlide.style.display = "block";
+
+        document
+            .querySelector(".news-menu__btn[data-target='news-slide']")
+            .classList.add("active");
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function hideBlogAdd() {
+        hideAllNewsViews();
+        sectionNews.style.display = "block";
+        sectionBlog.style.display = "block";
+
+        document
+            .querySelector(".news-menu__btn[data-target='news-blog']")
+            .classList.add("active");
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    document.getElementById('brandSelect').addEventListener('change', function() {
+        if (this.value === 'add-new') {
+            openModal('brandModal');
+            this.value = "";
+        }
+    });
+
+    document.getElementById('tagSelect').addEventListener('change', function() {
+        if (this.value === 'add-new') {
+            openModal('tagModal');
+            this.value = "";
+        }
+    });
+    document.getElementById('cateSelect').addEventListener('change', function() {
+        if (this.value === 'add-new') {
+            openModal('cateModal');
+            this.value = "";
+        }
+    });
+
+</script>
+
+<script>
+    let quill;
+    document.addEventListener("DOMContentLoaded", function() {
+        quill = new Quill('#editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ header: [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ list: 'ordered' }, { list: 'bullet' }],
+                    ['link', 'image'],
+                    ['clean']
+                ]
+            }
+        });
+
+        // Gán nội dung khởi tạo
+        quill.setText('Nội dung');
+    });
+
+    // --- XỬ LÝ HIỂN THỊ CỬA SỔ NHẬP (MODAL) ---
+
+    function openModal(id) {
+        const modal = document.getElementById(id);
+        if (modal) {
+            modal.style.display = 'flex'; // Hiển thị modal
+        }
+    }
+
+    function closeModal(id) {
+        const modal = document.getElementById(id);
+        if (modal) {
+            modal.style.display = 'none'; // Ẩn modal
+        }
+        // Khi đóng, reset lại thanh chọn về mặc định để tránh bị kẹt ở chữ "Thêm mới"
+        if (id === 'brandModal') document.getElementById('brandSelect').value = '';
+        if (id === 'tagModal') document.getElementById('tagSelect').value = '';
+
+        // <--- MỚI THÊM: Reset select danh mục khi đóng modal
+        if (id === 'cateModal') document.getElementById('cateSelect').value = '';
+    }
+
+    window.onclick = function(event) {
+        if (event.target.classList.contains('admin-modal')) {
+            event.target.style.display = "none";
+        }
+    }
+
+    // 1. Chức năng lưu Nhãn hiệu (Brand)
+    function saveNewBrand() {
+        const form = document.getElementById('addBrandFormQuick');
+        if(!form) return;
+
+        const formData = new FormData(form);
+
+        fetch('/DoAnWeb/api/add-brands', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (!response.ok) throw new Error("Mạng có vấn đề hoặc Server lỗi");
+                return response.json();
+            })
+            .then(data => {
+                if (data.status === "success") {
+                    const select = document.getElementById('brandSelect');
+                    if (select) {
+                        const newOption = new Option(data.brandName, data.brandID, true, true);
+                        select.add(newOption, select.options[select.length - 1]);
+                    }
+
+                    closeModal('brandModal');
+                    form.reset();
+                    alert("Thêm nhãn hiệu thành công!");
+                } else {
+                    alert("Không thể lưu: " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Lỗi kết nối server!");
+            });
+    }
+
+    // 2. Chức năng lưu Từ khóa (Tag/Keyword)
+    function saveNewTag() {
+        const tagName = document.getElementById('newTagName').value;
+        const tagDesc = document.getElementById('newTagDesc').value;
+
+        if (!tagName) {
+            alert("Vui lòng nhập tên từ khóa");
+            return;
+        }
+
+        const params = new URLSearchParams();
+        params.append('tagName', tagName);
+        params.append('tagDesc', tagDesc);
+
+        fetch('/DoAnWeb/api/add-tag', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: params
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    const select = document.getElementById('tagSelect');
+                    const newOption = new Option(tagName, data.tagID, true, true);
+                    select.add(newOption, select.options[select.length - 1]);
+
+                    closeModal('tagModal');
+                    document.getElementById('addTagFormQuick').reset();
+                    alert("Thêm từ khóa thành công!");
+                } else {
+                    alert("Lỗi: " + data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    // 3. Chức năng lưu Danh mục (Category) <--- MỚI THÊM: Code giống hệt Brand
+    function saveNewCategory() {
+        const cateName = document.getElementById('newCateName').value;
+        const cateDesc = document.getElementById('newCateDesc').value;
+
+        const params = new URLSearchParams();
+        params.append('cateName', cateName);
+        params.append('cateDesc', cateDesc);
+
+        fetch('/DoAnWeb/api/add-category', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: params
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    const select = document.getElementById('cateSelect');
+                    // Server trả về cateName, cateID
+                    const newOption = new Option(data.cateName, data.cateID, true, true);
+                    select.add(newOption, select.options[select.length - 1]);
+
+                    closeModal('cateModal');
+                    // Reset form
+                    document.getElementById('addCateFormQuick').reset();
+                    alert("Thêm danh mục thành công!");
+                } else {
+                    alert("Lỗi: " + data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    // --- QUẢN LÝ MÔ TẢ (DESCRIPTIONS) ---
+    function addDescription() {
+        const title = document.getElementById('descTitle').value;
+        const content = document.getElementById('descContent').value;
+
+        if (!title || !content) {
+            alert("Vui lòng nhập đầy đủ tiêu đề và nội dung mô tả!");
+            return;
+        }
+
+        const list = document.getElementById('descriptionList');
+        const itemIdx = list.children.length;
+
+        const html = '<div class="added-item" id="desc-item-' + itemIdx + '">' +
+            '<span><strong>' + title + ':</strong> ' + content + '</span>' +
+            '<input type="hidden" name="descTitles[]" value="' + title + '">' +
+            '<input type="hidden" name="descContents[]" value="' + content + '">' +
+            '<button type="button" onclick="removeItem(\'desc-item-' + itemIdx + '\')" class="btn-remove">Xóa</button>' +
+            '</div>';
+        list.insertAdjacentHTML('beforeend', html);
+
+        document.getElementById('descTitle').value = '';
+        document.getElementById('descContent').value = '';
+    }
+
+    // --- QUẢN LÝ CHI TIẾT (DETAILS - CÓ ẢNH) ---
+    function addDetail() {
+        const fileInput = document.getElementById('detailImg');
+        const title = document.getElementById('detailTitle').value;
+        const content = document.getElementById('detailContent').value;
+
+        if (!fileInput.files[0] || !title) {
+            alert("Vui lòng chọn ảnh và nhập tiêu đề chi tiết!");
+            return;
+        }
+
+        const list = document.getElementById('detailList');
+        const itemIdx = list.children.length;
+
+        const newFileInput = fileInput.cloneNode();
+        newFileInput.style.display = 'none';
+        newFileInput.name = "detImages[]";
+
+        const html = `
+    <div class="added-item" id="det-item-\${itemIdx}">
+        <span><strong></strong> (Đã chọn ảnh)</span>
+        <span><strong>\${title}:</strong> \${content}</span>
+        <input type="hidden" name="detTitles[]" value="\${title}">
+        <input type="hidden" name="detContents[]" value="\${content}">
+        <button type="button" onclick="removeItem('det-item-\${itemIdx}')" class="btn-remove">Xóa</button>
+    </div>
+`;
+
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = html;
+        const itemDiv = wrapper.firstElementChild;
+        itemDiv.appendChild(newFileInput);
+        list.appendChild(itemDiv);
+
+        fileInput.value = '';
+        document.getElementById('detailTitle').value = '';
+        document.getElementById('detailContent').value = '';
+    }
+
+    function removeItem(id) {
+        document.getElementById(id).remove();
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Lưu ý: bỏ dấu '/' ở đầu nếu file JS chạy từ trang cùng cấp thư mục api
+        fetchData('/DoAnWeb/api/brands', 'brandSelect', '-- Chọn nhãn hiệu --');
+        fetchData('/DoAnWeb/api/keywords', 'tagSelect', '-- Chọn từ khóa --');
+        fetchData('/DoAnWeb/api/categories', 'cateSelect', '-- Chọn danh mục --');
+    });
+
+    function fetchData(url, selectId, defaultText) {
+        const selectElem = document.getElementById(selectId);
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) throw new Error('HTTP error! status: ' + response.status);
+                return response.json();
+            })
+            .then(data => {
+                selectElem.innerHTML = `<option value="">${defaultText}</option>`;
+
+                data.forEach(item => {
+                    let opt = document.createElement('option');
+                    opt.value = item.id;
+                    opt.textContent = item.name;
+                    selectElem.appendChild(opt);
+                });
+
+                let addNewOpt = document.createElement('option');
+                addNewOpt.value = "add-new";
+                addNewOpt.textContent = "+ Thêm mới";
+                selectElem.appendChild(addNewOpt);
+            })
+            .catch(error => {
+                console.error('Lỗi:', error);
+                selectElem.innerHTML = `<option value="">Lỗi tải dữ liệu (404/500)</option>`;
+            });
+    }
+
+    async function saveFullProduct() {
+        const form = document.getElementById('addProductFormInline');
+        if (!form || !form.reportValidity()) return;
+
+        // 1. Thu thập ID từ các thẻ Select
+        const brandID = document.getElementById('brandSelect').value;
+        const tagID = document.getElementById('tagSelect').value;
+        const cateID = document.getElementById('cateSelect').value; // <--- MỚI THÊM: Lấy ID danh mục
+
+        // Validate thêm cateID
+        if (!brandID || brandID === 'add-new' ||
+            !tagID || tagID === 'add-new' ||
+            !cateID || cateID === 'add-new') { // <--- MỚI THÊM
+            alert("Vui lòng chọn Nhãn hiệu, Danh mục và Từ khóa hợp lệ!");
+            return;
+        }
+
+        // 2. Tạo đối tượng FormData từ Form chính
+        const formData = new FormData(form);
+
+        // 3. Xử lý logic Checkbox
+        const postCheckbox = document.getElementById('postStatus');
+        const isPostValue = (postCheckbox && postCheckbox.checked) ? "1" : "0";
+        formData.set('postStatus', isPostValue);
+
+        // 4. Ép ID Brand, Tag, Category vào dữ liệu gửi đi
+        formData.set('brandID', brandID);
+        formData.set('tagID', tagID);
+        formData.set('cateID', cateID);
+
+        // 5. Lấy nội dung từ Quill Editor
+        const editorContent = document.querySelector('#editor .ql-editor');
+        if (editorContent) {
+            formData.append('productFullDescription', editorContent.innerHTML);
+        }
+
+        // Gửi dữ liệu qua API
+        console.log("Đang tiến hành lưu sản phẩm và dữ liệu liên quan...");
+
+        try {
+            const response = await fetch('/DoAnWeb/api/add-product', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (result.status === "success") {
+                alert("Lưu sản phẩm, mô tả và chi tiết thành công!");
+                window.location.reload();
+            } else {
+                alert("Lỗi từ server: " + result.message);
+            }
+        } catch (error) {
+            console.error("Chi tiết lỗi:", error);
+            alert("Lỗi hệ thống: " + error.message);
+        }
+    }
+</script>
+
+<script>
+
+    var contextPath = '${pageContext.request.contextPath}';
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // 1. Tải danh mục bên trái
+        fetch('DoAnWeb/api/categories-list')
+            .then(res => res.json())
+            .then(data => renderCategoriesExact(data))
+            .catch(err => console.error(err));
+
+        loadProducts(0);
+
+        const searchBtn = document.querySelector('.event-search__btn');
+        const searchInput = document.querySelector('.event-search__input');
+
+        if (searchBtn && searchInput) {
+            searchBtn.addEventListener('click', function() {
+                searchProducts(searchInput.value);
+            });
+
+            searchInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    searchProducts(searchInput.value);
+                }
+            });
+        }
+    });
+
+    function searchProducts(keyword) {
+        console.log("Đang tìm kiếm:", keyword);
+        fetch(contextPath + '/api/search-products?query=' + encodeURIComponent(keyword))
+            .then(res => {
+                if (!res.ok) return res.text().then(text => { throw new Error(text) });
+                return res.json();
+            })
+            .then(data => {
+                console.log("Dữ liệu search trả về:", data);
+                renderProductTable(data);
+            })
+            .catch(err => console.error('Lỗi search:', err));
+    }
+    function loadProducts(cateId) {
+
+        fetch(contextPath + '/api/products-by-category?cateId=' + cateId)
+            .then(res => res.json())
+            .then(data => {
+                renderProductTable(data);
+            })
+            .catch(err => {
+                console.error('Lỗi tải sản phẩm:', err);
+            });
+    }
+
+    function renderProductTable(products) {
+        var container = document.getElementById('product-list-container');
+        if (!container) return;
+
+        if (!products || products.length === 0) {
+            container.innerHTML = '<p style="padding:20px; text-align:center;">Không có sản phẩm nào.</p>';
+            return;
+        }
+
+        var html = '';
+
+        products.forEach(function(p) {
+            // 1. Xử lý giá tiền
+            var formattedPrice = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(p.price);
+
+            // 2. Xử lý đường dẫn ảnh
+            var imgUrl = contextPath + '/assets/img/products/' + p.image;
+
+            // 3. XỬ LÝ CHECKBOX (MỚI THÊM)
+            // Nếu p.post bằng 1 thì biến checkStatus là 'checked', ngược lại là rỗng
+            var checkStatus = (p.post == 1) ? 'checked' : '';
+
+            // 4. TẠO HTML
+            html += '<article class="product-table__row">';
+
+            // Cột Ảnh
+            html += '    <div class="product-table__cell">';
+            html += '        <img src="' + imgUrl + '" alt="" class="product-table__img">';
+            html += '    </div>';
+
+            // Cột Tên
+            html += '    <div class="product-table__cell">';
+            html += '        <span class="product-table__text">' + p.name + '</span>';
+            html += '    </div>';
+
+
+            html += '    <div class="product-table__cell">';
+            html += '        <input type="checkbox" class="product-table__checkbox" value="' + p.id + '" ' + checkStatus + '>';
+            html += '    </div>';
+
+            // Cột Giá
+            html += '    <div class="product-table__cell">';
+            html += '        <span class="product-table__text">' + formattedPrice + '</span>';
+            html += '    </div>';
+
+
+            html += '    <div class="product-table__cell">';
+            html += '        <button class="product-table__view" onclick="viewProduct(' + p.id + ')">Xem</button>';
+            html += '    </div>';
+
+            html += '    <div class="product-table__cell">';
+            html += '        <button class="product-table__edit" onclick="editProduct(' + p.id + ')">Sửa</button>';
+            html += '    </div>';
+
+
+            html += '    <div class="product-table__cell">';
+            html += '        <button class="product-table__delete" onclick="deleteProduct(' + p.id + ')">Xóa</button>';
+            html += '    </div>';
+
+            html += '</article>';
+        });
+
+        container.innerHTML = html;
+    }
+
+    function renderCategoriesExact(list) {
+        var container = document.getElementById('category-list');
+        if (!container) return;
+
+        var html = '';
+
+        list.forEach(function(parent) {
+            var hasChild = parent.children && parent.children.length > 0;
+
+            // HTML CHO MENU CON
+            var subHtml = '';
+            if (hasChild) {
+                subHtml += '<ul class="product-sub" style="display: none;">';
+                parent.children.forEach(function(child) {
+                    // QUAN TRỌNG: Sửa href thành javascript:void(0) và thêm onclick loadProducts
+                    subHtml += '<li class="product-sub__item">';
+                    subHtml +=    '<a href="javascript:void(0)" onclick="loadProducts(' + child.id + ')" class="product-sub__link">';
+                    subHtml +=       child.name;
+                    subHtml +=    '</a>';
+                    subHtml += '</li>';
+                });
+                subHtml += '</ul>';
+            }
+
+            var parentOnClick = hasChild ? '' : 'onclick="loadProducts(' + parent.id + ')"';
+            var parentHref = 'javascript:void(0)';
+
+            html += '<li class="product-sidebar__item">';
+            html +=    '<a href="' + parentHref + '" ' + parentOnClick + ' class="product-sidebar__link">';
+            html +=       parent.name;
+            html +=    '</a>';
+            html +=    subHtml;
+            html += '</li>';
+        });
+
+        container.innerHTML = html;
+        initAccordion();
+    }
+
+    function initAccordion() {
+        var links = document.querySelectorAll('.product-sidebar__item > .product-sidebar__link');
+        links.forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                var subMenu = this.nextElementSibling;
+                if (subMenu && subMenu.classList.contains('product-sub')) {
+                    e.preventDefault();
+                    if (subMenu.style.display === 'none' || subMenu.style.display === '') {
+                        subMenu.style.display = 'block';
+                        this.parentElement.classList.add('product-sidebar__item--active');
+                    } else {
+                        subMenu.style.display = 'none';
+                        this.parentElement.classList.remove('product-sidebar__item--active');
+                    }
+                }
+            });
+        });
+    }
+
+    // --- 1. HÀM XỬ LÝ CLICK NÚT "XEM" ---
+    function viewProduct(id) {
+        console.log("Đang xem sản phẩm ID: " + id);
+
+        // BƯỚC 1: CHUYỂN ĐỔI GIAO DIỆN (Logic của bạn)
+        // Ẩn tất cả các section khác (Giả sử bạn đã có hàm này)
+        if (typeof hideAllSections === 'function') {
+            hideAllSections();
+        }
+
+        // Lấy thẻ container chi tiết (ID trùng với trong HTML bạn đã viết)
+        var sectionProductDetail = document.getElementById('viewProductModal');
+
+        if (sectionProductDetail) {
+            // Áp dụng CSS như bạn yêu cầu để nó hiện ra như một trang con
+            sectionProductDetail.style.display = "block";
+            sectionProductDetail.style.position = "static";
+            sectionProductDetail.style.backgroundColor = "transparent";
+            sectionProductDetail.style.padding = "0"; // Hoặc padding tùy ý
+
+            // Cuộn lên đầu trang
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        } else {
+            console.error("Không tìm thấy div id='viewProductModal'");
+            return;
+        }
+
+        fetch(contextPath + '/api/product-detail?id=' + id)
+            .then(res => {
+                if (!res.ok) throw new Error("Lỗi kết nối server");
+                return res.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    // Nếu lỗi thì quay lại danh sách
+                    backToList();
+                } else {
+                    // BƯỚC 3: ĐỔ DỮ LIỆU VÀO HTML
+                    fillProductModal(data);
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Không thể tải thông tin sản phẩm.");
+            });
+    }
+
+    // --- 2. HÀM ĐỔ DỮ LIỆU VÀO HTML (RENDER) ---
+    function fillProductModal(p) {
+        '${pageContext.request.contextPath}';
+
+        var imgPath = p.image ? (contextPath + '/assets/img/products/' + p.image) : (contextPath + '/assets/img/no-image.png');
+
+        var elImg = document.getElementById('v-image');
+        if(elImg) elImg.src = imgPath;
+
+        if(document.getElementById('v-createdAt')) document.getElementById('v-createdAt').innerText = p.createdAt || '---';
+        if(document.getElementById('v-updatedAt')) document.getElementById('v-updatedAt').innerText = p.updatedAt || '---';
+        if(document.getElementById('v-name')) document.getElementById('v-name').innerText = p.name;
+        if(document.getElementById('v-brand')) document.getElementById('v-brand').innerText = p.brandName || '---';
+        if(document.getElementById('v-tags')) document.getElementById('v-tags').innerText = p.keywordName || '---';
+
+        if(document.getElementById('v-stock')) document.getElementById('v-stock').innerText = p.quantity;
+        if(document.getElementById('v-sold')) document.getElementById('v-sold').innerText = p.quantitySaled;
+        if(document.getElementById('v-isPost')) document.getElementById('v-isPost').checked = (p.post === 1);
+
+        // 2. Render Giá tiền
+        var priceFmt = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' });
+        if(document.getElementById('v-newPrice')) document.getElementById('v-newPrice').innerText = priceFmt.format(p.price);
+
+        var boxOldPrice = document.getElementById('box-oldPrice');
+        var boxDiscount = document.getElementById('box-discount');
+        var oldPriceEl = document.getElementById('v-oldPrice');
+        var discountEl = document.getElementById('v-discount');
+
+        if (p.discountPercent > 0) {
+            if(oldPriceEl) oldPriceEl.innerText = priceFmt.format(p.firstPrice);
+            if(discountEl) discountEl.innerText = p.discountPercent;
+
+            if(boxOldPrice) {
+                boxOldPrice.style.display = 'block';
+                boxOldPrice.style.marginBottom = '10px';
+                boxOldPrice.style.lineHeight = '1.8';
+            }
+            if(boxDiscount) {
+                boxDiscount.style.display = 'block';
+                boxDiscount.style.marginBottom = '10px';
+                boxDiscount.style.lineHeight = '1.8';
+            }
+        } else {
+            if(boxOldPrice) boxOldPrice.style.display = 'none';
+            if(boxDiscount) boxDiscount.style.display = 'none';
+        }
+
+
+
+
+        var descContainer = document.getElementById('v-descriptionList');
+        if(descContainer) {
+            descContainer.innerHTML = '';
+            if (p.descriptions && p.descriptions.length > 0) {
+                var htmlDesc = '';
+                p.descriptions.forEach(function(d) {
+                    // SỬA LỖI TẠI ĐÂY: Dùng nháy đơn và dấu cộng
+                    htmlDesc += '<div class="view-text-item">';
+                    htmlDesc +=     '<h5>' + d.title + '</h5>';
+                    htmlDesc +=     '<p>' + d.description + '</p>';
+                    htmlDesc += '</div>';
+                });
+                descContainer.innerHTML = htmlDesc;
+            } else {
+                descContainer.innerHTML = '<p style="color:#888; font-style:italic">Không có mô tả bổ sung.</p>';
+            }
+        }
+
+        var detailContainer = document.getElementById('v-detailList');
+        if(detailContainer) {
+            detailContainer.innerHTML = '';
+            if (p.details && p.details.length > 0) {
+                var htmlDetail = '';
+                p.details.forEach(function(dt) {
+                    var dtImgSrc = dt.image ? (contextPath + '/assets/img/details/' + dt.image) : '';
+
+                    // SỬA LỖI TẠI ĐÂY:
+                    var imgTag = dtImgSrc ? '<img src="' + dtImgSrc + '" alt="Detail">' : '';
+
+                    htmlDetail += '<div class="view-detail-card">';
+                    htmlDetail +=     imgTag;
+                    htmlDetail +=     '<div class="view-detail-info">';
+                    htmlDetail +=         '<h5>' + dt.title + '</h5>';
+                    htmlDetail +=         '<p>' + dt.description + '</p>';
+                    htmlDetail +=     '</div>';
+                    htmlDetail += '</div>';
+                });
+                detailContainer.innerHTML = htmlDetail;
+            } else {
+                detailContainer.innerHTML = '<p style="color:#888; font-style:italic">Không có chi tiết sản phẩm.</p>';
+            }
+        }
+    }
+    var contextPath = '${pageContext.request.contextPath}';
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        fetch(contextPath + '/api/categories-list')
+            .then(res => res.json())
+            .then(data => renderCategoriesExact(data))
+            .catch(err => console.error(err));
+
+        loadProducts(0);
+
+        document.getElementById('edit-oldPrice').addEventListener('input', calculateNewPrice);
+        document.getElementById('edit-discount').addEventListener('input', calculateNewPrice);
+    });
+
+    // --- 1. HÀM CLICK NÚT SỬA (GỌI API) ---
+    document.addEventListener("DOMContentLoaded", function () {
+        // Tải danh mục, brand, keyword khi trang vừa load
+        if(typeof loadProducts === "function") loadProducts(0);
+        loadBrandOptions();
+        loadKeywordOptions();
+    });
+
+    // Hàm hiển thị Form sửa
+    function editProduct(id) {
+        console.log("Bắt đầu sửa sản phẩm ID: " + id);
+
+        if (typeof hideAllSections === 'function') {
+            hideAllSections();
+        }
+
+
+        var editPage = document.getElementById('editProductPage');
+        if (editPage) {
+            editPage.style.display = 'block';
+
+            // Reset form
+            document.getElementById('editProductForm').reset();
+            document.getElementById('edit-v-image').src = contextPath + '/assets/img/no-image.png';
+            document.getElementById('edit-v-descriptionList').innerHTML = '';
+            document.getElementById('edit-v-detailList').innerHTML = '';
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        } else {
+            console.error("Không tìm thấy div id='editProductPage'");
+            return;
+        }
+
+        // 2. Gọi API lấy dữ liệu chi tiết
+        fetch(contextPath + '/api/product-detail?id=' + id)
+            .then(res => {
+                if (!res.ok) throw new Error("Lỗi server " + res.status);
+                return res.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    alert("Server báo lỗi: " + data.error);
+                } else {
+                    fillEditForm(data);
+                }
+            })
+            .catch(err => {
+                console.error("Lỗi:", err);
+                alert("Không thể tải thông tin: " + err.message);
+            });
+    }
+
+    // --- 2. HÀM ĐỔ DỮ LIỆU VÀO FORM (ĐÃ CẬP NHẬT LOGIC ID) ---
+    function fillEditForm(p) {
+        console.log("Dữ liệu nhận được:", p);
+
+        // 1. Thông tin cơ bản
+        document.getElementById('edit-id').value = p.id || "";
+        document.getElementById('edit-name').value = p.name || "";
+
+        var createdSpan = document.getElementById('view-created-at');
+        if (createdSpan) createdSpan.innerText = p.createdAt || "---";
+
+        // 2. Select Box
+        setSelectValue('edit-brand', p.brandId);
+        setSelectValue('edit-tags', p.keywordId);
+
+        // 3. Giá cả
+        document.getElementById('edit-oldPrice').value = p.firstPrice || 0;
+        document.getElementById('edit-discount').value = p.discountPercent || 0;
+        document.getElementById('edit-newPrice').value = p.price || 0;
+
+        // 4. Kho hàng & Trạng thái
+        document.getElementById('edit-stock').value = p.quantity || 0;
+        document.getElementById('edit-sold').value = p.quantitySaled || 0;
+        document.getElementById('edit-isPost').checked = (p.post === 1);
+
+        // 5. Ảnh đại diện
+        var imgPath = p.image ? (contextPath + '/assets/img/products/' + p.image) : (contextPath + '/assets/img/no-image.png');
+        document.getElementById('edit-v-image').src = imgPath;
+        document.getElementById('edit-oldImageName').value = p.image || "";
+
+        // 6. Mô tả (CẬP NHẬT: Truyền thêm ID)
+        var descContainer = document.getElementById('edit-v-descriptionList');
+        if(descContainer) {
+            descContainer.innerHTML = "";
+            if (p.descriptions && p.descriptions.length > 0) {
+                p.descriptions.forEach(d => {
+                    // Truyền d.id vào hàm (nếu null thì truyền 0)
+                    addDescriptionRow(d.id || 0, d.title, d.description);
+                });
+            }
+        }
+
+        // 7. Chi tiết (CẬP NHẬT: Truyền thêm ID)
+        var detailContainer = document.getElementById('edit-v-detailList');
+        if(detailContainer) {
+            detailContainer.innerHTML = "";
+            if (p.details && p.details.length > 0) {
+                p.details.forEach(dt => {
+                    // Truyền dt.id vào hàm
+                    addDetailRow(dt.id || 0, dt.title, dt.description, dt.image);
+                });
+            }
+        }
+    }
+
+    var isUpdating = false;
+
+    // --- HÀM TÍNH TOÁN GIÁ (Helper) ---
+    function calculateNewPrice() {
+        var oldPrice = parseFloat(document.getElementById('edit-oldPrice').value) || 0;
+        var discount = parseFloat(document.getElementById('edit-discount').value) || 0;
+        // Tính giá sau giảm
+        var newPrice = oldPrice - (oldPrice * discount / 100);
+        document.getElementById('edit-newPrice').value = Math.round(newPrice);
+    }
+
+    // --- HÀM UPDATE CHÍNH ---
+    function updateProduct() {
+        var id = document.getElementById('edit-id').value;
+        if (!id) { alert("Lỗi: Thiếu ID sản phẩm."); return; }
+        if (isUpdating) return;
+
+        var btnSave = document.querySelector("#editProductPage .btn-save");
+        if (btnSave) { btnSave.innerText = "Đang lưu..."; btnSave.disabled = true; }
+        isUpdating = true;
+
+        var formData = new FormData();
+        formData.append("id", id);
+        formData.append("name", getValue("edit-name"));
+
+        // --- FIX QUAN TRỌNG: Thêm || 0 để tránh lỗi parseInt("") ---
+        formData.append("price_first", getValue("edit-oldPrice") || 0);
+        formData.append("price_total", getValue("edit-newPrice") || 0);
+        formData.append("quantity", getValue("edit-stock") || 0);
+
+        // Lưu ý: Kiểm tra kỹ xem edit-tags là Category hay Keyword.
+        // Code dưới đây giả định bạn đang dùng nó thay cho categories_id như code cũ của bạn.
+        formData.append("categories_id", getValue("edit-tags") || 0);
+        formData.append("brands_id", getValue("edit-brand") || 0);
+
+        var isPost = document.getElementById("edit-isPost").checked ? 1 : 0;
+        formData.append("post", isPost);
+
+        formData.append("old_image", getValue("edit-oldImageName"));
+        var mainFileInput = document.getElementById("input-file-edit");
+        if (mainFileInput.files.length > 0) {
+            formData.append("image", mainFileInput.files[0]);
+        }
+
+        // Xử lý Description
+        document.querySelectorAll("#edit-v-descriptionList .edit-item-box").forEach(function(item) {
+            var dTitle = item.querySelector("input[name='descTitle']").value;
+            if (dTitle && dTitle.trim() !== "") {
+                formData.append("desc_id", item.querySelector("input[name='descId']").value || "0");
+                formData.append("desc_title", dTitle);
+                formData.append("desc_content", item.querySelector("textarea[name='descContent']").value);
+            }
+        });
+
+        // Xử lý Detail
+        document.querySelectorAll("#edit-v-detailList .edit-detail-card").forEach(function(item, index) {
+            formData.append("detail_id", item.querySelector("input[name='detailId']").value || "0");
+            formData.append("detail_title", item.querySelector("input[name='detailTitle']").value);
+            formData.append("detail_desc", item.querySelector("textarea[name='detailContent']").value);
+            formData.append("detail_old_image", item.querySelector("input[name='detailOldImage']").value);
+
+            var fileInput = item.querySelector("input[name='detailImage']");
+            var fileKey = "detail_image_" + index;
+            if (fileInput.files.length > 0) {
+                formData.append(fileKey, fileInput.files[0]);
+            }
+        });
+
+        fetch(contextPath + '/admin/product-edit', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (response.redirected) {
+                    if(response.url.includes("success")) {
+                        alert("Cập nhật thành công!");
+                    } else {
+                        alert("Có lỗi xảy ra (Redirect Error).");
+                    }
+                } else {
+                    // Nếu Java forward lại trang lỗi (không redirect)
+                    return response.text().then(text => {
+                        console.error("Server Error Content:", text); // Xem lỗi trong Console F12
+                        alert("Cập nhật thất bại! Vui lòng kiểm tra Console (F12) để xem chi tiết.");
+                        isUpdating = false;
+                        resetButton(btnSave);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Lỗi kết nối server: " + error);
+                isUpdating = false;
+                resetButton(btnSave);
+            });
+    }
+
+    function getValue(id) {
+        var el = document.getElementById(id);
+        return el ? el.value : "";
+    }
+
+    function resetButton(btn) {
+        if (btn) {
+            btn.innerText = "Lưu thay đổi";
+            btn.disabled = false;
+        }
+    }
+    function addDescriptionRow(id = 0, title = "", content = "") {
+        var container = document.getElementById('edit-v-descriptionList');
+        var div = document.createElement('div');
+        div.className = 'edit-item-box';
+
+        // Thêm input hidden name="descId"
+        div.innerHTML = `
+        <input type="hidden" name="descId" value="${id}">
+        <input type="text" class="form-input edit-sub-title" name="descTitle" placeholder="Tiêu đề">
+        <textarea class="form-textarea" name="descContent" rows="2" placeholder="Nội dung mô tả..."></textarea>
+        <button type="button" class="btn-remove-item" onclick="this.parentElement.remove()" style="color:red; margin-top:5px; cursor:pointer;">Xóa dòng này</button>
+    `;
+
+        div.querySelector('input[name="descTitle"]').value = title;
+        div.querySelector('textarea[name="descContent"]').value = content;
+
+        container.appendChild(div);
+    }
+
+    // Thêm dòng chi tiết (CÓ THAM SỐ ID)
+    function addDetailRow(id = 0, title = "", content = "", imageName = "") {
+        var container = document.getElementById('edit-v-detailList');
+        var imgSrc = imageName ? (contextPath + '/assets/img/details/' + imageName) : (contextPath + '/assets/img/no-image.png');
+
+        var div = document.createElement('div');
+        div.className = 'edit-detail-card';
+
+        var html = '';
+        // Thêm input hidden name="detailId"
+        html += '<input type="hidden" name="detailId" value="' + id + '">';
+
+        html += '<input type="hidden" name="detailOldImage" value="' + imageName + '">';
+        html += '<div class="edit-card-img">';
+        html += '    <img src="' + imgSrc + '" alt="Detail" class="detail-img-preview">';
+        html += '    <label class="change-img-mini">';
+        html += '        <i class="fa-solid fa-camera"></i>';
+        html += '        <input type="file" name="detailImage" hidden onchange="previewDetailImage(this)">';
+        html += '    </label>';
+        html += '</div>';
+
+        html += '<div class="view-detail-info">';
+        html += '    <input type="text" class="form-input edit-sub-title" name="detailTitle" placeholder="Tiêu đề" value="' + (title || "") + '">';
+        html += '    <textarea class="form-textarea" name="detailContent" rows="3" placeholder="Nội dung chi tiết...">' + (content || "") + '</textarea>';
+        html += '</div>';
+
+        html += '<button type="button" class="btn-remove-detail" onclick="this.parentElement.remove()" style="position: absolute; top: 5px; right: 5px; color: red; border: none; background: none; font-size: 20px;">&times;</button>';
+
+        div.innerHTML = html;
+        container.appendChild(div);
+    }
+
+    // Preview ảnh chi tiết
+    function previewDetailImage(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var img = input.closest('.edit-card-img').querySelector('img');
+                img.src = e.target.result;
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    // Preview ảnh chính
+    function previewImage(input, imgId) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById(imgId).src = e.target.result;
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    // Tính giá mới
+    function calculateNewPrice() {
+        var oldPrice = parseFloat(document.getElementById('edit-oldPrice').value) || 0;
+        var discount = parseInt(document.getElementById('edit-discount').value) || 0;
+        var newPrice = oldPrice * (100 - discount) / 100;
+        document.getElementById('edit-newPrice').value = Math.round(newPrice);
+    }
+
+    // Set select value
+    function setSelectValue(id, value) {
+        var select = document.getElementById(id);
+        if(select) select.value = value;
+    }
+
+    function closeEditModal() {
+        document.getElementById('editProductPage').style.display = 'none';
+        var listSection = document.getElementById('product-manage-section');
+        if(listSection) listSection.style.display = 'block';
+    }
+
+    // --- HÀM LOAD SELECT OPTION ---
+    function loadBrandOptions() {
+        fetch(contextPath + '/api/brands')
+            .then(res => res.json())
+            .then(data => {
+                var select = document.getElementById('edit-brand');
+                if (!select) return;
+                var html = '<option value="">-- Chọn nhãn hiệu --</option>';
+                data.forEach(item => {
+                    html += '<option value="' + item.id + '">' + item.name + '</option>';
+                });
+                select.innerHTML = html;
+            })
+            .catch(err => console.error(err));
+    }
+
+    function loadKeywordOptions() {
+        fetch(contextPath + '/api/keywords')
+            .then(res => res.json())
+            .then(data => {
+                var select = document.getElementById('edit-tags');
+                if (!select) return;
+                var html = '<option value="">-- Chọn từ khóa --</option>';
+                data.forEach(item => {
+                    html += '<option value="' + item.id + '">' + item.name + '</option>';
+                });
+                select.innerHTML = html;
+            })
+            .catch(err => console.error(err));
+    }
+    function deleteProduct(id) {
+        if(confirm('Bạn có chắc muốn xóa sản phẩm này? Hành động này không thể hoàn tác.')) {
+
+            // SỬA ĐOẠN NÀY: Không dùng FormData nữa
+            // Dùng URLSearchParams hoặc chuỗi string đơn giản
+
+            fetch(contextPath + '/admin/product-delete', {
+                method: 'POST',
+                headers: {
+                    // Báo cho server biết đây là form data bình thường
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                },
+                // Gửi dữ liệu dạng key=value
+                body: 'id=' + id
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert("Đã xóa sản phẩm thành công!");
+                        // Reload lại bảng (gọi lại hàm load ban đầu của bạn)
+                        loadProducts(0);
+                    } else {
+                        alert("Lỗi: " + data.message);
+                    }
+                })
+                .catch(err => {
+                    console.error('Lỗi mạng:', err);
+                    alert("Không thể kết nối đến server.");
+                });
+        }
+    }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        loadCategories();
+        setupFormSubmit();
+        setupScopeToggle();
+    });
+
+    async function loadCategories() {
+        try {
+            const response = await fetch(window.location.origin + '/DoAnWeb/api/categories');
+            const data = await response.json();
+            const select = document.querySelector('select[name="applyCategories"]');
+            if (select) {
+                select.innerHTML = '<option value="0">-- Chọn một danh mục --</option>';
+                data.forEach(cat => {
+                    select.add(new Option(cat.name, cat.id));
+                });
+            }
+        } catch (err) { console.error("Lỗi load categories:", err); }
+    }
+
+    // 2. Hàm xử lý ẩn hiện Select Danh mục dựa trên Radio được chọn
+    function setupScopeToggle() {
+        const radios = document.querySelectorAll('input[name="applyScope"]');
+        const scopeBox = document.getElementById('scopeCategory');
+
+        radios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                if (e.target.value === 'category') {
+                    scopeBox.style.display = 'block';
+                } else {
+                    scopeBox.style.display = 'none';
+                    // Reset select về 0 nếu người dùng quay lại chọn "Tất cả"
+                    const select = document.querySelector('select[name="applyCategories"]');
+                    if (select) select.value = "0";
+                }
+            });
+        });
+    }
+
+    // 3. Hàm xử lý gửi Form (Fix lỗi lưu 2 lần và xử lý id_cate)
+    function setupFormSubmit() {
+        const form = document.getElementById('addEventForm');
+        if (!form) return;
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+
+            // TỰ ĐỘNG LẤY CONTEXT PATH (Sửa lỗi JasperException)
+            const contextPath = window.location.pathname.substring(0, window.location.pathname.indexOf("/", 1));
+            const url = contextPath + '/admin/add-discount';
+
+            const formData = new FormData(this);
+
+            // Đảm bảo logic đồng bộ với Java
+            if (formData.get('applyScope') === 'all') {
+                formData.set('applyCategories', '0');
+            }
+
+            const saveBtn = document.querySelector('.event-btn--save');
+            const originalText = saveBtn.innerHTML;
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang xử lý...';
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData // Servlet dùng @MultipartConfig nên gửi FormData là chuẩn
+                });
+
+                // Đọc response dưới dạng text trước để check nếu là lỗi 500 (trang HTML lỗi)
+                const responseText = await response.text();
+                let result;
+                try {
+                    result = JSON.parse(responseText);
+                } catch (e) {
+                    console.error("Server trả về lỗi không phải JSON:", responseText);
+                    throw new Error("Server bị lỗi nội bộ (500). Kiểm tra Console Java!");
+                }
+
+                if (result.status === "success") {
+                    alert("Lưu sự kiện thành công!");
+                    location.reload();
+                } else {
+                    alert(" Lỗi: " + result.message);
+                }
+            } catch (error) {
+                console.error("Chi tiết lỗi:", error);
+                alert(error.message);
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = originalText;
+            }
+        });
+    }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll('input[name="applyScope"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const scopeCategory = document.getElementById('scopeCategory');
+                if (this.value === 'category') {
+                    scopeCategory.style.display = 'block';
+                    loadCategories();
+                } else {
+                    scopeCategory.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+<script>
+    // Phải khai báo contextPath từ JSP
+    var contextPath = '${pageContext.request.contextPath}';
+
+    document.addEventListener("DOMContentLoaded", function () {
+        loadAllDiscounts();
+    });
+
+    function loadAllDiscounts() {
+        fetch(contextPath + '/api/admin/discounts-list')
+            .then(res => {
+                if (!res.ok) throw new Error("Lỗi Server");
+                return res.json();
+            })
+            .then(data => {
+                renderDiscountTable(data);
+            })
+            .catch(err => console.error("Không tải được giảm giá:", err));
+    }
+
+    function renderDiscountTable(discounts) {
+        var container = document.getElementById('discount-list-container');
+        if (!container) return;
+
+        var html = '<div class="event-table__row event-table__row--header">';
+        html += '    <div class="event-table__cell event-col-name">Tên sự kiện</div>';
+        html += '    <div class="event-table__cell event-col-discount">Giảm giá</div>';
+        html += '    <div class="event-table__cell event-col-post">Post</div>';
+        html += '    <div class="event-table__cell event-col-date">Ngày bắt đầu</div>';
+        html += '    <div class="event-table__cell event-col-date">Ngày kết thúc</div>';
+        html += '    <div class="event-table__cell event-col-action">Xem</div>';
+        html += '    <div class="event-table__cell event-col-action">Sửa</div>';
+        html += '    <div class="event-table__cell event-col-action">Xóa</div>';
+        html += '</div>';
+
+        // BƯỚC 2: Duyệt danh sách để thêm dữ liệu
+        if (discounts && discounts.length > 0) {
+            discounts.forEach(function (d) {
+                var discountDisplay = d.discount + "%";
+
+                html += '<article class="event-table__row">';
+                html += '    <div class="event-table__cell event-col-name">';
+                html += '        <span class="event-table__text event-table__text--bold">' + d.name + '</span>';
+                html += '    </div>';
+                html += '    <div class="event-table__cell event-col-discount">';
+                html += '        <span class="event-table__text event-table__text--red">' + discountDisplay + '</span>';
+                html += '    </div>';
+                html += '    <div class="event-table__cell event-col-post"><input type="checkbox" ' + (d.status == 1 ? "checked" : "") + '></div>';
+                html += '    <div class="event-table__cell event-col-date">';
+                html += '        <span class="event-table__text">' + d.startDate + '</span>';
+                html += '    </div>';
+                html += '    <div class="event-table__cell event-col-date">';
+                html += '        <span class="event-table__text">' + d.endDate + '</span>';
+                html += '    </div>';
+
+                html += '    <div class="event-table__cell event-col-action">';
+                html += '        <button class="event-btn-view" onclick="viewDiscount(' + d.id + ')">Xem</button>';
+                html += '    </div>';
+                html += '    <div class="event-table__cell event-col-action">';
+                html += '        <button class="event-btn-edit" onclick="editDiscount(' + d.id + ')">Sửa</button>';
+                html += '    </div>';
+                html += '    <div class="event-table__cell event-col-action">';
+                html += '        <button class="event-btn-delete" onclick="deleteDiscount(' + d.id + ')">Xóa</button>';
+                html += '    </div>';
+                html += '</article>';
+            });
+        } else {
+            html += '<p style="padding: 20px; text-align: center;">Không có dữ liệu giảm giá nào.</p>';
+        }
+
+        container.innerHTML = html;
+    }
+</script>
+<script>
+    document.getElementById('addSlideForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+
+        const formData = new FormData(this);
+
+        const saveBtn = this.closest('.slide-table').querySelector('.slide-table__save');
+        saveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang lưu...';
+        saveBtn.disabled = true;
+
+        fetch('${pageContext.request.contextPath}/api/add-slide', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    alert("Thêm slide thành công!");
+                    location.reload();
+                } else {
+                    alert("Lỗi: " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Đã có lỗi xảy ra khi kết nối server.");
+            })
+            .finally(() => {
+                saveBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Lưu slide';
+                saveBtn.disabled = false;
+            });
+    });
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+
+        // 1. AJAX TÌM KIẾM
+        $(document).on('submit', '#searchOrderForm', function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'GET',
+                data: $(this).serialize(),
+                headers: { "X-Requested-With": "XMLHttpRequest" },
+                success: function(data) {
+                    $('#order-main-content').html(data);
+                }
+            });
+        });
+
+        // 2. CHỌN TẤT CẢ CHECKBOX
+        $(document).on('change', '#selectAll', function() {
+            $('.order-table__checkbox').prop('checked', this.checked);
+        });
+
+        // 3. AJAX XÓA NHIỀU (Sửa lại logic click nút thay vì submit form)
+        $(document).on('click', '#btnDeleteAll', function() {
+            let selectedIds = [];
+            $('input[name="orderIds"]:checked').each(function() {
+                selectedIds.push($(this).val());
+            });
+
+            if (selectedIds.length === 0) {
+                alert("Vui lòng chọn ít nhất một đơn hàng!");
+                return;
+            }
+
+            if (confirm('Bạn có chắc chắn muốn xóa các mục đã chọn?')) {
+                $.ajax({
+                    url: '${pageContext.request.contextPath}/order-delete',
+                    type: 'POST',
+                    data: { orderIds: selectedIds }, // Gửi mảng ID
+                    traditional: true, // Quan trọng để gửi mảng qua AJAX cho Java nhận diện
+                    headers: { "X-Requested-With": "XMLHttpRequest" },
+                    success: function(response) {
+                        $('#order-main-content').html(response);
+                        alert("Đã xóa thành công!");
+                    }
+                });
+            }
+        });
+
+        // 4. AJAX CẬP NHẬT TRẠNG THÁI (Cả vận chuyển và thanh toán)
+        $(document).on('submit', '.form-update-status', function(e) {
+            e.preventDefault();
+            let form = $(this);
+            $.ajax({
+                url: form.attr('action'),
+                type: 'POST',
+                data: form.serialize(),
+                headers: { "X-Requested-With": "XMLHttpRequest" },
+                success: function(response) {
+                    $('#order-main-content').html(response);
+                    alert("Cập nhật thành công!");
+                }
+            });
+        });
+    });
+
+    $(document).on('click', '#btnReloadAll', function() {
+        // Xóa trắng ô input tìm kiếm
+        $('input[name="keyword"]').val('');
+
+        // Gửi AJAX không kèm keyword để lấy toàn bộ danh sách
+        $.ajax({
+            url: '${pageContext.request.contextPath}/order-search',
+            type: 'GET',
+            data: { keyword: '' },
+            headers: { "X-Requested-With": "XMLHttpRequest" },
+            success: function(data) {
+                $('#order-main-content').html(data);
+            }
+        });
+    });
+</script>
+<script>
+
+    // --- HÀM XEM (GIỮ NGUYÊN) ---
+    function viewDiscount(id) {
+        fetch(contextPath + '/api/admin/discount-detail?id=' + id)
+            .then(res => res.json())
+            .then(d => {
+                if (d.status === "error") throw new Error(d.message);
+                document.getElementById('view-eventName').textContent = d.name;
+                document.getElementById('view-descrip').textContent = d.description || "Không có mô tả";
+                document.getElementById('view-startDate').textContent = d.startDate;
+                document.getElementById('view-endDate').textContent = d.endDate;
+                document.getElementById('view-categoryName').textContent = d.categoryName;
+
+                const isPercent = (d.typeDiscount === "percentage" || d.typeDiscount == 1);
+                document.getElementById('view-discountType').textContent = isPercent ? "Phần trăm (%)" : "Tiền mặt (VNĐ)";
+                document.getElementById('view-discountValue').textContent = d.discount + (isPercent ? "%" : " VNĐ");
+
+                if (typeof hideAllSections === "function") hideAllSections();
+                const viewPage = document.getElementById('view-event-page');
+                if (viewPage) {
+                    viewPage.style.display = 'block';
+                    window.scrollTo(0, 0);
+                }
+            })
+            .catch(err => alert("Lỗi tải: " + err.message));
+    }
+
+    // --- HÀM SỬA (FIX DẤU NGOẶC + DATE) ---
+    async function editDiscount(id) {
+        try {
+            const res = await fetch(contextPath + '/api/admin/discount-detail?id=' + id);
+            const d = await res.json();
+            if (d.status === "error") throw new Error(d.message);
+
+            hideAllSections();
+            document.getElementById('edit-event-page').style.display = 'block';
+
+            if (document.getElementById('edit-currentCategoryName')) {
+                document.getElementById('edit-currentCategoryName').textContent = d.categoryName;
+            }
+
+            document.getElementById('edit-eventName').value = d.name;
+            document.getElementById('edit-discountType').value = d.typeDiscount == 1 ? "percentage" : "amount";
+            document.getElementById('edit-discountValue').value = d.discount;
+            document.getElementById('edit-eventDesc').value = d.description || "";
+            document.getElementById('editEventForm').dataset.currentId = id;
+
+            // Chuyển dd/MM/yyyy (từ Controller) sang yyyy-MM-dd (cho input date)
+            const formatDateForInput = (dateStr) => {
+                if (!dateStr || !dateStr.includes('/')) return "";
+                const parts = dateStr.split('/');
+                if(parts.length !== 3) return "";
+                return `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+            };
+
+            document.getElementById('edit-startDate').value = formatDateForInput(d.startDate);
+            document.getElementById('edit-endDate').value = formatDateForInput(d.endDate);
+
+            await loadEditCategories();
+
+            const idCate = d.id_cate || 0;
+            const scopeBox = document.getElementById('editScopeCategory');
+            if (idCate > 0) {
+                const rb = document.querySelector('input[name="editApplyScope"][value="category"]');
+                if(rb) rb.checked = true;
+                if(scopeBox) scopeBox.style.display = 'block';
+                document.getElementById('editApplyCategories').value = idCate;
+            } else {
+                const rbAll = document.querySelector('input[name="editApplyScope"][value="all"]');
+                if(rbAll) rbAll.checked = true;
+                if(scopeBox) scopeBox.style.display = 'none';
+            }
+        } catch (err) {
+            alert("Lỗi: " + err.message);
+        }
+    } // Đã đóng ngoặc hàm editDiscount
+
+    // --- HÀM LOAD CATEGORIES (GIỮ NGUYÊN) ---
+    async function loadEditCategories() {
+        try {
+            const response = await fetch(window.location.origin + '/DoAnWeb/api/categories');
+            const data = await response.json();
+            const select = document.getElementById('editApplyCategories');
+            if (select) {
+                select.innerHTML = '<option value="">-- Chọn một danh mục --</option>';
+                data.forEach(cat => select.add(new Option(cat.name, cat.id)));
+            }
+        } catch (err) { console.error(err); }
+    }
+
+    // --- HÀM LƯU (GIỮ NGUYÊN LOGIC NHƯNG THÊM CHECK TRỐNG) ---
+    async function saveDiscountUpdate() {
+        const form = document.getElementById('editEventForm');
+        const discountId = form.dataset.currentId;
+
+        const sDate = document.getElementById('edit-startDate').value;
+        const eDate = document.getElementById('edit-endDate').value;
+
+        // Nếu ngày trống, báo lỗi ngay tại đây thay vì để Controller báo lỗi Parse
+        if (!sDate || !eDate) {
+            alert("Vui lòng không để trống ngày tháng!");
+            return;
+        }
+
+        const payload = {
+            id: parseInt(discountId),
+            name: document.getElementById('edit-eventName').value,
+            type: document.getElementById('edit-discountType').value,
+            value: parseFloat(document.getElementById('edit-discountValue').value),
+            startDate: sDate,
+            endDate: eDate,
+            description: document.getElementById('edit-eventDesc').value,
+            scope: document.querySelector('input[name="editApplyScope"]:checked').value,
+            categoryId: document.getElementById('editApplyCategories').value
+        };
+
+        try {
+            const response = await fetch(contextPath + '/api/admin/update-discount', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                alert("Cập nhật thành công!");
+                backToEventList();
+                if (typeof loadDiscountList === 'function') loadDiscountList();
+            } else {
+                alert("Cập nhật thất bại: " + result.message);
+            }
+        } catch (err) {
+            alert("Lỗi kết nối Server.");
+        }
+    }
+
+    // Event Radios
+    document.querySelectorAll('input[name="editApplyScope"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            const box = document.getElementById('editScopeCategory');
+            if (box) box.style.display = (e.target.value === 'category') ? 'block' : 'none';
+        });
+    });
+</script>
+<script>
+    function deleteDiscount(id) {
+        if (!confirm("Bạn có chắc chắn muốn xóa khuyến mãi này?")) return;
+
+        const url = contextPath + '/api/admin/delete-discount';
+        const params = new URLSearchParams();
+        params.append('id', id);
+
+        fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: params.toString()
+        })
+            .then(async res => {
+                const data = await res.json();
+
+                if (res.ok && data.status === "success") {
+                    alert("Xóa thành công!");
+                    location.reload();
+                } else {
+                    // Hiển thị lỗi cụ thể từ Server (status: fail hoặc status: error)
+                    const msg = data.message || "Lỗi hệ thống không xác định.";
+                    alert("THẤT BẠI: " + msg);
+                    console.error("Chi tiết lỗi:", data);
+                }
+            })
+            .catch(err => {
+                console.error("Fetch error:", err);
+                alert("Lỗi kết nối: Không thể gửi yêu cầu đến Server.");
+            });
+    }
+
+</script>
+<script src="${pageContext.request.contextPath}/assets/js/script.js"></script>
+</html>
