@@ -1,11 +1,10 @@
-package com.webgiadung.doanweb.controller.admin;
+package com.webgiadung.webgiadung.controller.admin;
 
-import com.webgiadung.doanweb.model.Discounts;
-import com.webgiadung.doanweb.model.Product;
-import com.webgiadung.doanweb.model.ProductDescriptions;
-import com.webgiadung.doanweb.model.ProductDetails;
-import com.webgiadung.doanweb.services.DiscountService;
-import com.webgiadung.doanweb.services.ProductService;
+import com.webgiadung.webgiadung.model.*;
+import com.webgiadung.webgiadung.services.BrandService;
+import com.webgiadung.webgiadung.services.DiscountService;
+import com.webgiadung.webgiadung.services.KeywordService;
+import com.webgiadung.webgiadung.services.ProductService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -24,6 +23,8 @@ public class ProductViewController extends HttpServlet {
     private final ProductService productService = new ProductService();
     private final DiscountService discountService = new DiscountService(); // Khởi tạo DiscountService
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private final BrandService brandService = new BrandService();
+    private final KeywordService keywordService = new KeywordService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -43,8 +44,8 @@ public class ProductViewController extends HttpServlet {
                 if (p != null) {
                     String name = escapeJson(p.getName());
                     String image = escapeJson(p.getImage());
-                    String brandName = (p.getBrandName() != null) ? escapeJson(p.getBrandName()) : "Chưa cập nhật";
-                    String keywordName = (p.getKeywordName() != null) ? escapeJson(p.getKeywordName()) : "Chưa cập nhật";
+                    Brands brand = brandService.getBrandById(p.getBrandsId());
+                    String brandName = (brand != null) ? escapeJson(brand.getName()) : "Chưa cập nhật";
 
                     String createdAt = (p.getCreatedAt() != null) ? p.getCreatedAt().format(formatter) : "";
                     String updatedAt = (p.getUpdatedAt() != null) ? p.getUpdatedAt().format(formatter) : "";
@@ -53,7 +54,7 @@ public class ProductViewController extends HttpServlet {
                     if (p.getDiscountsId() > 0) {
                         Discounts d = discountService.getDiscountById(p.getDiscountsId());
                         if (d != null) {
-                            discountPercent = d.getDiscount(); // Lấy giá trị % từ bảng discounts
+                            discountPercent = d.getDiscountValue(); // Lấy giá trị % từ bảng discounts
                         }
                     }
 
@@ -68,7 +69,6 @@ public class ProductViewController extends HttpServlet {
                     json.append("\"image\": \"").append(image).append("\",");
 
                     json.append("\"brandId\": ").append(p.getBrandsId()).append(",");
-                    json.append("\"keywordId\": ").append(p.getKeywordsId()).append(",");
 
                     // JSON trả về dữ liệu lấy từ Service
                     json.append("\"firstPrice\": ").append(firstPrice).append(",");
@@ -76,23 +76,22 @@ public class ProductViewController extends HttpServlet {
                     json.append("\"discountPercent\": ").append(discountPercent).append(",");
 
                     json.append("\"quantity\": ").append(p.getQuantity()).append(",");
-                    json.append("\"quantitySaled\": ").append(p.getQuantitySaled()).append(",");
-                    json.append("\"post\": ").append(p.getPost()).append(",");
+                    json.append("\"quantitySaled\": ").append(p.getSoldQuantity()).append(",");
+                    json.append("\"post\": ").append(p.getIsVisible()).append(",");
 
                     json.append("\"brandName\": \"").append(brandName).append("\",");
-                    json.append("\"keywordName\": \"").append(keywordName).append("\",");
 
                     json.append("\"createdAt\": \"").append(createdAt).append("\",");
                     json.append("\"updatedAt\": \"").append(updatedAt).append("\",");
 
                     // Xử lý Descriptions
                     json.append("\"descriptions\": [");
-                    List<ProductDescriptions> descList = p.getDescriptionsList();
+                    List<ProductDescriptions> descList = p.getDescriptions();
                     if (descList != null && !descList.isEmpty()) {
                         StringJoiner sjDesc = new StringJoiner(",");
                         for (ProductDescriptions d : descList) {
-                            String dTitle = escapeJson(d.getTitle());
-                            String dContent = escapeJson(d.getDescription());
+                            String dTitle = escapeJson(d.getAttrName());
+                            String dContent = escapeJson(d.getValue());
                             sjDesc.add("{\"id\":" + d.getId() + ", \"title\":\"" + dTitle + "\", \"description\":\"" + dContent + "\"}");
                         }
                         json.append(sjDesc.toString());
@@ -101,7 +100,7 @@ public class ProductViewController extends HttpServlet {
 
                     // Xử lý Details
                     json.append("\"details\": [");
-                    List<ProductDetails> detailList = p.getDetailsList();
+                    List<ProductDetails> detailList = p.getDetails();
                     if (detailList != null && !detailList.isEmpty()) {
                         StringJoiner sjDetail = new StringJoiner(",");
                         for (ProductDetails d : detailList) {

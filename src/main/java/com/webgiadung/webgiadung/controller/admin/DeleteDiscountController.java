@@ -1,12 +1,13 @@
-package com.webgiadung.doanweb.controller.admin;
+package com.webgiadung.webgiadung.controller.admin;
 
-import com.webgiadung.doanweb.dao.ProductDao;
-import com.webgiadung.doanweb.dao.DiscountDao; // Giả sử bạn có DiscountDao
+import com.webgiadung.webgiadung.dao.DiscountDao;
+import com.webgiadung.webgiadung.dao.ProductDao;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 
 @WebServlet("/api/admin/delete-discount")

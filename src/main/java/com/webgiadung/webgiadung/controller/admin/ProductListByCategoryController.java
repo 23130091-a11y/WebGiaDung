@@ -1,7 +1,7 @@
-package com.webgiadung.doanweb.controller.admin;
+package com.webgiadung.webgiadung.controller.admin;
 
-import com.webgiadung.doanweb.model.Product;
-import com.webgiadung.doanweb.services.ProductService;
+import com.webgiadung.webgiadung.model.Product;
+import com.webgiadung.webgiadung.services.ProductService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -59,7 +59,7 @@ public class ProductListByCategoryController extends HttpServlet {
                     image,
                     p.getTotalPrice(),
                     p.getQuantity(),
-                    p.getPost() // <--- QUAN TRỌNG: Lấy trạng thái (1 hoặc 0) để check checkbox
+                    p.getIsVisible() // <--- QUAN TRỌNG: Lấy trạng thái (1 hoặc 0) để check checkbox
             );
 
             sj.add(item);

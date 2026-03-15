@@ -1,12 +1,15 @@
-package com.webgiadung.doanweb.controller.admin;
+package com.webgiadung.webgiadung.controller.admin;
 
-import com.webgiadung.doanweb.model.Brands;
-import com.webgiadung.doanweb.utils.FileUtils;
-import com.webgiadung.doanweb.services.BrandService;
+import com.webgiadung.webgiadung.model.Brands;
+import com.webgiadung.webgiadung.services.BrandService;
+import com.webgiadung.webgiadung.utils.FileUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 
 import java.io.IOException;
 import java.io.PrintWriter;

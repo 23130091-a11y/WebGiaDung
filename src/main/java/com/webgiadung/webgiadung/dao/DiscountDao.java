@@ -1,6 +1,6 @@
-package com.webgiadung.doanweb.dao;
+package com.webgiadung.webgiadung.dao;
 
-import com.webgiadung.doanweb.model.Discounts;
+import com.webgiadung.webgiadung.model.Discounts;
 
 import java.util.List;
 
@@ -18,6 +18,7 @@ public class DiscountDao extends BaseDao {
                     .one();
         });
     }
+
     public Discounts getDiscountById(int id) {
         return get().withHandle(handle -> {
             return handle.createQuery("SELECT * FROM discounts WHERE id = :id")
@@ -27,6 +28,7 @@ public class DiscountDao extends BaseDao {
                     .orElse(null);
         });
     }
+
     public List<Discounts> getAllDiscounts() {
         return get().withHandle(handle -> {
             return handle.createQuery("SELECT * FROM discounts ORDER BY id DESC")
@@ -34,6 +36,7 @@ public class DiscountDao extends BaseDao {
                     .list();
         });
     }
+
     public boolean updateDiscount(Discounts d) {
         return get().withHandle(handle -> {
             int rowsAffected = handle.createUpdate("""
@@ -52,6 +55,7 @@ public class DiscountDao extends BaseDao {
             return rowsAffected > 0;
         });
     }
+
     public boolean deleteDiscount(int id) {
         return get().withHandle(handle -> {
             int rowsAffected = handle.createUpdate("DELETE FROM discounts WHERE id = :id")

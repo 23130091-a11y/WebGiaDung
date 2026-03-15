@@ -1,26 +1,26 @@
-package com.webgiadung.doanweb.model;
+package com.webgiadung.webgiadung.model;
 
 import java.io.Serializable;
 
 public class TransactionAdmin implements Serializable {
-    private int id;             // id bản ghi transaction
-    private int order_id;       // id đơn hàng
-    private int product_id;     // id sản phẩm
-    private String name;        // tên sản phẩm
-    private String avatar;      // ảnh sản phẩm
-    private int quantity;       // số lượng
-    private double price;       // giá cuối cùng lúc mua
-    private double total_price; // price * quantity
+    private int id; // id bản ghi (chi tiết sp của 1 đơn)
+    private int orderId; // id order
+    private int productId; // id sp
+    private String name; // tên sp
+    private String avatar; // ảnh chính sp
+    private int quantity; // sl
+    private double price; // giá tại thời điểm mua
+    private double totalPrice; // tổng tiền
 
-    public TransactionAdmin(int id, int order_id, int product_id, String name, String avatar, int quantity, double price, double total_price) {
+    public TransactionAdmin(int id, int orderId, int productId, String name, String avatar, int quantity, double price, double totalPrice) {
         this.id = id;
-        this.order_id = order_id;
-        this.product_id = product_id;
+        this.orderId = orderId;
+        this.productId = productId;
         this.name = name;
         this.avatar = avatar;
         this.quantity = quantity;
         this.price = price;
-        this.total_price = total_price;
+        this.totalPrice = totalPrice;
     }
 
     public TransactionAdmin() {}
@@ -29,23 +29,22 @@ public class TransactionAdmin implements Serializable {
     public String toString() {
         return "TransactionAdmin{" +
                 "id=" + id +
-                ", order_id=" + order_id +
-                ", product_id=" + product_id +
+                ", orderId=" + orderId +
+                ", productId=" + productId +
                 ", name='" + name + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", quantity=" + quantity +
                 ", price=" + price +
-                ", total_price=" + total_price +
+                ", totalPrice=" + totalPrice +
                 '}';
     }
 
-    // Getter & Setter
-    public double getTotal_price() {
-        return total_price;
+    public double getTotalPrice() {
+        return totalPrice;
     }
 
-    public void setTotal_price(double total_price) {
-        this.total_price = total_price;
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public double getPrice() {
@@ -80,20 +79,20 @@ public class TransactionAdmin implements Serializable {
         this.name = name;
     }
 
-    public int getProduct_id() {
-        return product_id;
+    public int getProductId() {
+        return productId;
     }
 
-    public void setProduct_id(int product_id) {
-        this.product_id = product_id;
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 
-    public int getOrder_id() {
-        return order_id;
+    public int getOrderId() {
+        return orderId;
     }
 
-    public void setOrder_id(int order_id) {
-        this.order_id = order_id;
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 
     public int getId() {

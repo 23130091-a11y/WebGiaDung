@@ -1,7 +1,7 @@
-package com.webgiadung.doanweb.services;
+package com.webgiadung.webgiadung.services;
 
-import com.webgiadung.doanweb.dao.CategoriesDao;
-import com.webgiadung.doanweb.model.Categories;
+import com.webgiadung.webgiadung.dao.CategoriesDao;
+import com.webgiadung.webgiadung.model.Categories;
 
 import java.util.List;
 
@@ -16,7 +16,6 @@ public class CategoriesService {
         return categoriesDao.getAllCategories();
     }
 
-
     public List<Categories> getCategoriesParent() {
         return categoriesDao.getCategoriesParent();
     }
@@ -25,8 +24,6 @@ public class CategoriesService {
         return categoriesDao.getCategoriesByParentId(parentId);
     }
 
-    // --------------------------------
-
     public int insertCategory(String name, String description) {
         Categories exist = categoriesDao.findByName(name);
 
@@ -34,7 +31,6 @@ public class CategoriesService {
             return 0;
         }
 
-        // BƯỚC 2: Nếu chưa tồn tại thì thêm mới
         return categoriesDao.insertCategory(name, description);
     }
 }

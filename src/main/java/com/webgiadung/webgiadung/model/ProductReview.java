@@ -1,17 +1,17 @@
-package com.webgiadung.doanweb.model;
+package com.webgiadung.webgiadung.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class ProductReview implements Serializable {
-    private int id;
-    private int productId;
-    private int userId;
-    private double rating;        // 0 - 5
-    private String comment;
-    private LocalDateTime createdAt;
+    private int id; // id review
+    private int productId; // id sản phẩm
+    private int userId; // id user
+    private double rating; // đánh giá 0-5 sao
+    private String comment; // bình luận
+    private LocalDateTime createdAt; // ngày tạo đánh giá
 
-    public  ProductReview() {}
+    public ProductReview() {}
 
     public ProductReview(int id, int productId, int userId, double rating, String comment, LocalDateTime createdAt) {
         this.id = id;
@@ -81,8 +81,4 @@ public class ProductReview implements Serializable {
                 ", createdAt=" + createdAt +
                 '}';
     }
-    private String authorName;
-
-    public String getAuthorName() { return authorName; }
-    public void setAuthorName(String authorName) { this.authorName = authorName; }
 }

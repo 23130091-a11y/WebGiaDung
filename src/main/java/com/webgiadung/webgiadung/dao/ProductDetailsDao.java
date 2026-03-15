@@ -1,11 +1,12 @@
-package com.webgiadung.doanweb.dao;
+package com.webgiadung.webgiadung.dao;
 
-import com.webgiadung.doanweb.model.ProductDetails;
+import com.webgiadung.webgiadung.model.ProductDetails;
+
 import java.util.List;
 
 public class ProductDetailsDao extends BaseDao {
 
-    // Chuyển sang kiểu int để trả về ID vừa insert
+    // insert dòng chi tiết sp -> id đã thêm
     public int insert(ProductDetails detail) {
         return get().withHandle(h ->
                 h.createUpdate(
@@ -19,7 +20,6 @@ public class ProductDetailsDao extends BaseDao {
         );
     }
 
-    // Các hàm khác giữ nguyên
     public List<ProductDetails> findByProductId(int productId) {
         return get().withHandle(h ->
                 h.createQuery("SELECT * FROM product_details WHERE id = :id ORDER BY id ASC")
@@ -36,6 +36,7 @@ public class ProductDetailsDao extends BaseDao {
                         .execute()
         );
     }
+
     public boolean update(ProductDetails detail) {
         return get().withHandle(h ->
                 h.createUpdate("UPDATE products_detail " +
@@ -49,7 +50,7 @@ public class ProductDetailsDao extends BaseDao {
         );
     }
 
-    // 3. Delete (Xóa một chi tiết cụ thể theo ID)
+    // Xóa một chi tiết cụ thể theo ID
     // Dùng cho trường hợp user bấm nút xóa 1 dòng chi tiết
     public boolean delete(int id) {
         return get().withHandle(h ->

@@ -1,14 +1,14 @@
-package com.webgiadung.doanweb.model;
+package com.webgiadung.webgiadung.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class ProductImage implements Serializable {
-    private int id;
-    private String path;       // URL hoặc tên file
-    private int productId;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private int id; // id ảnh
+    private String path; // URL hoặc tên file
+    private int productId; // id p
+    private LocalDateTime createdAt; // ngày tạo
+    private LocalDateTime updatedAt; // ngày update
 
     public ProductImage() {}
 

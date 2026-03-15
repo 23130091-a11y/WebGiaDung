@@ -1,6 +1,7 @@
-package com.webgiadung.doanweb.dao;
+package com.webgiadung.webgiadung.dao;
 
-import com.webgiadung.doanweb.model.Keywords;
+import com.webgiadung.webgiadung.model.Keywords;
+
 import java.util.List;
 
 public class KeywordsDao extends BaseDao {
@@ -14,7 +15,7 @@ public class KeywordsDao extends BaseDao {
         );
     }
 
-    // HÀM INSERT TRẢ VỀ INT (ID TỰ ĐỘNG TẠO)
+    // HÀM INSERT TRẢ VỀ INT
     public int insert(Keywords keyword) {
         return get().withHandle(h ->
                 h.createUpdate("INSERT INTO keywords (name, description, created_at, updated_at) " +
@@ -27,7 +28,7 @@ public class KeywordsDao extends BaseDao {
         );
     }
 
-    // Kiểm tra tồn tại
+    // Kiểm tra từ khóa có tồn tại ko
     public boolean checkExists(String name) {
         return get().withHandle(h ->
                 h.createQuery("SELECT COUNT(id) FROM keywords WHERE name = :name")
@@ -36,6 +37,7 @@ public class KeywordsDao extends BaseDao {
                         .one() > 0
         );
     }
+
     public Keywords getById(int id) {
         return get().withHandle(h ->
                 h.createQuery("SELECT * FROM keywords WHERE id = :id")
@@ -46,21 +48,18 @@ public class KeywordsDao extends BaseDao {
         );
     }
 
-    // 2. Cập nhật Keyword
-    // Trả về true nếu update thành công (có dòng bị ảnh hưởng), false nếu thất bại
+    // Cập nhật Keyword
     public boolean update(Keywords keyword) {
         return get().withHandle(h ->
                 h.createUpdate("UPDATE keywords SET name = :name, description = :description, updated_at = NOW() WHERE id = :id")
                         .bind("id", keyword.getId())
                         .bind("name", keyword.getName())
                         .bind("description", keyword.getDescription())
-                        .execute() > 0 // execute() trả về số dòng thay đổi
+                        .execute() > 0
         );
     }
 
-    // --- BỔ SUNG THÊM (NẾU CẦN XÓA) ---
-
-    // 3. Xóa Keyword
+    // Xóa Keyword
     public boolean delete(int id) {
         return get().withHandle(h ->
                 h.createUpdate("DELETE FROM keywords WHERE id = :id")

@@ -1,14 +1,14 @@
-package com.webgiadung.doanweb.model;
+package com.webgiadung.webgiadung.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class CartItem implements Serializable {
-    private Product product;        // Thông tin sản phẩm
-    private int quantity;           // Số lượng trong giỏ
-    private double originalPrice;   // Giá gốc ban đầu của 1 sản phẩm
-    private double discountPrice;   // Giá sau khi áp dụng khuyến mãi 1 sản phẩm
-    private LocalDateTime addedAt;  // Thời gian thêm vào giỏ
+    private Product product;
+    private int quantity;
+    private double originalPrice;
+    private double discountPrice;
+    private LocalDateTime addedAt;
 
     public Product getProduct() { return product; }
     public int getQuantity() { return quantity; }
@@ -22,12 +22,12 @@ public class CartItem implements Serializable {
     public CartItem(Product product, int quantity, double discountPrice) {
         this.product = product;
         this.quantity = quantity <= 0 ? 1 : quantity;
-        this.originalPrice = product.getFirstPrice(); // tự động lấy giá gốc
-        this.discountPrice = discountPrice;           // giá sau khi áp dụng discount
-        this.addedAt = LocalDateTime.now();           // set thời gian hiện tại
+        this.originalPrice = product.getFirstPrice();
+        this.discountPrice = discountPrice;
+        this.addedAt = LocalDateTime.now(); // thời gian hiện tại thêm vào giỏ hàng
     }
 
-    // Giá tổng theo số lượng
+    // tổng giá
     public double getTotalPrice() {
         return discountPrice * quantity;
     }

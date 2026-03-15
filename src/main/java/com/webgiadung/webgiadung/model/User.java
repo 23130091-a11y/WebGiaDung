@@ -1,20 +1,20 @@
-package com.webgiadung.doanweb.model;
+package com.webgiadung.webgiadung.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 
 public class User implements Serializable {
-    private int id;
-    private String name;
-    private String email;
-    private String password;
-    private String address;
-    private String avatar;
-    private String phone;
-    private int status;
-    private LocalDate createdAt;
-    private LocalDate updatedAt;
-    private int role;
+    private int id; // id của user
+    private String name; // tên của user
+    private String email; // email đăng nhập
+    private String password; // mk đã hash
+    private String address; // địa chỉ
+    private String avatar; // link avatar
+    private String phone; // sdt
+    private int status; // trạng thái của tk: 0 - bị khóa, 1 - đang hđ
+    private LocalDate createdAt; // ngày tạo tk
+    private LocalDate updatedAt; // ngày update gần nhất
+    private int role; // role: User or Admin
 
     public User() {}
 
@@ -118,5 +118,22 @@ public class User implements Serializable {
 
     public void setRole(int role) {
         this.role = role;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", address='" + address + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", phone='" + phone + '\'' +
+                ", status=" + status +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", role=" + role +
+                '}';
     }
 }

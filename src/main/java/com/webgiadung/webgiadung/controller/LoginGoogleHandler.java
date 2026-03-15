@@ -1,14 +1,17 @@
-package com.webgiadung.doanweb.controller;
+package com.webgiadung.webgiadung.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.webgiadung.doanweb.model.User;
-import com.webgiadung.doanweb.model.UserGoogleDto;
-import com.webgiadung.doanweb.model.Constants;
-import com.webgiadung.doanweb.services.AuthService;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import com.webgiadung.webgiadung.model.Constants;
+import com.webgiadung.webgiadung.model.User;
+import com.webgiadung.webgiadung.model.UserGoogleDto;
+import com.webgiadung.webgiadung.services.AuthService;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
@@ -20,6 +23,7 @@ public class LoginGoogleHandler extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+            // lấy temporary authorization code
             String code = request.getParameter("code");
             if (code == null || code.isEmpty()) {
                 response.sendRedirect(request.getContextPath() + "/login.jsp");
@@ -40,8 +44,8 @@ public class LoginGoogleHandler extends HttpServlet {
             if (user != null) {
                 // Tạo session giống login thường
                 HttpSession session = request.getSession(true);
-                session.setAttribute("user", user);        // key dùng chung với login thường
-                session.setAttribute("USER_LOGIN", user);  // giữ nếu chỗ khác dùng
+                session.setAttribute("user", user); // key dùng chung với login thường
+                session.setAttribute("USER_LOGIN", user); // giữ nếu chỗ khác dùng
                 response.sendRedirect(request.getContextPath() + "/list-product");
             } else {
                 request.setAttribute("error", "Không thể đăng nhập bằng Google");

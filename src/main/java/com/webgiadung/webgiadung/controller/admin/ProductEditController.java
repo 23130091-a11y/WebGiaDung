@@ -1,10 +1,9 @@
-package com.webgiadung.doanweb.controller.admin;
+package com.webgiadung.webgiadung.controller.admin;
 
-import com.webgiadung.doanweb.model.Product;
-import com.webgiadung.doanweb.model.ProductDescriptions;
-import com.webgiadung.doanweb.model.ProductDetails;
-import com.webgiadung.doanweb.services.ProductService;
-
+import com.webgiadung.webgiadung.model.Product;
+import com.webgiadung.webgiadung.model.ProductDescriptions;
+import com.webgiadung.webgiadung.model.ProductDetails;
+import com.webgiadung.webgiadung.services.ProductService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,10 +14,7 @@ import jakarta.servlet.http.Part;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,14 +64,13 @@ public class ProductEditController extends HttpServlet {
             p.setId(Integer.parseInt(req.getParameter("id")));
             p.setName(req.getParameter("name"));
             p.setFirstPrice(Double.parseDouble(req.getParameter("price_first")));
-            p.setTotalPrice(Double.parseDouble(req.getParameter("price_total")));
             p.setQuantity(Integer.parseInt(req.getParameter("quantity")));
             // Các trường ID khóa ngoại
             p.setCategoriesId(Integer.parseInt(req.getParameter("categories_id")));
             p.setBrandsId(Integer.parseInt(req.getParameter("brands_id")));
             // Xử lý logic Post (bài viết/trạng thái)
             String postVal = req.getParameter("post");
-            p.setPost(postVal != null ? Integer.parseInt(postVal) : 0);
+            p.setIsVisible(postVal != null ? Integer.parseInt(postVal) : 0);
 
             // 2. XỬ LÝ ẢNH CHÍNH (MAIN IMAGE)
             Part mainImagePart = req.getPart("image");
@@ -100,13 +95,13 @@ public class ProductEditController extends HttpServlet {
                     ProductDescriptions desc = new ProductDescriptions();
                     // Nếu là dòng mới thêm bằng JS thì ID có thể là 0 hoặc rỗng
                     desc.setId(parseId(descIds[i]));
-                    desc.setTitle(descTitles[i]);
-                    desc.setDescription(descContents[i]);
+                    desc.setAttrName(descTitles[i]);
+                    desc.setValue(descContents[i]);
                     desc.setProductId(p.getId());
                     descList.add(desc);
                 }
             }
-            p.setDescriptionsList(descList);
+            p.setDescriptions(descList);
 
             // 4. XỬ LÝ DANH SÁCH CHI TIẾT (DETAILS - CÓ ẢNH)
             List<ProductDetails> detailList = new ArrayList<>();
@@ -141,7 +136,7 @@ public class ProductEditController extends HttpServlet {
                     detailList.add(detail);
                 }
             }
-            p.setDetailsList(detailList);
+            p.setDetails(detailList);
 
             // 5. GỌI SERVICE ĐỂ CẬP NHẬT (Transaction handled in DAO)
             boolean isUpdated = productService.updateProduct(p);

@@ -1,6 +1,6 @@
-package com.webgiadung.doanweb.dao;
+package com.webgiadung.webgiadung.dao;
 
-import com.webgiadung.doanweb.model.Categories;
+import com.webgiadung.webgiadung.model.Categories;
 
 import java.util.List;
 
@@ -31,18 +31,8 @@ public class CategoriesDao extends BaseDao {
                         .orElse(null)
         );
     }
-//    public List<Categories> getCategoriesParent() {
-//        return get().withHandle(h ->
-//                h.createQuery("""
-//                    SELECT *
-//                    FROM categories
-//                    WHERE parent_id IS NULL
-//                """)
-//                        .mapToBean(Categories.class)
-//                        .list()
-//        );
-//    }
 
+    // trả về ds các danh mục cha
     public List<Categories> getCategoriesParent() {
         return get().withHandle(h ->
                 h.createQuery("""
@@ -53,16 +43,6 @@ public class CategoriesDao extends BaseDao {
                         .mapToBean(Categories.class)
                         .list()
         );
-    }
-
-    public List<Categories> getCategoryTree() {
-        List<Categories> parents = getCategoriesParent();
-        for (Categories parent : parents) {
-            List<Categories> children =
-                    getCategoriesByParentId(parent.getId());
-            parent.setChildren(children);
-        }
-        return parents;
     }
 
     // Lấy danh sách danh mục con theo parent_id
@@ -78,8 +58,8 @@ public class CategoriesDao extends BaseDao {
                         .list()
         );
     }
+
     public Categories findByName(String name) {
-        // Giả sử bạn dùng JDBI giống như ProductDao
         return get().withHandle(h -> {
             return h.createQuery("SELECT * FROM categories WHERE name = :name")
                     .bind("name", name)
@@ -89,6 +69,7 @@ public class CategoriesDao extends BaseDao {
                     .orElse(null);
         });
     }
+
     public int insertCategory(String name, String description) {
         try {
             return get().withHandle(h ->
@@ -100,12 +81,21 @@ public class CategoriesDao extends BaseDao {
                             .bind("description", description)
                             .executeAndReturnGeneratedKeys("id")
                             .mapTo(Integer.class)
-                            .one() // Dùng .one() giống bên Brand (sẽ ném lỗi nếu không tạo được, để catch bắt)
+                            .one() // Dùng .one(): phải có đúng 1 kq -> JDBI sẽ ném Exception
             );
         } catch (Exception e) {
-            e.printStackTrace(); // In lỗi ra console để debug
-            return -1; // Trả về -1 nếu lỗi giống bên Brand
+            e.printStackTrace();
+            return -1;
         }
     }
 
+    public List<Categories> getCategoryTree() {
+        List<Categories> parents = getCategoriesParent();
+        for (Categories parent : parents) {
+            List<Categories> children =
+                    getCategoriesByParentId(parent.getId());
+            parent.setChildren(children);
+        }
+        return parents;
+    }
 }

@@ -1,20 +1,18 @@
-package com.webgiadung.doanweb.model;
+package com.webgiadung.webgiadung.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class Brands implements Serializable {
-    private int id;
-    private String name;
-    private String country;
-    private String logo;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private int id; // id
+    private String name; // tên thương hiệu
+    private String country; // quốc gia
+    private String logo; // link ảnh logo
+    private LocalDateTime createdAt; // ngày tạo
+    private LocalDateTime updatedAt; // ngày update
 
-    public Brands() {
-    }
+    public Brands() {}
 
-    // Constructor đầy đủ tham số (Tùy chọn)
     public Brands(int id, String name, String country, String logo, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.name = name;

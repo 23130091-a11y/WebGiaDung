@@ -1,12 +1,14 @@
-package com.webgiadung.doanweb.controller;
+package com.webgiadung.webgiadung.controller.cart;
 
-import com.webgiadung.doanweb.model.Product;
-import com.webgiadung.doanweb.model.Slide; // Giả định bạn có model Slide
-import com.webgiadung.doanweb.services.ProductService;
-import com.webgiadung.doanweb.services.SlideService; // Cần service để lấy thông tin Slide
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import com.webgiadung.webgiadung.model.Product;
+import com.webgiadung.webgiadung.model.Slide;
+import com.webgiadung.webgiadung.services.ProductService;
+import com.webgiadung.webgiadung.services.SlideService;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,7 +28,7 @@ public class SlideController extends HttpServlet {
                 Slide slide = slideService.getById(slideId);
 
                 if (slide != null) {
-                    String discountName = slide.getName();
+                    String discountName = slide.getTitle();
                     ProductService productService = new ProductService();
                     List<Product> products = productService.searchByDiscountName(discountName);
 

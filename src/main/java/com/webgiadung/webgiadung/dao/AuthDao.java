@@ -1,9 +1,10 @@
-package com.webgiadung.doanweb.dao;
+package com.webgiadung.webgiadung.dao;
 
-import com.webgiadung.doanweb.model.User;
+import com.webgiadung.webgiadung.model.User;
 
 import java.util.List;
 public class AuthDao extends BaseDao {
+    // Tìm user trong bảng dựa vào email
     public User getUserByEmail(String email) {
         String e = (email == null) ? "" : email.trim().toLowerCase();
         return get().withHandle(h ->
@@ -26,6 +27,7 @@ public class AuthDao extends BaseDao {
                         .one() > 0
         );
     }
+
     // Check số điện thoại tồn tại
     public boolean checkPhoneExists(String phone) {
         String p = (phone == null) ? "" : phone.trim();
@@ -37,6 +39,7 @@ public class AuthDao extends BaseDao {
                         .one() > 0
         );
     }
+
     // Đăng ký user
     public void register(User user) {
         String email = (user.getEmail() == null) ? null : user.getEmail().trim().toLowerCase();
@@ -57,8 +60,8 @@ public class AuthDao extends BaseDao {
                         .execute()
         );
     }
-    // ============ ADMIN: CUSTOMER MANAGEMENT ============
 
+    // Tìm user, keyword rỗng -> lấy hết, keyword có thì tìm theo name, email, phone
     public List<User> findUsers(String keyword) {
         String kw = (keyword == null) ? "" : keyword.trim();
 
@@ -86,7 +89,6 @@ public class AuthDao extends BaseDao {
         });
     }
 
-
     public User findUserById(int id) {
         return get().withHandle(h ->
                 h.createQuery(
@@ -101,7 +103,6 @@ public class AuthDao extends BaseDao {
         );
     }
 
-
     public void adminUpdateUser(User u) {
         get().useHandle(h ->
                 h.createUpdate(
@@ -115,6 +116,7 @@ public class AuthDao extends BaseDao {
                         .execute()
         );
     }
+
     public void adminUpdateUserWithPassword(User u) {
         get().useHandle(h ->
                 h.createUpdate(
@@ -129,7 +131,7 @@ public class AuthDao extends BaseDao {
         );
     }
 
-    // Soft delete: khóa user để tránh lỗi FK (đơn hàng...)
+    // khóa user để tránh lỗi FK (đơn hàng)
     public void adminSoftDeleteUser(int id) {
         get().useHandle(h ->
                 h.createUpdate("UPDATE users SET status = 0 WHERE id=:id")
@@ -138,6 +140,7 @@ public class AuthDao extends BaseDao {
         );
     }
 
+    // Kích hoạt tài khoản user
     public void activateUser(String email) {
         String e = (email == null) ? "" : email.trim().toLowerCase();
         get().useHandle(h ->
@@ -146,6 +149,7 @@ public class AuthDao extends BaseDao {
                         .execute()
         );
     }
+
     // Check email tồn tại nhưng loại trừ 1 id (dùng khi admin update)
     public boolean checkEmailExistsExceptId(String email, int id) {
         String e = (email == null) ? "" : email.trim().toLowerCase();
@@ -171,7 +175,7 @@ public class AuthDao extends BaseDao {
                         .isPresent()
         );
     }
-    // ===== USER: ACCOUNT (UPDATE PROFILE + CHANGE PASSWORD) =====
+
     public User findByIdFull(int id) {
         return get().withHandle(h ->
                 h.createQuery("SELECT * FROM users WHERE id = :id")
@@ -182,6 +186,7 @@ public class AuthDao extends BaseDao {
         );
     }
 
+    // update name, phone, address của user
     public boolean updateProfile(int id, String name, String phone, String address) {
         int updated = get().withHandle(h ->
                 h.createUpdate("UPDATE users SET name = :name, phone = :phone, address = :address, updated_at = NOW() WHERE id = :id")
@@ -194,6 +199,7 @@ public class AuthDao extends BaseDao {
         return updated > 0;
     }
 
+    // hàm xác minh user có oldPass đúng không trước khi đổi mk mới
     public boolean checkPassword(int id, String oldPass) {
         Integer cnt = get().withHandle(h ->
                 h.createQuery("SELECT COUNT(*) FROM users WHERE id=:id AND password=:pass")

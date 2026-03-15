@@ -1,7 +1,7 @@
-package com.webgiadung.doanweb.dao;
+package com.webgiadung.webgiadung.dao;
 
 public class EmailVerificationDao extends BaseDao {
-
+    // lưu email và token
     public void saveToken(String email, String token) {
         get().useHandle(h ->
                 h.createUpdate(

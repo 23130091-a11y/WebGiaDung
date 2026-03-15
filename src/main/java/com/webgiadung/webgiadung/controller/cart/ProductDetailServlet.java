@@ -1,10 +1,12 @@
-package com.webgiadung.doanweb.controller.cart;
+package com.webgiadung.webgiadung.controller.cart;
 
-import com.webgiadung.doanweb.model.Product;
-import com.webgiadung.doanweb.services.ProductService;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import com.webgiadung.webgiadung.model.Product;
+import com.webgiadung.webgiadung.services.ProductService;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 

@@ -1,12 +1,13 @@
-package com.webgiadung.doanweb.dao;
+package com.webgiadung.webgiadung.dao;
 
-import com.webgiadung.doanweb.model.Cart;
-import com.webgiadung.doanweb.model.CartItem;
-import com.webgiadung.doanweb.model.User;
+import com.webgiadung.webgiadung.model.Cart;
+import com.webgiadung.webgiadung.model.CartItem;
+import com.webgiadung.webgiadung.model.User;
 import org.jdbi.v3.core.Handle;
 
-import java.util.*;
-
+import java.util.List;
+import java.util.Map;
+// Thảo luận lại OrderDao
 public class OrderDao extends BaseDao {
 
     public int placeOrder(User user, Cart cart, int shipFee) {
@@ -97,6 +98,7 @@ public class OrderDao extends BaseDao {
                         .list()
         );
     }
+
     public boolean cancelOrder(int orderId, int userId) {
         String sql = """
         UPDATE orders
@@ -127,7 +129,6 @@ public class OrderDao extends BaseDao {
         return cnt != null && cnt > 0;
     }
 
-
     public List<Map<String, Object>> findItemsForRepurchase(int orderId) {
         String sql = """
         SELECT 
@@ -150,6 +151,4 @@ public class OrderDao extends BaseDao {
                         .list()
         );
     }
-
-
 }

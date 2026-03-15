@@ -1,8 +1,8 @@
-package com.webgiadung.doanweb.controller.admin;
+package com.webgiadung.webgiadung.controller.admin;
 
-import com.webgiadung.doanweb.model.Slide;
-import com.webgiadung.doanweb.services.SlideService;
-import com.webgiadung.doanweb.utils.FileUtils;
+import com.webgiadung.webgiadung.model.Slide;
+import com.webgiadung.webgiadung.services.SlideService;
+import com.webgiadung.webgiadung.utils.FileUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -38,8 +38,8 @@ public class AddSlideController extends HttpServlet {
             }
 
             Slide s = new Slide();
-            s.setName(name);
-            s.setText(req.getParameter("text"));
+            s.setTitle(name);
+            s.setDescription(req.getParameter("text"));
 
             s.setCreatedAt(LocalDateTime.now());
             s.setUpdatedAt(LocalDateTime.now());
@@ -52,7 +52,7 @@ public class AddSlideController extends HttpServlet {
             Part filePart = req.getPart("avatar");
             if (filePart != null && filePart.getSize() > 0) {
                 String filePath = FileUtils.saveFile(filePart, realPath, "slides");
-                s.setAvatar(filePath);
+                s.setBanner(filePath);
             } else {
 
                 resp.getWriter().write("{\"status\":\"error\", \"message\":\"Vui lòng chọn ảnh cho slide\"}");

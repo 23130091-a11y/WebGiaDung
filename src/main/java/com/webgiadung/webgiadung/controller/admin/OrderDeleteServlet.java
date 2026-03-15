@@ -1,10 +1,12 @@
-package com.webgiadung.doanweb.controller.admin;
+package com.webgiadung.webgiadung.controller.admin;
 
-import com.webgiadung.doanweb.dao.OrderAdminDao;
-import com.webgiadung.doanweb.model.OrderAdmin;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import com.webgiadung.webgiadung.dao.OrderAdminDao;
+import com.webgiadung.webgiadung.model.OrderAdmin;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.Arrays;

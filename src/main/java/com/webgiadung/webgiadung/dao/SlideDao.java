@@ -1,6 +1,6 @@
-package com.webgiadung.doanweb.dao;
+package com.webgiadung.webgiadung.dao;
 
-import com.webgiadung.doanweb.model.Slide;
+import com.webgiadung.webgiadung.model.Slide;
 import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
@@ -16,6 +16,7 @@ public class SlideDao extends BaseDao{
 
         return slides;
     }
+
     public static Slide getById(int id) {
         return get().withHandle(h -> {
             return h.createQuery("SELECT * FROM slide WHERE id = :id AND status = 1")
@@ -25,6 +26,7 @@ public class SlideDao extends BaseDao{
                     .orElse(null);
         });
     }
+
     public static int insert(Slide slide) {
         return get().withHandle(handle -> {
             return handle.createUpdate(

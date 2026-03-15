@@ -1,10 +1,10 @@
-package com.webgiadung.doanweb.controller.admin;
+package com.webgiadung.webgiadung.controller.admin;
 
-import com.webgiadung.doanweb.utils.FileUtils;
-import com.webgiadung.doanweb.model.Product;
-import com.webgiadung.doanweb.model.ProductDescriptions;
-import com.webgiadung.doanweb.model.ProductDetails;
-import com.webgiadung.doanweb.services.ProductService;
+import com.webgiadung.webgiadung.model.Product;
+import com.webgiadung.webgiadung.model.ProductDescriptions;
+import com.webgiadung.webgiadung.model.ProductDetails;
+import com.webgiadung.webgiadung.services.ProductService;
+import com.webgiadung.webgiadung.utils.FileUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -47,15 +47,13 @@ public class AddProductController extends HttpServlet {
             Product p = new Product();
             p.setName(req.getParameter("productName"));
             p.setFirstPrice(Double.parseDouble(req.getParameter("productPrice")));
-            p.setTotalPrice(Double.parseDouble(req.getParameter("productPrice")));
 
             // Set ID các khóa ngoại
             p.setBrandsId(Integer.parseInt(brandIdRaw));
-            p.setKeywordsId(Integer.parseInt(tagIdRaw));
             p.setCategoriesId(Integer.parseInt(cateIdRaw));
 
             p.setQuantity(Integer.parseInt(req.getParameter("productStock")));
-            p.setPost("1".equals(postStatusRaw) ? 1 : 0);
+            p.setIsVisible("1".equals(postStatusRaw) ? 1 : 0);
 
             String realPath = getServletContext().getRealPath("/");
 
@@ -78,8 +76,8 @@ public class AddProductController extends HttpServlet {
                         if (dTitles[i] != null && !dTitles[i].trim().isEmpty()) {
                             ProductDescriptions pd = new ProductDescriptions();
                             pd.setProductId(productId);
-                            pd.setTitle(dTitles[i]);
-                            pd.setDescription(dContents[i]);
+                            pd.setAttrName(dTitles[i]);
+                            pd.setValue(dContents[i]);
                             productService.addDescription(pd);
                         }
                     }

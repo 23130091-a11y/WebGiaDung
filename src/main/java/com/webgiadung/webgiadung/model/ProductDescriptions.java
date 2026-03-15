@@ -1,23 +1,22 @@
-package com.webgiadung.doanweb.model;
+package com.webgiadung.webgiadung.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class ProductDescriptions implements Serializable {
-    private int id;
-    private String title;
-    private String description;
-    private int productId;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private int id; // id mô tả
+    private String attrName; // tên mô tả
+    private String value; // thông tin mô tả
+    private int productId; // id p
+    private LocalDateTime createdAt; // ngày tạo
+    private LocalDateTime updatedAt; // ngày update
 
-    public ProductDescriptions() {
-    }
+    public ProductDescriptions() {}
 
-    public ProductDescriptions(int id, String title, String description, int productId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public ProductDescriptions(int id, String attrName, String value, int productId, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
-        this.title = title;
-        this.description = description;
+        this.attrName = attrName;
+        this.value = value;
         this.productId = productId;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
@@ -31,20 +30,20 @@ public class ProductDescriptions implements Serializable {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getAttrName() {
+        return attrName;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setAttrName(String attrName) {
+        this.attrName = attrName;
     }
 
-    public String getDescription() {
-        return description;
+    public String getValue() {
+        return value;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public int getProductId() {
@@ -73,10 +72,10 @@ public class ProductDescriptions implements Serializable {
 
     @Override
     public String toString() {
-        return "ProductDescription{" +
+        return "ProductDescriptions{" +
                 "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
+                ", attrName='" + attrName + '\'' +
+                ", value='" + value + '\'' +
                 ", productId=" + productId +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +

@@ -1,4 +1,4 @@
-package com.webgiadung.doanweb.model;
+package com.webgiadung.webgiadung.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -6,30 +6,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Product implements Serializable {
-    private int id;
-    private String name;
-    private String image;
-    private double firstPrice;
-    private int discountsId;
-    private double totalPrice;
-    private int categoriesId;
-    private int brandsId;
-    private int keywordsId;
-    private String brandName;
-    private String keywordName;
-    private int post;
-    private int quantity;
-    private int quantitySaled;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private int id; // id p
+    private String name; // tên sp
+    private String image; // ảnh chính
+    private double firstPrice; // giá gốc
+    private int discountsId; // id giảm giá (bảng discounts)
+    private int categoriesId; // id danh mục
+    private int brandsId; // id thương hiệu
+    private int isVisible; // 0 - không hiển thị, 1 - hiển thị sp trên trang
+    private int status; // 0 - tạm ngừng / ngừng bán hẳn, 1 - đang bán, 2 - hết hàng
+    private int quantity; // số lượng kho
+    private int soldQuantity; // số lượng đã bán
+    private LocalDateTime createdAt; // ngày tạo
+    private LocalDateTime updatedAt; // ngày update
 
     // Liên kết các bảng phụ
-    private List<ProductDescriptions> descriptionsList;  // Thông số động
-    private List<ProductDetails> detailsList;
-    private List<ProductAttribute> attributes;  // Thông số động
-    private List<ProductOption> options;        // Tùy chọn
-    private List<ProductImage> images;          // Ảnh phụ
-    private List<ProductReview> reviews;        // Đánh giá
+    private List<ProductDescriptions> descriptions = new ArrayList<>(); // mô tả sp
+    private List<ProductDetails> details = new ArrayList<>(); // chi tiết sp
+    private List<ProductImage> images = new ArrayList<>(); // Các ảnh khác của sp
+    private List<ProductReview> reviews = new ArrayList<>(); // Đánh giá
+    private List<Keywords> keywords = new ArrayList<>();
 
     // rating tính sẵn từ SQL (dùng cho trang list)
     private Double ratingAvg;
@@ -42,9 +38,10 @@ public class Product implements Serializable {
         this.ratingAvg = ratingAvg;
     }
 
-    // ===== Khuyến mãi (dùng cho trang list) =====
-    private Double discountPercent;   // 25
-    private String discountType;      // percentage | fixed
+    // Tính toán lại dùng đến sau
+    private Double discountPercent;
+
+    private String discountType;
 
     public Double getDiscountPercent() {
         return discountPercent != null ? discountPercent : 0.0;
@@ -53,6 +50,7 @@ public class Product implements Serializable {
     public void setDiscountPercent(Double discountPercent) {
         this.discountPercent = discountPercent;
     }
+
     public String getDiscountType() {
         return discountType;
     }
@@ -61,6 +59,7 @@ public class Product implements Serializable {
         this.discountType = discountType;
     }
 
+    // tính rating lấy từ review trong trang product details
     public double getRating() {
         if (reviews == null || reviews.isEmpty()) return 0.0;
 
@@ -72,64 +71,31 @@ public class Product implements Serializable {
         return Math.round(avg * 10.0) / 10.0; // làm tròn 1 chữ số
     }
 
+    // làm tròn để hiển thị sao
     public int getRatingInt() {
-        return (int) Math.round(getRating()); // làm tròn để hiển thị sao
+        return (int) Math.round(getRating());
     }
 
-    // Trong Product.java
     public boolean getIsDiscounted() {
-        // Thêm kiểm tra null và đảm bảo giá gốc lớn hơn giá tổng ít nhất 1000đ (để tránh sai số)
-        return discountPercent != null
-                && discountPercent > 0
-                && (firstPrice - totalPrice > 1);
+        return discountPercent != null && discountPercent > 0;
     }
 
-    public Product() {
-    }
+    public Product() {}
 
-    public Product(int id, String name, String image, double firstPrice, double totalPrice, int discountsId, int categoriesId, int brandsId, int keywordsId, int post, int quantity, int quantitySaled, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.name = name;
-        this.image = image;
-        this.firstPrice = firstPrice;
-        this.totalPrice = totalPrice;
-        this.discountsId = discountsId;
-        this.categoriesId = categoriesId;
-        this.brandsId = brandsId;
-        this.keywordsId = keywordsId;
-        this.post = post;
-        this.quantity = quantity;
-        this.quantitySaled = quantitySaled;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.attributes = new ArrayList<>();
-        this.options = new ArrayList<>();
-        this.images = new ArrayList<>();
-        this.reviews = new ArrayList<>();
-    }
-
-    public Product(int id, String name, String image, double firstPrice, int discountsId, double totalPrice, int categoriesId, int brandsId, int keywordsId, String brandName, String keywordName, int post, int quantity, int quantitySaled, LocalDateTime createdAt, LocalDateTime updatedAt, List<ProductDescriptions> descriptionsList, List<ProductDetails> detailsList, List<ProductReview> reviews, Double discountPercent, String discountType) {
+    public Product(int id, String name, String image, double firstPrice, int discountsId, int categoriesId, int brandsId, int isVisible, int status, int quantity, int soldQuantity, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.name = name;
         this.image = image;
         this.firstPrice = firstPrice;
         this.discountsId = discountsId;
-        this.totalPrice = totalPrice;
         this.categoriesId = categoriesId;
         this.brandsId = brandsId;
-        this.keywordsId = keywordsId;
-        this.brandName = brandName;
-        this.keywordName = keywordName;
-        this.post = post;
+        this.isVisible = isVisible;
+        this.status = status;
         this.quantity = quantity;
-        this.quantitySaled = quantitySaled;
+        this.soldQuantity = soldQuantity;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.descriptionsList = descriptionsList;
-        this.detailsList = detailsList;
-        this.reviews = reviews;
-        this.discountPercent = discountPercent;
-        this.discountType = discountType;
     }
 
     public int getId() {
@@ -172,14 +138,6 @@ public class Product implements Serializable {
         this.firstPrice = firstPrice;
     }
 
-    public double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
     public int getCategoriesId() {
         return categoriesId;
     }
@@ -196,20 +154,12 @@ public class Product implements Serializable {
         this.brandsId = brandsId;
     }
 
-    public int getKeywordsId() {
-        return keywordsId;
+    public int getIsVisible() {
+        return isVisible;
     }
 
-    public void setKeywordsId(int keywordsId) {
-        this.keywordsId = keywordsId;
-    }
-
-    public int getPost() {
-        return post;
-    }
-
-    public void setPost(int post) {
-        this.post = post;
+    public void setIsVisible(int isVisible) {
+        this.isVisible = isVisible;
     }
 
     public int getQuantity() {
@@ -220,12 +170,12 @@ public class Product implements Serializable {
         this.quantity = quantity;
     }
 
-    public int getQuantitySaled() {
-        return quantitySaled;
+    public int getSoldQuantity() {
+        return soldQuantity;
     }
 
-    public void setQuantitySaled(int quantitySaled) {
-        this.quantitySaled = quantitySaled;
+    public void setSoldQuantity(int soldQuantity) {
+        this.soldQuantity = soldQuantity;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -244,20 +194,12 @@ public class Product implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public List<ProductAttribute> getAttributes() {
-        return attributes;
+    public int getStatus() {
+        return status;
     }
 
-    public void setAttributes(List<ProductAttribute> attributes) {
-        this.attributes = attributes;
-    }
-
-    public List<ProductOption> getOptions() {
-        return options;
-    }
-
-    public void setOptions(List<ProductOption> options) {
-        this.options = options;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public List<ProductImage> getImages() {
@@ -276,36 +218,28 @@ public class Product implements Serializable {
         this.reviews = reviews;
     }
 
-    public List<ProductDescriptions> getDescriptionsList() {
-        return descriptionsList;
+    public List<ProductDescriptions> getDescriptions() {
+        return descriptions;
     }
 
-    public void setDescriptionsList(List<ProductDescriptions> descriptionsList) {
-        this.descriptionsList = descriptionsList;
+    public void setDescriptions(List<ProductDescriptions> descriptions) {
+        this.descriptions = descriptions;
     }
 
-    public List<ProductDetails> getDetailsList() {
-        return detailsList;
+    public List<ProductDetails> getDetails() {
+        return details;
     }
 
-    public void setDetailsList(List<ProductDetails> detailsList) {
-        this.detailsList = detailsList;
+    public void setDetails(List<ProductDetails> details) {
+        this.details = details;
     }
 
-    public String getBrandName() {
-        return brandName;
+    public List<Keywords> getKeywords() {
+        return keywords;
     }
 
-    public void setBrandName(String brandName) {
-        this.brandName = brandName;
-    }
-
-    public String getKeywordName() {
-        return keywordName;
-    }
-
-    public void setKeywordName(String keywordName) {
-        this.keywordName = keywordName;
+    public void setKeywords(List<Keywords> keywords) {
+        this.keywords = keywords;
     }
 
     @Override
@@ -316,15 +250,27 @@ public class Product implements Serializable {
                 ", image='" + image + '\'' +
                 ", firstPrice=" + firstPrice +
                 ", discountsId=" + discountsId +
-                ", totalPrice=" + totalPrice +
                 ", categoriesId=" + categoriesId +
                 ", brandsId=" + brandsId +
-                ", keywordsId=" + keywordsId +
-                ", post=" + post +
+                ", post=" + isVisible +
                 ", quantity=" + quantity +
-                ", quantitySaled=" + quantitySaled +
+                ", soldQuantity=" + soldQuantity +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
+    }
+
+    // hàm tính tổng tiền
+    public double getTotalPrice() {
+        double price = firstPrice;
+        if(getIsDiscounted()) {
+            if("percentage".equalsIgnoreCase(discountType)) {
+                price = firstPrice * (1 - discountPercent / 100);
+            }
+            else if("fixed".equalsIgnoreCase(discountType)) {
+                price = firstPrice - discountPercent;
+            }
+        }
+        return Math.max(price, 0);
     }
 }

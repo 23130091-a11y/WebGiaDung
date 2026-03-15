@@ -1,9 +1,10 @@
-package com.webgiadung.doanweb.services;
+package com.webgiadung.webgiadung.services;
 
-import java.util.Properties;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+
+import java.util.Properties;
 
 public class EmailService {
 
@@ -18,7 +19,7 @@ public class EmailService {
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
 
-        // Tạo Session của javax.mail
+        // Tạo Session của jakarta.mail
         Session session = Session.getInstance(props, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {

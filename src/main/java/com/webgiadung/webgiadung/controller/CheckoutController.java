@@ -1,25 +1,23 @@
-package com.webgiadung.doanweb.controller;
+package com.webgiadung.webgiadung.controller;
 
-import com.webgiadung.doanweb.dao.CartItemDao;
-import com.webgiadung.doanweb.dao.OrderDao;
-import com.webgiadung.doanweb.model.Cart;
-import com.webgiadung.doanweb.model.CartItem;
-import com.webgiadung.doanweb.model.User;
-
+import com.webgiadung.webgiadung.dao.CartItemDao;
+import com.webgiadung.webgiadung.dao.OrderDao;
+import com.webgiadung.webgiadung.dao.UserAddressDao;
+import com.webgiadung.webgiadung.model.Cart;
+import com.webgiadung.webgiadung.model.CartItem;
+import com.webgiadung.webgiadung.model.User;
+import com.webgiadung.webgiadung.model.UserAddress;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Set;
-
-import com.webgiadung.doanweb.dao.UserAddressDao;
-import com.webgiadung.doanweb.model.UserAddress;
-
-
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
 @WebServlet("/checkout")
 public class CheckoutController extends HttpServlet {

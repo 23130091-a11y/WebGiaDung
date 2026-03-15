@@ -1,15 +1,15 @@
-package com.webgiadung.doanweb.model;
+package com.webgiadung.webgiadung.model;
 
 import java.io.Serializable;
 
 public class UserGoogleDto implements Serializable {
-    private String id;
-    private String email;
-    private boolean verifiedEmail;
-    private String name;
-    private String givenName;
-    private String familyName;
-    private String picture;
+    private String id; // id của user
+    private String email; // email của user
+    private boolean verifiedEmail; // email của user đã được GG verified hay chưa
+    private String name; // tên đầy đủ của user
+    private String givenName; // tên của user
+    private String familyName; // họ của user
+    private String picture; // url ảnh đại diện tài khoản GG
 
     public UserGoogleDto() {}
 

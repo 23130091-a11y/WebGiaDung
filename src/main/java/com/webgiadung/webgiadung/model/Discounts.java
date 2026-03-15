@@ -1,38 +1,39 @@
-package com.webgiadung.doanweb.model;
+package com.webgiadung.webgiadung.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class Discounts implements Serializable {
-    private int id;
-    private String name;
-    private String typeDiscount;
-    private double discount;
-    private String description;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private int id_cate;
+    private int id; // id mgg
+    private String name; // tên mã giảm
+    private String discountType; // loại giảm: theo % or theo giá tiền
+    private double discountValue; // giá trị giảm, biến này phụ thuộc vào loại giảm
+    private String description; // mô tả chương trình
+    private LocalDateTime startDate; // ngày bắt đầu
+    private LocalDateTime endDate; // ngày kết thúc
+    private int categoryId; // id danh mục được giảm
+    private int status; // tắt - bật
 
-    public Discounts() {
-    }
+    public Discounts() {}
 
-    public Discounts(int id, String name, String typeDiscount, double discount, String description, LocalDateTime endDate, LocalDateTime startDate, int id_cate) {
+    public Discounts(int id, String name, String discountType, double discountValue, String description, LocalDateTime endDate, LocalDateTime startDate, int categoryId, int status) {
         this.id = id;
         this.name = name;
-        this.typeDiscount = typeDiscount;
-        this.discount = discount;
+        this.discountType = discountType;
+        this.discountValue = discountValue;
         this.description = description;
         this.endDate = endDate;
         this.startDate = startDate;
-        this.id_cate = id_cate;
+        this.categoryId = categoryId;
+        this.status = status;
     }
 
-    public int getId_cate() {
-        return id_cate;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setId_cate(int id_cate) {
-        this.id_cate = id_cate;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     public int getId() {
@@ -51,20 +52,20 @@ public class Discounts implements Serializable {
         this.name = name;
     }
 
-    public String getTypeDiscount() {
-        return typeDiscount;
+    public String getDiscountType() {
+        return discountType;
     }
 
-    public void setTypeDiscount(String typeDiscount) {
-        this.typeDiscount = typeDiscount;
+    public void setDiscountType(String discountType) {
+        this.discountType = discountType;
     }
 
-    public double getDiscount() {
-        return discount;
+    public double getDiscountValue() {
+        return discountValue;
     }
 
-    public void setDiscount(double discount) {
-        this.discount = discount;
+    public void setDiscountValue(double discountValue) {
+        this.discountValue = discountValue;
     }
 
     public String getDescription() {
@@ -91,16 +92,26 @@ public class Discounts implements Serializable {
         this.endDate = endDate;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Discounts{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", typeDiscount='" + typeDiscount + '\'' +
-                ", discount=" + discount +
+                ", discountType='" + discountType + '\'' +
+                ", discountValue=" + discountValue +
                 ", description='" + description + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
+                ", categoryId=" + categoryId +
+                ", status=" + status +
                 '}';
     }
 }

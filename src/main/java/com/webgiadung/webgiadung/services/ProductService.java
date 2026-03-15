@@ -1,16 +1,15 @@
-package com.webgiadung.doanweb.services;
+package com.webgiadung.webgiadung.services;
 
-import com.webgiadung.doanweb.dao.ProductDao;
-import com.webgiadung.doanweb.dao.ProductDescriptionsDao;
-import com.webgiadung.doanweb.dao.ProductDetailsDao;
-import com.webgiadung.doanweb.model.Product;
-import com.webgiadung.doanweb.model.ProductDescriptions;
-import com.webgiadung.doanweb.model.ProductDetails;
+import com.webgiadung.webgiadung.dao.ProductDao;
+import com.webgiadung.webgiadung.dao.ProductDescriptionsDao;
+import com.webgiadung.webgiadung.dao.ProductDetailsDao;
+import com.webgiadung.webgiadung.model.Product;
+import com.webgiadung.webgiadung.model.ProductDescriptions;
+import com.webgiadung.webgiadung.model.ProductDetails;
 
 import java.util.List;
 
 public class ProductService {
-    // Khởi tạo các đối tượng DAO để tương tác với cơ sở dữ liệu
     ProductDao pdao = new ProductDao();
     ProductDescriptionsDao descDao = new ProductDescriptionsDao();
     ProductDetailsDao detailDao = new ProductDetailsDao();
@@ -23,11 +22,6 @@ public class ProductService {
     // Lấy chi tiết một sản phẩm theo ID
     public Product getProduct(int id) {
         return pdao.getProduct(id);
-    }
-
-    // Thêm sản phẩm mới và trả về ID (Generated Key)
-    public int addProduct(Product p) {
-        return pdao.insert(p);
     }
 
     // Thêm mô tả ngắn cho sản phẩm
@@ -71,18 +65,21 @@ public class ProductService {
     }
 
     public List<Product> getProductsByCategory(int categoryId) {
-        return pdao.getByCategoryId(categoryId);
+        return pdao.getProductsByCategoryId(categoryId);
     }
 
     public List<Product> searchProductByName(String keyword) {
         return pdao.searchByName(keyword);
     }
+
     public Product getProductFullInfo(int id) {
         return pdao.getProductFullInfo(id);
     }
+
     public boolean updateProduct(Product p) {
         return pdao.updateProduct(p);
     }
+
     public boolean updateDescription(ProductDescriptions desc) {
         return descDao.update(desc);
     }
@@ -99,7 +96,6 @@ public class ProductService {
         return detailDao.update(detail);
     }
 
-
     public boolean deleteProductDetail(int id) {
         return detailDao.delete(id);
     }
@@ -107,19 +103,19 @@ public class ProductService {
     public void deleteAllDetailsByProductId(int productId) {
         detailDao.deleteByProductId(productId);
     }
+
     public boolean deleteProduct(int id) {
         return pdao.deleteProduct(id);
-    }
-    public int applyDiscountToAll(int discountId) {
-        return pdao.applyDiscountToAll(discountId);
     }
 
     public int applyDiscountToCategory(int categoryId, int discountId) {
         return pdao.applyDiscountToCategory(categoryId, discountId);
     }
+
     public List<Product> searchWithFilters(String keyword, String[] brands, String[] priceRanges,String categoryId) {
         return pdao.searchWithFilters(keyword, brands, priceRanges,categoryId);
     }
+
     public Product getProductFull(int id) {
         return pdao.getProductFull(id);
     }
@@ -127,12 +123,11 @@ public class ProductService {
     public List<Product> getProductsFromIds(List<Integer> viewedIds) {
         return pdao.getProductsFromIds(viewedIds);
     }
+
     public List<Product> searchByDiscountName(String discountName) {
         return pdao.searchByDiscountName(discountName);
     }
-    public int updateProductPricesByDiscountId(int discountId) {
-        return pdao.updateProductPricesByDiscountId(discountId);
-    }
+
     public int removeDiscount(int discountId) {
         return pdao.removeDiscount(discountId);
     }

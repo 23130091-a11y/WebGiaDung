@@ -1,12 +1,14 @@
-package com.webgiadung.doanweb.controller;
+package com.webgiadung.webgiadung.controller;
 
-import com.webgiadung.doanweb.dao.CategoriesDao;
-import com.webgiadung.doanweb.dao.ProductDao;
-import com.webgiadung.doanweb.model.Categories;
-import com.webgiadung.doanweb.model.Product;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import com.webgiadung.webgiadung.dao.CategoriesDao;
+import com.webgiadung.webgiadung.dao.ProductDao;
+import com.webgiadung.webgiadung.model.Categories;
+import com.webgiadung.webgiadung.model.Product;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,10 +37,16 @@ public class CategoryServlet extends HttpServlet {
         }
 
         Categories category = categoriesDao.getCategory(categoryId);
-        List<Product> products = productDao.getProductsByCategoryId(categoryId);
 
-        request.setAttribute("category", category);
-        request.setAttribute("products", products);
+        if (category != null) {
+            List<Product> products = productDao.getProductsByCategoryId(categoryId);
+
+            request.setAttribute("category", category);
+            request.setAttribute("products", products);
+        } else {
+            // Xử lý khi ID danh mục không tồn tại, lỗi 404
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
 
         // dùng chung view
         request.getRequestDispatcher("/search.jsp").forward(request, response);

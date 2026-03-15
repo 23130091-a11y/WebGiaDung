@@ -1,11 +1,11 @@
-package com.webgiadung.doanweb.dao;
+package com.webgiadung.webgiadung.dao;
 
-import com.webgiadung.doanweb.model.Blog;
+import com.webgiadung.webgiadung.model.Blog;
 
 import java.util.List;
 
 public class BlogDao extends BaseDao {
-
+    // Xem lại xử lý blog sau
     public List<Blog> findLatest(int limit) {
         int lim = (limit <= 0) ? 4 : limit;
 

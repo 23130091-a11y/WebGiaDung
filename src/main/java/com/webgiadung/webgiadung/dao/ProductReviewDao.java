@@ -1,6 +1,6 @@
-package com.webgiadung.doanweb.dao;
+package com.webgiadung.webgiadung.dao;
 
-import com.webgiadung.doanweb.model.ProductReview;
+import com.webgiadung.webgiadung.model.ProductReview;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -44,11 +44,8 @@ public class ProductReviewDao extends BaseDao {
                             r.setUserId(rs.getInt("user_id"));
                             r.setRating(rs.getDouble("rating"));
                             r.setComment(rs.getString("comment"));
-
                             Timestamp ts = rs.getTimestamp("created_at");
                             if (ts != null) r.setCreatedAt(ts.toLocalDateTime());
-
-                            r.setAuthorName(rs.getString("author_name"));
                             return r;
                         })
                         .list()

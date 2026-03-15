@@ -1,11 +1,12 @@
-package com.webgiadung.doanweb.dao;
+package com.webgiadung.webgiadung.dao;
 
-import com.webgiadung.doanweb.model.ProductDescriptions;
+import com.webgiadung.webgiadung.model.ProductDescriptions;
+
 import java.util.List;
 
 public class ProductDescriptionsDao extends BaseDao {
 
-    // Thay đổi từ void sang int để trả về ID vừa sinh ra
+    // insert dòng mô tả, trả về id vừa thêm
     public int insert(ProductDescriptions desc) {
         return get().withHandle(h ->
                 h.createUpdate(
@@ -28,20 +29,20 @@ public class ProductDescriptionsDao extends BaseDao {
                         .list()
         );
     }
+
     public boolean update(ProductDescriptions desc) {
         return get().withHandle(h ->
                 h.createUpdate("UPDATE products_description " +
                                 "SET title = :title, description = :description, updated_at = NOW() " +
                                 "WHERE id = :id")
                         .bind("id", desc.getId())
-                        .bind("title", desc.getTitle())
-                        .bind("description", desc.getDescription())
-                        // Không update cột products_id vì mô tả hiếm khi chuyển từ sản phẩm này sang sản phẩm khác
+                        .bind("name", desc.getAttrName())
+                        .bind("value", desc.getValue())
                         .execute() > 0
         );
     }
 
-    // 2. Xóa mô tả theo ID (Delete single item)
+    // Xóa mô tả theo ID
     // Dùng khi người dùng bấm nút "Xóa dòng này" trên giao diện sửa
     public boolean delete(int id) {
         return get().withHandle(h ->
@@ -51,7 +52,7 @@ public class ProductDescriptionsDao extends BaseDao {
         );
     }
 
-    // 3. (Tùy chọn) Xóa tất cả mô tả của một sản phẩm
+    // Xóa tất cả mô tả của một sản phẩm
     // Dùng khi xóa hoàn toàn sản phẩm khỏi hệ thống
     public boolean deleteByProductId(int productId) {
         return get().withHandle(h ->

@@ -1,6 +1,6 @@
-package com.webgiadung.doanweb.dao;
+package com.webgiadung.webgiadung.dao;
 
-import com.webgiadung.doanweb.model.OrderAdmin;
+import com.webgiadung.webgiadung.model.OrderAdmin;
 import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
@@ -27,13 +27,12 @@ public class OrderAdminDao extends BaseDao {
 
     // Tìm kiếm theo từ khóa (mã đơn hoặc tên khách)
     public List<OrderAdmin> searchOrders(String keyword) {
-        // 1. Xử lý keyword ngay từ đầu, đảm bảo không bị lỗi null
         String searchPattern = "%" + (keyword == null ? "" : keyword.trim()) + "%";
 
         return jdbi.withHandle(handle ->
                 handle.createQuery(
                                 "SELECT o.id, " +
-                                        "       u.name AS customer_name, " + // Đảm bảo khớp với field 'customer_name' trong Bean
+                                        "       u.name AS customer_name, " +
                                         "       o.status_transport, " +
                                         "       o.status_payment, " +
                                         "       o.created_at, " +
@@ -49,25 +48,6 @@ public class OrderAdminDao extends BaseDao {
                         .list()
         );
     }
-
-    // Lọc theo trạng thái
-//    public List<OrderAdmin> filterOrders(Integer statusPayment, Integer statusTransport) {
-//        return jdbi.withHandle(handle ->
-//                handle.createQuery(
-//                                "SELECT o.id, o.user_id, u.name as customer_name, " +
-//                                        "o.status_transport, o.status_payment, o.created_at, o.total_price " +
-//                                        "FROM orders o " +
-//                                        "JOIN users u ON o.user_id = u.id " +
-//                                        "WHERE (:statusPayment IS NULL OR o.status_payment = :statusPayment) " +
-//                                        "AND (:statusTransport IS NULL OR o.status_transport = :statusTransport) " +
-//                                        "ORDER BY o.created_at DESC"
-//                        )
-//                        .bind("statusPayment", statusPayment)
-//                        .bind("statusTransport", statusTransport)
-//                        .mapToBean(OrderAdmin.class)
-//                        .list()
-//        );
-//    }
 
     // Xóa nhiều đơn hàng
     public void deleteOrders(List<Integer> orderIds) {

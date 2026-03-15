@@ -1,38 +1,35 @@
-package com.webgiadung.doanweb.model;
+package com.webgiadung.webgiadung.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class Slide implements Serializable {
+    private int id; // id của slide
+    private String title; // tiêu đề của slide
+    private String banner; // link ảnh của slide
+    private String description; // mô tả
+    private int status; // trạng thái // 0 - chưa post, 1 - đã post
+    private LocalDateTime createdAt; // ngày thêm slide
+    private LocalDateTime updatedAt; // ngày cập nhật gần nhất
 
-    private int id;
-    private String name;
-    private String avatar;
-    private String text;
-    private int status;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    public Slide() {}
 
-
-    public Slide() {
-    }
-
-    public Slide(int id, String name, String avatar, String text, int status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Slide(int id, String title, String banner, String description, int status, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
-        this.name = name;
-        this.avatar = avatar;
-        this.text = text;
+        this.title = title;
+        this.banner = banner;
+        this.description = description;
         this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public int getId() {
@@ -43,20 +40,20 @@ public class Slide implements Serializable {
         this.id = id;
     }
 
-    public String getAvatar() {
-        return avatar;
+    public String getBanner() {
+        return banner;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public void setBanner(String banner) {
+        this.banner = banner;
     }
 
-    public String getText() {
-        return text;
+    public String getDescription() {
+        return description;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getStatus() {
@@ -81,5 +78,18 @@ public class Slide implements Serializable {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Slide{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", banner='" + banner + '\'' +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 }

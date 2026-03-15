@@ -1,22 +1,21 @@
-package com.webgiadung.doanweb.model;
+package com.webgiadung.webgiadung.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class Keywords implements Serializable {
-    private int id;
-    private String name;
-    private String description;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private int id; // id từ khóa
+    private String name; // tên
+    private String description; // mô tả từ khóa
+    private LocalDateTime createdAt; // ngày tạo
+    private LocalDateTime updatedAt; // ngày update
 
-    public Keywords() {
-    }
+    public Keywords() {}
 
-    public Keywords(int id, String description, String name, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Keywords(int id, String name, String description, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
-        this.description = description;
         this.name = name;
+        this.description = description;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }

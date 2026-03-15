@@ -1,10 +1,9 @@
-package com.webgiadung.doanweb.controller.admin;
+package com.webgiadung.webgiadung.controller.admin;
 
-import com.webgiadung.doanweb.model.Discounts;
-import com.webgiadung.doanweb.model.Categories;
-import com.webgiadung.doanweb.services.DiscountService;
-import com.webgiadung.doanweb.services.CategoriesService; // Đảm bảo đã import
-
+import com.webgiadung.webgiadung.model.Categories;
+import com.webgiadung.webgiadung.model.Discounts;
+import com.webgiadung.webgiadung.services.CategoriesService;
+import com.webgiadung.webgiadung.services.DiscountService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -42,8 +41,8 @@ public class ViewDiscountController extends HttpServlet {
             if (d != null) {
 
                 String categoryName = "Tất cả sản phẩm";
-                if (d.getId_cate() > 0) {
-                    Categories cat = categoriesService.getCategory(d.getId_cate());
+                if (d.getCategoryId() > 0) {
+                    Categories cat = categoriesService.getCategory(d.getCategoryId());
                     if (cat != null) {
                         categoryName = cat.getName();
                     }
@@ -54,8 +53,8 @@ public class ViewDiscountController extends HttpServlet {
                 json.append("\"status\": \"success\",");
                 json.append("\"id\": ").append(d.getId()).append(",");
                 json.append("\"name\": \"").append(escapeJson(d.getName())).append("\",");
-                json.append("\"typeDiscount\": \"").append(d.getTypeDiscount()).append("\",");
-                json.append("\"discount\": ").append(d.getDiscount()).append(",");
+                json.append("\"typeDiscount\": \"").append(d.getDiscountType()).append("\",");
+                json.append("\"discount\": ").append(d.getDiscountValue()).append(",");
                 json.append("\"description\": \"").append(escapeJson(d.getDescription())).append("\",");
                 json.append("\"startDate\": \"").append(d.getStartDate().format(formatter)).append("\",");
                 json.append("\"endDate\": \"").append(d.getEndDate().format(formatter)).append("\","); // CÓ DẤU PHẨY

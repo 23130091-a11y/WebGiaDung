@@ -1,7 +1,6 @@
-package com.webgiadung.doanweb.dao;
+package com.webgiadung.webgiadung.dao;
 
-import com.webgiadung.doanweb.model.*;
-import org.jdbi.v3.core.Jdbi;
+import com.webgiadung.webgiadung.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class ProductDao extends BaseDao {
 
-    // Lấy danh sách sản phẩm cơ bản (không load phụ để nhanh)
+    // Lấy danh sách sản phẩm (50 sp)
     public List<Product> getListProduct() {
         return get().withHandle(h ->
                 h.createQuery(BASE_SELECT + " LIMIT 50")
@@ -46,28 +45,6 @@ public class ProductDao extends BaseDao {
                     .orElse(null);
 
             if (product != null) {
-                // Load attributes (thông số kỹ thuật)
-                List<ProductAttribute> attributes = h.createQuery("""
-                        SELECT *
-                        FROM product_attributes
-                        WHERE product_id = :id
-                    """)
-                        .bind("id", id)
-                        .mapToBean(ProductAttribute.class)
-                        .list();
-                product.setAttributes(attributes);
-
-                // Load options (tùy chọn sản phẩm)
-                List<ProductOption> options = h.createQuery("""
-                        SELECT *
-                        FROM product_options
-                        WHERE product_id = :id
-                    """)
-                        .bind("id", id)
-                        .mapToBean(ProductOption.class)
-                        .list();
-                product.setOptions(options);
-
                 // Load images phụ
                 List<ProductImage> images = h.createQuery("""
                         SELECT *
@@ -99,24 +76,10 @@ public class ProductDao extends BaseDao {
                         .bind("id", id)
                         .mapToBean(ProductDescriptions.class)
                         .list();
-                product.setDescriptionsList(descriptions); // Đảm bảo tên setter đúng với class Product
+                product.setDescriptions(descriptions); // Đảm bảo tên setter đúng với class Product
             }
 
             return product;
-        });
-    }
-    public int insert(Product p) {
-        return get().withHandle(h -> {
-            return h.createUpdate(
-                            "INSERT INTO products (name, image, price_first, price_total, " +
-                                    "brands_id, keywords_id, categories_id, post, quantity, created_at, updated_at) " +
-                                    "VALUES (:name, :image, :totalPrice,:totalPrice, " +
-                                    ":brandsId, :keywordsId, :categoriesId, :post, :quantity, NOW(), NOW())"
-                    )
-                    .bindBean(p)
-                    .executeAndReturnGeneratedKeys("id")
-                    .mapTo(Integer.class)
-                    .one();
         });
     }
 
@@ -124,23 +87,31 @@ public class ProductDao extends BaseDao {
         return get().withHandle(h ->
                 h.createQuery("""
             SELECT
-                id,
-                name,
-                image,
-                price_first AS firstPrice,
-                price_total AS totalPrice,
-                discounts_id AS discountsId,
-                categories_id AS categoriesId,
-                brands_id AS brandsId,
-                keywords_id AS keywordsId,
-                post,
-                quantity,
-                quantity_saled AS quantitySaled,
-                created_at AS createdAt,
-                updated_at AS updatedAt
-            FROM products
-            WHERE name LIKE :keyword
-        """)
+                    p.id, p.name, p.image,
+                    p.price_first AS firstPrice,
+                    p.discounts_id AS discountsId,
+                    p.categories_id AS categoriesId,
+                    p.brands_id AS brandsId,
+                    p.is_visible AS isVisible,
+                    p.status,
+                    p.quantity,
+                    p.sold_quantity AS soldQuantity,
+                    p.created_at AS createdAt,
+                    p.updated_at AS updatedAt,
+                    IFNULL(d.discount_value, 0) AS discountPercent,
+                    d.discount_type AS discountType,
+                    IFNULL(pr.ratingAvg, 0.0) AS ratingAvg
+                FROM products p
+                LEFT JOIN discounts d ON p.discounts_id = d.id
+                LEFT JOIN (
+                    SELECT product_id, ROUND(AVG(rating), 1) AS ratingAvg 
+                    FROM product_reviews 
+                    GROUP BY product_id
+                ) pr ON p.id = pr.product_id
+                WHERE p.name LIKE :keyword AND p.is_visible = 1
+                GROUP BY p.id
+                ORDER BY p.id DESC
+            """)
                         .bind("keyword", "%" + keyword + "%")
                         .mapToBean(Product.class)
                         .list()
@@ -148,134 +119,88 @@ public class ProductDao extends BaseDao {
     }
 
     private static final String BASE_SELECT = """
-    SELECT
-        p.id, p.name, p.image,
-        -- Nếu price_first NULL thì lấy price_total làm giá gốc
-        IFNULL(p.price_first, p.price_total) AS firstPrice,
-        p.price_total AS totalPrice,
-        p.discounts_id AS discountsId,
-        p.categories_id AS categoriesId,
-        p.brands_id AS brandsId,
-        p.keywords_id AS keywordsId,
-        p.post, p.quantity,
-        p.quantity_saled AS quantitySaled,
-        p.created_at AS createdAt,
-        p.updated_at AS updatedAt,
-        IFNULL(d.discount, 0) AS discountPercent, -- Đảm bảo không bị NULL
-        d.type_discount AS discountType,
-        IFNULL(ROUND(AVG(pr.rating), 1), 0.0) AS ratingAvg
-    FROM products p
-    LEFT JOIN discounts d ON p.discounts_id = d.id
-    LEFT JOIN product_reviews pr ON p.id = pr.product_id
-    WHERE p.post = 1
-    GROUP BY
-        p.id, p.name, p.image, p.price_first, p.price_total,
-        p.discounts_id, p.categories_id, p.brands_id,
-        p.keywords_id, p.post, p.quantity,
-        p.quantity_saled, p.created_at, p.updated_at,
-        d.discount, d.type_discount
-""";
+        SELECT
+            p.id, p.name, p.image,
+            p.price_first AS firstPrice,
+            p.discounts_id AS discountsId,
+            p.categories_id AS categoriesId,
+            p.brands_id AS brandsId,
+            p.is_visible AS isVisible,
+            p.status,
+            p.quantity,
+            p.sold_quantity AS soldQuantity,
+            p.created_at AS createdAt,
+            p.updated_at AS updatedAt,
+            IFNULL(d.discount_value, 0) AS discountPercent, --Đảm bảo không bị NULL
+            d.discount_type AS discountType,
+            IFNULL(pr.ratingAvg, 0.0) AS ratingAvg -- truy vấn lúc này lấy avgrating tính trực tiếp ở dưới luôn
+        FROM products p
+            LEFT JOIN discounts d ON p.is_visible = 1 AND p.discounts_id = d.id
+        LEFT JOIN (
+            SELECT product_id, ROUND(AVG(rating), 1) AS ratingAvg 
+            FROM product_reviews 
+            GROUP BY product_id
+        ) pr ON p.id = pr.product_id
+        WHERE p.is_visible = 1
+        GROUP BY p.id
+    """;
 
     private static final String PROMOTION_SELECT = """
-    SELECT
-        p.id, p.name, p.image,
-        p.price_first AS firstPrice,
-        CASE
-            WHEN d.type_discount = 'percentage' THEN ROUND(p.price_first * (1 - d.discount / 100), 0)
-            WHEN d.type_discount = 'fixed' THEN GREATEST(p.price_first - d.discount, 0)
-            ELSE p.price_first
-        END AS totalPrice,
-        p.discounts_id AS discountsId,
-        d.discount AS discountPercent,
-        d.type_discount AS discountType,
-        IFNULL(ROUND(AVG(pr.rating), 1), 0.0) AS ratingAvg
-    FROM products p
-    JOIN discounts d ON p.discounts_id = d.id
-    LEFT JOIN product_reviews pr ON p.id = pr.product_id
-    WHERE p.post = 1 AND NOW() BETWEEN d.start_date AND d.end_date
-    GROUP BY p.id, p.name, p.image, p.price_first, p.discounts_id, d.discount, d.type_discount
-""";
+        SELECT
+            p.id, p.name, p.image,
+            p.price_first AS firstPrice,
+            p.discounts_id AS discountsId,
+            p.categories_id AS categoriesId,
+            p.brands_id AS brandsId,
+            p.is_visible AS isVisible,
+            p.status,
+            p.quantity,
+            p.sold_quantity AS soldQuantity,
+            p.created_at AS createdAt,
+            p.updated_at AS updatedAt,
+            d.discount_value AS discountPercent,
+            d.discount_type AS discountType,
+            IFNULL(pr.ratingAvg, 0.0) AS ratingAvg
+        FROM products p
+        INNER JOIN discounts d ON p.discounts_id = d.id -- Dùng INNER JOIN để bắt buộc phải có discount
+        LEFT JOIN (
+            SELECT product_id, ROUND(AVG(rating), 1) AS ratingAvg 
+            FROM product_reviews 
+            GROUP BY product_id
+        ) pr ON p.id = pr.product_id
+        WHERE p.is_visible = 1 
+          AND NOW() BETWEEN d.start_date AND d.end_date -- Chỉ lấy khuyến mãi còn hạn
+        GROUP BY p.id
+    """;
 
-    private static final String SUGGESTED_SELECT = """
-    SELECT
-        p.id, p.name, p.image,
-        p.price_first AS firstPrice,
-        p.price_total AS totalPrice,
-        p.discounts_id AS discountsId,
-        p.quantity_saled AS quantitySaled,
-        d.discount AS discountPercent,
-        ROUND(AVG(pr.rating), 1) AS ratingAvg
-    FROM products p
-    LEFT JOIN discounts d ON p.discounts_id = d.id
-    JOIN product_reviews pr ON p.id = pr.product_id
-    WHERE p.post = 1 AND p.quantity_saled > 0
-    GROUP BY p.id, p.name, p.image, p.price_first, p.price_total, p.discounts_id, p.quantity_saled, d.discount
-    HAVING AVG(pr.rating) >= 4.0
-    ORDER BY p.quantity_saled DESC, ratingAvg DESC
-    LIMIT 8
-""";
+    private static final String SUGGESTED_SELECT = BASE_SELECT + """
+        HAVING ratingAvg >= 4.0 AND p.sold_quantity > 0
+        ORDER BY ratingAvg DESC, RAND()
+        LIMIT 8
+    """;
 
-    private static final String LIMITED_DISCOUNT_SELECT = """
-    SELECT
-        p.id,
-        p.name,
-        p.image,
-        p.price_first AS firstPrice,
+    private static final String LIMITED_DISCOUNT_SELECT = BASE_SELECT + """
+        AND p.quantity > 0 
+        AND p.quantity <= 10
+        AND p.discounts_id IS NOT NULL
+        AND NOW() BETWEEN d.start_date AND d.end_date
+        ORDER BY p.quantity ASC, p.sold_quantity DESC
+        LIMIT 8
+    """;
 
-        -- Giá sau giảm
-        CASE
-            WHEN d.type_discount = 'percentage'
-                THEN ROUND(p.price_first * (1 - d.discount / 100), 0)
-            WHEN d.type_discount = 'fixed'
-                THEN GREATEST(p.price_first - d.discount, 0)
-            ELSE
-                p.price_first
-        END AS totalPrice,
-
-        p.quantity,
-        p.quantity_saled AS quantitySaled,
-
-        d.discount AS discountPercent,
-        d.type_discount AS discountType,
-
-        IFNULL(ROUND(AVG(pr.rating), 1), 0.0) AS ratingAvg
-
-    FROM products p
-    JOIN discounts d ON p.discounts_id = d.id
-    LEFT JOIN product_reviews pr ON p.id = pr.product_id
-
-    WHERE p.post = 1
-      AND p.quantity > 0
-      AND p.quantity <= 5
-      AND NOW() BETWEEN d.start_date AND d.end_date
-
-    GROUP BY
-        p.id,
-        p.name,
-        p.image,
-        p.price_first,
-        p.quantity,
-        p.quantity_saled,
-        d.discount,
-        d.type_discount
-
-    ORDER BY p.quantity ASC, p.quantity_saled DESC
-
-    LIMIT 8
-""";
-
+    // lấy những sản phẩm có lượt bán và rating cao
     public List<Product> getFeaturedProducts() {
         return get().withHandle(h ->
                 h.createQuery(BASE_SELECT + """
-            ORDER BY p.quantity_saled DESC
-            LIMIT 8
+            ORDER BY p.sold_quantity DESC, ratingAvg DESC
+                           LIMIT 8
         """)
                         .mapToBean(Product.class)
                         .list()
         );
     }
 
-    // Sửa lại getPromotionProducts (Nếu không có khuyến mãi, lấy sản phẩm mới nhất)
+    // lấy 8 sp đang có khuyến mãi
     public List<Product> getPromotionProducts() {
         return get().withHandle(h -> {
             List<Product> list = h.createQuery(PROMOTION_SELECT + " ORDER BY p.created_at DESC LIMIT 8")
@@ -290,22 +215,19 @@ public class ProductDao extends BaseDao {
 
     public List<Product> getSuggestedProducts() {
         return get().withHandle(h -> {
-            // Bước 1: Thử lấy sản phẩm theo đúng tiêu chí (Rating cao, đã bán được hàng)
+            // lấy sp rating cao, đã bán được hàng
             List<Product> list = h.createQuery(SUGGESTED_SELECT)
                     .mapToBean(Product.class)
                     .list();
-
-            // Bước 2: Nếu không đủ 8 sản phẩm, lấy thêm sản phẩm mới nhất để bù vào
+            // Nếu không đủ 8 sản phẩm, lấy thêm sản phẩm mới nhất để bù vào
             if (list.size() < 8) {
                 List<Integer> idsToExclude = list.stream().map(Product::getId).collect(Collectors.toList());
-                if (idsToExclude.isEmpty()) idsToExclude.add(-1); // Tránh lỗi SQL IN empty
 
-                List<Product> fallback = h.createQuery(BASE_SELECT + """
-                AND p.id NOT IN (<ids>)
-                ORDER BY p.created_at DESC
-                LIMIT :limit
-            """)
-                        .bindList("ids", idsToExclude)
+                if (idsToExclude.isEmpty()) idsToExclude.add(-1);
+
+                String fallbackSql = BASE_SELECT + " AND p.id NOT IN (<ids>) ORDER BY p.created_at DESC LIMIT :limit";
+                List<Product> fallback = h.createQuery(fallbackSql)
+                        .bindList("ids", idsToExclude) // JDBI sẽ tự thay <ids> bằng danh sách id
                         .bind("limit", 8 - list.size())
                         .mapToBean(Product.class)
                         .list();
@@ -316,7 +238,7 @@ public class ProductDao extends BaseDao {
         });
     }
 
-    // Sửa lại getLimitedProducts (Nếu không có hàng sắp hết, lấy hàng ngẫu nhiên)
+    // lấy sản phẩm có số lượng tồn kho nhỏ hơn 10 & đang giảm giá
     public List<Product> getLimitedProducts() {
         return get().withHandle(h -> {
             List<Product> list = h.createQuery(LIMITED_DISCOUNT_SELECT).mapToBean(Product.class).list();
@@ -327,9 +249,11 @@ public class ProductDao extends BaseDao {
         });
     }
 
+    // lấy sản phẩm mới
     public List<Product> getNewProducts() {
         return get().withHandle(h ->
                 h.createQuery(BASE_SELECT + """
+            AND p.status = 1
             ORDER BY p.created_at DESC
             LIMIT 8
         """)
@@ -338,59 +262,23 @@ public class ProductDao extends BaseDao {
         );
     }
 
-    // THÊM MỚI: Lấy sản phẩm dựa trên danh sách ID từ Cookie
+    // Lấy sản phẩm dựa trên danh sách ID từ Cookie
     public List<Product> getProductsFromIds(List<Integer> ids) {
         if (ids == null || ids.isEmpty()) return new ArrayList<>();
 
-        String idList = ids.stream().map(String::valueOf).collect(java.util.stream.Collectors.joining(","));
+        // tạo chuỗi idListOrder để giữ thứ tự cho FIELD, cái id mới thêm và các id trong ds
+        String idListOrder = ids.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining(","));
 
         return get().withHandle(h ->
-                h.createQuery("""
-                SELECT 
-                    p.id, p.name, p.image, 
-                    IFNULL(p.price_first, p.price_total) AS firstPrice,
-                    p.price_total AS totalPrice,
-                    IFNULL(d.discount, 0) AS discountPercent, 
-                    d.type_discount AS discountType,
-                    IFNULL(ROUND(AVG(pr.rating), 1), 0.0) AS ratingAvg -- Thêm dòng này
-                FROM products p 
-                LEFT JOIN discounts d ON p.discounts_id = d.id 
-                LEFT JOIN product_reviews pr ON p.id = pr.product_id -- Thêm JOIN này
-                WHERE p.id IN (<ids>) 
-                GROUP BY p.id, d.id -- Thêm GROUP BY để hàm AVG() hoạt động
-                ORDER BY FIELD(p.id, """ + idList + ")")
+                h.createQuery(BASE_SELECT + " AND p.id IN (<ids>) ORDER BY FIELD(p.id, " + idListOrder + ")")
                         .bindList("ids", ids)
                         .mapToBean(Product.class)
                         .list()
         );
     }
 
-    public List<Product> getByCategoryId(int categoryId) {
-        return get().withHandle(h ->
-                h.createQuery("""
-                    SELECT
-                        id,
-                        name,
-                        image,
-                        price_first AS firstPrice,
-                        price_total AS totalPrice,
-                        discounts_id AS discountsId,
-                        categories_id AS categoriesId,
-                        brands_id AS brandsId,
-                        keywords_id AS keywordsId,
-                        post,
-                        quantity,
-                        quantity_saled AS quantitySaled,
-                        created_at AS createdAt,
-                        updated_at AS updatedAt
-                    FROM products
-                    WHERE categories_id = :categoryId
-                """)
-                        .bind("categoryId", categoryId)
-                        .mapToBean(Product.class)
-                        .list()
-        );
-    }
     public Product getProductFullInfo(int id) {
         return get().withHandle(handle -> {
             Product product = handle.createQuery("""
@@ -450,13 +338,14 @@ public class ProductDao extends BaseDao {
                         .mapToBean(ProductDetails.class)
                         .list();
 
-                product.setDescriptionsList(descriptions);
-                product.setDetailsList(details);
+                product.setDescriptions(descriptions);
+                product.setDetails(details);
             }
 
             return product;
         });
     }
+
     public boolean updateProduct(Product product) {
         return get().inTransaction(handle -> {
             // 1. CẬP NHẬT BẢNG CHÍNH (products)
@@ -482,7 +371,7 @@ public class ProductDao extends BaseDao {
             if (rowsUpdated == 0) return false;
 
             // --- 2. XỬ LÝ DESCRIPTIONS (Thông minh) ---
-            if (product.getDescriptionsList() != null) {
+            if (product.getDescriptions() != null) {
                 // Bước A: Lấy danh sách ID hiện có trong DB
                 List<Integer> existingIds = handle.createQuery("SELECT id FROM products_description WHERE products_id = :pid")
                         .bind("pid", product.getId())
@@ -490,7 +379,7 @@ public class ProductDao extends BaseDao {
                         .list();
 
                 // Bước B: Lấy danh sách ID từ form gửi lên (chỉ lấy các ID > 0)
-                List<Integer> incomingIds = product.getDescriptionsList().stream()
+                List<Integer> incomingIds = product.getDescriptions().stream()
                         .map(ProductDescriptions::getId)
                         .filter(id -> id > 0)
                         .collect(Collectors.toList());
@@ -507,7 +396,7 @@ public class ProductDao extends BaseDao {
                 }
 
                 // Bước D: Loop để Update hoặc Insert
-                for (ProductDescriptions desc : product.getDescriptionsList()) {
+                for (ProductDescriptions desc : product.getDescriptions()) {
                     if (desc.getId() > 0 && existingIds.contains(desc.getId())) {
                         // Cập nhật dòng cũ
                         handle.createUpdate("""
@@ -515,8 +404,8 @@ public class ProductDao extends BaseDao {
                         SET title = :title, description = :desc, updated_at = NOW() 
                         WHERE id = :id
                     """)
-                                .bind("title", desc.getTitle())
-                                .bind("desc", desc.getDescription())
+                                .bind("title", desc.getAttrName())
+                                .bind("desc", desc.getValue())
                                 .bind("id", desc.getId())
                                 .execute();
                     } else {
@@ -525,8 +414,8 @@ public class ProductDao extends BaseDao {
                         INSERT INTO products_description (title, description, products_id, created_at, updated_at)
                         VALUES (:title, :desc, :pid, NOW(), NOW())
                     """)
-                                .bind("title", desc.getTitle())
-                                .bind("desc", desc.getDescription())
+                                .bind("title", desc.getAttrName())
+                                .bind("desc", desc.getValue())
                                 .bind("pid", product.getId())
                                 .execute();
                     }
@@ -534,13 +423,13 @@ public class ProductDao extends BaseDao {
             }
 
             // --- 3. XỬ LÝ DETAILS (Tương tự Description) ---
-            if (product.getDetailsList() != null) {
+            if (product.getDetails() != null) {
                 List<Integer> existingDetailIds = handle.createQuery("SELECT id FROM products_detail WHERE products_id = :pid")
                         .bind("pid", product.getId())
                         .mapTo(Integer.class)
                         .list();
 
-                List<Integer> incomingDetailIds = product.getDetailsList().stream()
+                List<Integer> incomingDetailIds = product.getDetails().stream()
                         .map(ProductDetails::getId)
                         .filter(id -> id > 0)
                         .collect(Collectors.toList());
@@ -555,7 +444,7 @@ public class ProductDao extends BaseDao {
                             .execute();
                 }
 
-                for (ProductDetails detail : product.getDetailsList()) {
+                for (ProductDetails detail : product.getDetails()) {
                     if (detail.getId() > 0 && existingDetailIds.contains(detail.getId())) {
                         // Update
                         handle.createUpdate("""
@@ -586,15 +475,15 @@ public class ProductDao extends BaseDao {
             return true;
         });
     }
+
     public boolean deleteProduct(int id) {
         return get().inTransaction(handle -> {
 
-            handle.createUpdate("DELETE FROM products_description WHERE products_id = :pid")
+            handle.createUpdate("DELETE FROM product_descriptions WHERE products_id = :pid")
                     .bind("pid", id)
                     .execute();
 
-            // 1.2 Xóa Detail (products_detail)
-            handle.createUpdate("DELETE FROM products_detail WHERE products_id = :pid")
+            handle.createUpdate("DELETE FROM product_details WHERE products_id = :pid")
                     .bind("pid", id)
                     .execute();
 
@@ -607,66 +496,34 @@ public class ProductDao extends BaseDao {
         });
     }
 
-    // Lấy sản phẩm theo category_id (menu cấp lá)
+    // lấy các sp thuộc category có id
     public List<Product> getProductsByCategoryId(int categoryId) {
         return get().withHandle(h ->
-                h.createQuery("""
-                SELECT
-                    id,
-                    name,
-                    image,
-                    price_first AS firstPrice,
-                    price_total AS totalPrice,
-                    discounts_id AS discountsId,
-                    categories_id AS categoriesId,
-                    brands_id AS brandsId,
-                    keywords_id AS keywordsId,
-                    post,
-                    quantity,
-                    quantity_saled AS quantitySaled,
-                    created_at AS createdAt,
-                    updated_at AS updatedAt
-                FROM products
-                WHERE categories_id = :cid
-            """)
-                        .bind("cid", categoryId)
+                h.createQuery(BASE_SELECT + " AND p.categories_id = :categoryId ORDER BY p.created_at DESC")
+                        .bind("categoryId", categoryId)
                         .mapToBean(Product.class)
                         .list()
         );
     }
-    public int applyDiscountToAll(int newDiscountId) {
-        return get().withHandle(handle -> {
-            int rows = handle.createUpdate("""
-            UPDATE products p
-            JOIN discounts d ON d.id = :discountId
-            SET p.discounts_id = d.id,
-                p.price_total = ROUND(COALESCE(p.price_first, 0) * (1 - COALESCE(d.discount, 0) / 100.0), 0),
-                p.updated_at = NOW()
-        """)
-                    .bind("discountId", newDiscountId)
-                    .execute();
-            System.out.println("DEBUG: Apply All - Rows affected: " + rows);
-            return rows;
-        });
-    }
 
+    // áp dụng chương trình giảm giá cho các sản phẩm trong 1 danh mục
     public int applyDiscountToCategory(int categoryId, int newDiscountId) {
         return get().withHandle(handle -> {
             int rows = handle.createUpdate("""
-            UPDATE products p
-            JOIN discounts d ON d.id = :discountId
-            SET p.discounts_id = d.id,
-                p.price_total = ROUND(COALESCE(p.price_first, 0) * (1 - COALESCE(d.discount, 0) / 100.0), 0),
-                p.updated_at = NOW()
-            WHERE p.categories_id = :categoryId
+            UPDATE products
+            SET discounts_id = :discountId,
+                updated_at = NOW()
+            WHERE categories_id = :categoryId
+            AND status = 1 -- chỉ áp dụng cho sản phẩm đang bán
+            AND is_visible = 1 -- chỉ áp dụng cho sản phẩm đang hiển thị
         """)
                     .bind("categoryId", categoryId)
                     .bind("discountId", newDiscountId)
                     .execute();
-            System.out.println("DEBUG: Apply Category " + categoryId + " - Rows affected: " + rows);
             return rows;
         });
     }
+
     public List<Product> searchWithFilters(String keyword, String[] brands, String[] priceRanges, String categoryId) {
         return get().withHandle(h -> {
             StringBuilder sql = new StringBuilder("""
@@ -738,6 +595,8 @@ public class ProductDao extends BaseDao {
             return query.mapToBean(Product.class).list();
         });
     }
+
+    // lấy thông tin sp full
     public Product getProductFull(int id) {
         return get().withHandle(handle -> {
             // 1. Lấy thông tin sản phẩm + Brand + Keyword + Discount
@@ -790,93 +649,36 @@ public class ProductDao extends BaseDao {
                         .mapToBean(ProductReview.class)
                         .list();
 
-                product.setDescriptionsList(descriptions);
-                product.setDetailsList(details);
+                product.setDescriptions(descriptions);
+                product.setDetails(details);
                 product.setReviews(reviews);
             }
-
             return product;
         });
     }
-    public List<Product> findByName(String name) {
-        return get().withHandle(h ->
-                h.createQuery("""
-                SELECT
-                    id, name, image,
-                    price_first AS firstPrice,
-                    price_total AS totalPrice,
-                    discounts_id AS discountsId,
-                    categories_id AS categoriesId,
-                    brands_id AS brandsId,
-                    keywords_id AS keywordsId,
-                    post,
-                    quantity,
-                    quantity_saled AS quantitySaled,
-                    created_at AS createdAt,
-                    updated_at AS updatedAt
-                FROM products
-                WHERE post = 1
-                  AND name LIKE :name
-            """)
-                        .bind("name", "%" + name + "%")
-                        .mapToBean(Product.class)
-                        .list()
-        );
-    }
+
+    // tìm sản phẩm thuộc các chương trình giảm giá discountName
     public List<Product> searchByDiscountName(String discountName) {
         return get().withHandle(h ->
-                h.createQuery("""
-            SELECT 
-                p.id, p.name, p.image, 
-                p.price_first AS firstPrice, 
-                p.price_total AS totalPrice, 
-                p.discounts_id AS discountsId, 
-                p.categories_id AS categoriesId, 
-                p.brands_id AS brandsId, 
-                p.keywords_id AS keywordsId, 
-                p.post, p.quantity, 
-                p.quantity_saled AS quantitySaled, 
-                p.created_at AS createdAt, 
-                p.updated_at AS updatedAt,
-                d.name AS discountName, -- Giả định bảng discount có cột name
-                d.discount AS discountPercent,
-                d.type_discount AS discountType
-            FROM products p
-            INNER JOIN discounts d ON p.discounts_id = d.id
-            WHERE d.name LIKE :discountName 
-              AND p.post = 1 -- Chỉ lấy sản phẩm đang hiển thị
-        """)
+                h.createQuery(BASE_SELECT.replace("LEFT JOIN discounts d", "INNER JOIN discounts d") + """
+                AND d.name LIKE :discountName
+                ORDER BY d.discount_value DESC
+            """)
                         .bind("discountName", "%" + discountName + "%")
                         .mapToBean(Product.class)
                         .list()
         );
     }
+
+    // khi xóa mã giảm giá thì gỡ nó ra khỏi các sản phẩm luôn (null)
     public int removeDiscount(int discountId) {
         return get().withHandle(handle -> {
             return handle.createUpdate("""
             UPDATE products 
             SET 
                 discounts_id = NULL,
-                price_total = price_first, 
                 updated_at = NOW()
             WHERE discounts_id = :discountId
-        """)
-                    .bind("discountId", discountId)
-                    .execute();
-        });
-    }
-    public int updateProductPricesByDiscountId(int discountId) {
-        return get().withHandle(handle -> {
-            return handle.createUpdate("""
-            UPDATE products p
-            CROSS JOIN discounts d ON d.id = :discountId
-            SET p.price_total = CASE 
-                    WHEN d.type_discount = 'percentage' THEN p.price_first * (1 - d.discount / 100)
-                    WHEN d.type_discount = 'fixed' THEN GREATEST(p.price_first - d.discount, 0)
-                    ELSE p.price_first 
-                END,
-                p.updated_at = NOW()
-            WHERE p.discounts_id = :discountId
         """)
                     .bind("discountId", discountId)
                     .execute();

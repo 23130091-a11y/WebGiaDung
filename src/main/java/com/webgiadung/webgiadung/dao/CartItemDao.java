@@ -1,7 +1,7 @@
-package com.webgiadung.doanweb.dao;
+package com.webgiadung.webgiadung.dao;
 
 import java.util.List;
-
+// cân nhắc xóa toàn bộ CartItemDao
 public class CartItemDao extends BaseDao {
 
     public void addOrInc(int cartId, int productId, int qty) {
@@ -20,6 +20,7 @@ public class CartItemDao extends BaseDao {
         );
     }
 
+    // cập nhật số lượng sản phẩm trong cart
     public void setQuantity(int cartId, int productId, int qty) {
         final int q = qty;
 
@@ -50,6 +51,7 @@ public class CartItemDao extends BaseDao {
         );
     }
 
+    // lấy tất cả sp trong cart
     public List<Row> findItems(int cartId) {
         return get().withHandle(h ->
                 h.createQuery("""
@@ -63,6 +65,7 @@ public class CartItemDao extends BaseDao {
         );
     }
 
+    // Dòng này làm gì?
     public static class Row {
         public final int productId;
         public final int quantity;
@@ -72,6 +75,7 @@ public class CartItemDao extends BaseDao {
             this.quantity = quantity;
         }
     }
+
     public void clearCartItems(int cartId) {
         get().useHandle(h ->
                 h.createUpdate("DELETE FROM cart_items WHERE cart_id = :cid")

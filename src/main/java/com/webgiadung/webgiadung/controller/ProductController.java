@@ -1,19 +1,21 @@
-package com.webgiadung.doanweb.controller;
+package com.webgiadung.webgiadung.controller;
 
-import com.webgiadung.doanweb.dao.ProductReviewDao;
-import com.webgiadung.doanweb.model.Categories;
-import com.webgiadung.doanweb.model.Product;
-import com.webgiadung.doanweb.model.ProductReview;
-import com.webgiadung.doanweb.services.CategoriesService;
-import com.webgiadung.doanweb.services.ProductService;
-import com.webgiadung.doanweb.utils.CookieUtils;
+import com.webgiadung.webgiadung.dao.ProductReviewDao;
+import com.webgiadung.webgiadung.model.Categories;
+import com.webgiadung.webgiadung.model.Product;
+import com.webgiadung.webgiadung.model.ProductReview;
+import com.webgiadung.webgiadung.services.CategoriesService;
+import com.webgiadung.webgiadung.services.ProductService;
+import com.webgiadung.webgiadung.utils.CookieUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.List;
-
+// servlet này: hiển thị trang chi tiết sản phẩm có id gửi lên server
 @WebServlet(name = "ProductController", value = "/product")
 public class ProductController extends HttpServlet {
 
@@ -41,6 +43,7 @@ public class ProductController extends HttpServlet {
         CookieUtils.addIdToCookie(request, response, "viewed_products", id);
 
         Categories category = cService.getCategory(p.getCategoriesId());
+
         List<Categories> parentCategories = cService.getCategoriesByParentId(p.getCategoriesId());
 
         ProductReviewDao reviewDao = new ProductReviewDao();

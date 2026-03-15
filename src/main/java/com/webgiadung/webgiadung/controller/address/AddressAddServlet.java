@@ -1,9 +1,8 @@
-package com.webgiadung.doanweb.controller.address;
+package com.webgiadung.webgiadung.controller.address;
 
-import com.webgiadung.doanweb.dao.UserAddressDao;
-import com.webgiadung.doanweb.model.User;
-import com.webgiadung.doanweb.model.UserAddress;
-
+import com.webgiadung.webgiadung.dao.UserAddressDao;
+import com.webgiadung.webgiadung.model.User;
+import com.webgiadung.webgiadung.model.UserAddress;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -11,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @WebServlet("/address/add")

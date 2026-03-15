@@ -1,19 +1,18 @@
-package com.webgiadung.doanweb.model;
+package com.webgiadung.webgiadung.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class ProductDetails implements Serializable {
-    private int id;
-    private String image;       // Lưu đường dẫn ảnh hoặc tên file (URL/path)
-    private String title;
-    private String description;
-    private int productId;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private int id; // id của 1 detail
+    private String image; // Lưu đường dẫn ảnh hoặc tên file
+    private String title; // sửa lại tiêu đề chi tiết có thể có hoặc không (trong add sp)
+    private String description; // nội dung chi tiết
+    private int productId; // id p
+    private LocalDateTime createdAt; // ngày tạo
+    private LocalDateTime updatedAt; // ngày update
 
-    public ProductDetails() {
-    }
+    public ProductDetails() {}
 
     public ProductDetails(int id, String image, String title, String description, int productId, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;

@@ -1,13 +1,12 @@
-package com.webgiadung.doanweb.dao;
+package com.webgiadung.webgiadung.dao;
 
-import com.webgiadung.doanweb.model.UserAddress;
+import com.webgiadung.webgiadung.model.UserAddress;
 
 import java.util.List;
 import java.util.Optional;
 
 public class UserAddressDao extends BaseDao {
 
-    // ✅ ALIAS để khỏi lỗi "cannot find symbol findByUser(int)"
     public List<UserAddress> findByUser(int userId) {
         return listByUser(userId);
     }
@@ -122,6 +121,7 @@ public class UserAddressDao extends BaseDao {
                         .execute()
         );
     }
+
     public int delete(int userId, int id) {
         return get().withHandle(h ->
                 h.createUpdate("""

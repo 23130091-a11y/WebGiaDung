@@ -1,19 +1,19 @@
-package com.webgiadung.doanweb.model;
+package com.webgiadung.webgiadung.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class Categories implements Serializable {
-    private int id;
-    private String name;
-    private String description;
-    private int post;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private int parentId;
+    private int id; // id danh mục
+    private String name; // tên danh mục
+    private String description; // mô tả
+    private int isVisible; // 0 - ẩn, 1 - hiện
+    private LocalDateTime createdAt; // ngày tạo
+    private LocalDateTime updatedAt; // ngày update
+    private int parentId; // id danh mục cha
 
-    private List<Categories> children;
+    private List<Categories> children; // danh sách danh mục con
 
     public List<Categories> getChildren() {
         return children;
@@ -23,26 +23,17 @@ public class Categories implements Serializable {
         this.children = children;
     }
 
-    public Categories(String name, String description, int post, int parentId) {
-        this.name = name;
-        this.description = description;
-        this.post = post;
-        this.parentId = parentId;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    public Categories(int id, String name, String description, int post, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Categories(int id, String name, String description, int isVisible, LocalDateTime createdAt, LocalDateTime updatedAt, int parentId) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.post = post;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+        this.isVisible = isVisible;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.parentId = parentId;
     }
 
-    public Categories() {
-    }
+    public Categories() {}
 
     public int getId() {
         return id;
@@ -68,12 +59,12 @@ public class Categories implements Serializable {
         this.description = description;
     }
 
-    public int getPost() {
-        return post;
+    public int getIsVisible() {
+        return isVisible;
     }
 
-    public void setPost(int post) {
-        this.post = post;
+    public void setIsVisible(int isVisible) {
+        this.isVisible = isVisible;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -106,14 +97,16 @@ public class Categories implements Serializable {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", post=" + post +
+                ", isVisible=" + isVisible +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", parentId=" + parentId +
+                ", children=" + children +
                 '}';
     }
+
     public boolean isPostPublished() {
-        if (this.post == 1) {
+        if (this.isVisible == 1) {
             return true;
         } else {
             return false;

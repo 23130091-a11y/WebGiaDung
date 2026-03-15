@@ -1,11 +1,11 @@
-package com.webgiadung.doanweb.controller.admin;
+package com.webgiadung.webgiadung.controller.admin;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializer;
-import com.webgiadung.doanweb.model.Discounts;
-import com.webgiadung.doanweb.services.DiscountService;
+import com.webgiadung.webgiadung.model.Discounts;
+import com.webgiadung.webgiadung.services.DiscountService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

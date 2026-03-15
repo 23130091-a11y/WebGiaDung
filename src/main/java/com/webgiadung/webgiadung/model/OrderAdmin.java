@@ -1,25 +1,25 @@
-package com.webgiadung.doanweb.model;
+package com.webgiadung.webgiadung.model;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class OrderAdmin implements Serializable {
-    private int id;                  // Mã đơn
-    private int user_id;             // Mã khách
-    private String customer_name;    // Tên khách
-    private int status_transport;    // Trạng thái đơn hàng (0=Mới,1=Hoàn thành,2=Hủy)
-    private int status_payment;      // Trạng thái thanh toán (0=Chưa thanh toán,1=Đã thanh toán)
-    private Timestamp created_at;    // Ngày tạo
-    private double total_price;      // Tổng tiền đơn
+    private int id; // Mã đơn
+    private int userId; // Mã khách
+    private String customerName; // Tên khách
+    private int statusTransport; // Trạng thái đơn hàng (0=Mới,1=Hoàn thành,2=Hủy)
+    private int statusPayment; // Trạng thái thanh toán (0=Chưa thanh toán,1=Đã thanh toán)
+    private LocalDateTime createdAt; // Ngày tạo
+    private double totalPrice; // Tổng tiền đơn
 
-    public OrderAdmin(int id, int user_id, String customer_name, int status_transport, int status_payment, Timestamp created_at, double total_price) {
+    public OrderAdmin(int id, int userId, String customerName, int statusTransport, int statusPayment, LocalDateTime createdAt, double totalPrice) {
         this.id = id;
-        this.user_id = user_id;
-        this.customer_name = customer_name;
-        this.status_transport = status_transport;
-        this.status_payment = status_payment;
-        this.created_at = created_at;
-        this.total_price = total_price;
+        this.userId = userId;
+        this.customerName = customerName;
+        this.statusTransport = statusTransport;
+        this.statusPayment = statusPayment;
+        this.createdAt = createdAt;
+        this.totalPrice = totalPrice;
     }
 
     public OrderAdmin() {}
@@ -28,49 +28,49 @@ public class OrderAdmin implements Serializable {
     public String toString() {
         return "OrderAdmin{" +
                 "id=" + id +
-                ", user_id=" + user_id +
-                ", customer_name='" + customer_name + '\'' +
-                ", status_transport=" + status_transport +
-                ", status_payment=" + status_payment +
-                ", created_at=" + created_at +
-                ", total_price=" + total_price +
+                ", user_id=" + userId +
+                ", customer_name='" + customerName + '\'' +
+                ", status_transport=" + statusTransport +
+                ", status_payment=" + statusPayment +
+                ", created_at=" + createdAt +
+                ", total_price=" + totalPrice +
                 '}';
     }
 
-    // --- Thêm getter hiển thị text & class theo BEM ---
-    // row
+    // row (hủy đơn)
     public String getRowClass() {
-        return status_transport == 2 ? "order-table__row--cancelled" : "";
+        return statusTransport == 2 ? "order-table__row--cancelled" : "";
     }
 
-    //Text
+    // Text
     public String getStatusTransportText() {
-        return switch (status_transport) {
+        return switch (statusTransport) {
             case 0 -> "Đơn hàng mới";
             case 1 -> "Hoàn thành";
             case 2 -> "Hủy đơn hàng";
             default -> "Không xác định";
         };
     }
-    //Class
+
+    // Class
     public String getStatusTransportClass() {
-        return switch (status_transport) {
+        return switch (statusTransport) {
             case 1 -> "order-table__status--completed";
             case 2 -> "order-table__status--cancelled";
             default -> "Không xác định";
         };
     }
-    //Text
+
+    // Text
     public String getStatusPaymentText() {
-        return status_payment == 0 ? "Chưa thanh toán" : "Đã thanh toán";
+        return statusPayment == 0 ? "Chưa thanh toán" : "Đã thanh toán";
     }
-    //Class
+
+    // Class
     public String getStatusPaymentClass() {
-        return status_payment == 0 ? "order-table__payment--pending" : "order-table__payment--paid";
+        return statusPayment == 0 ? "order-table__payment--pending" : "order-table__payment--paid";
     }
 
-
-    // Getter & Setter
     public int getId() {
         return id;
     }
@@ -79,51 +79,51 @@ public class OrderAdmin implements Serializable {
         this.id = id;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public String getCustomer_name() {
-        return customer_name;
+    public String getCustomerName() {
+        return customerName;
     }
 
-    public void setCustomer_name(String customer_name) {
-        this.customer_name = customer_name;
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
-    public int getStatus_transport() {
-        return status_transport;
+    public int getStatusTransport() {
+        return statusTransport;
     }
 
-    public void setStatus_transport(int status_transport) {
-        this.status_transport = status_transport;
+    public void setStatusTransport(int statusTransport) {
+        this.statusTransport = statusTransport;
     }
 
-    public int getStatus_payment() {
-        return status_payment;
+    public int getStatusPayment() {
+        return statusPayment;
     }
 
-    public void setStatus_payment(int status_payment) {
-        this.status_payment = status_payment;
+    public void setStatusPayment(int statusPayment) {
+        this.statusPayment = statusPayment;
     }
 
-    public Timestamp getCreated_at() {
-        return created_at;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(Timestamp created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public double getTotal_price() {
-        return total_price;
+    public double getTotalPrice() {
+        return totalPrice;
     }
 
-    public void setTotal_price(double total_price) {
-        this.total_price = total_price;
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }

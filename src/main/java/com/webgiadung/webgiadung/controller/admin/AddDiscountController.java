@@ -1,14 +1,15 @@
-package com.webgiadung.doanweb.controller.admin;
+package com.webgiadung.webgiadung.controller.admin;
 
-import com.webgiadung.doanweb.model.Discounts;
-import com.webgiadung.doanweb.services.DiscountService;
-import com.webgiadung.doanweb.services.ProductService;
+import com.webgiadung.webgiadung.model.Discounts;
+import com.webgiadung.webgiadung.services.DiscountService;
+import com.webgiadung.webgiadung.services.ProductService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -57,19 +58,17 @@ public class AddDiscountController extends HttpServlet {
 
             Discounts d = new Discounts();
             d.setName(name);
-            d.setDiscount(value);
+            d.setDiscountValue(value);
             d.setStartDate(start);
             d.setEndDate(end);
-            d.setTypeDiscount("percentage".equals(type) ? "1" : "2");
-            d.setId_cate(idCate);
+            d.setDiscountType("percentage".equals(type) ? "1" : "2");
+            d.setCategoryId(idCate);
 
             int newDiscountId = discountService.insertDiscount(d);
 
             if (newDiscountId > 0) {
                 if ("category".equals(scope) && idCate > 0) {
                     productService.applyDiscountToCategory(idCate, newDiscountId);
-                } else if ("all".equals(scope)) {
-                    productService.applyDiscountToAll(newDiscountId);
                 }
                 response.getWriter().write("{\"status\":\"success\"}");
             } else {
