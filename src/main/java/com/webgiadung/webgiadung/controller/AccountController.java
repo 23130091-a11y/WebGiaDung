@@ -1,8 +1,8 @@
-package com.webgiadung.doanweb.controller;
+package com.webgiadung.webgiadung.controller;
 
-import com.webgiadung.doanweb.dao.OrderDao;
-import com.webgiadung.doanweb.dao.AuthDao;
-import com.webgiadung.doanweb.model.User;
+import com.webgiadung.webgiadung.dao.OrderDao;
+import com.webgiadung.webgiadung.dao.AuthDao;
+import com.webgiadung.webgiadung.model.User;
 
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,8 +11,8 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.util.*;
 
-import com.webgiadung.doanweb.model.Cart;
-import com.webgiadung.doanweb.model.Product;
+import com.webgiadung.webgiadung.model.Cart;
+import com.webgiadung.webgiadung.model.Product;
 
 @WebServlet("/account")
 public class AccountController extends HttpServlet {

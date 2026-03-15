@@ -1,9 +1,9 @@
-package com.webgiadung.doanweb.controller;
+package com.webgiadung.webgiadung.controller;
 
-import com.webgiadung.doanweb.model.Product;
-import com.webgiadung.doanweb.model.Slide; // Giả định bạn có model Slide
-import com.webgiadung.doanweb.services.ProductService;
-import com.webgiadung.doanweb.services.SlideService; // Cần service để lấy thông tin Slide
+import com.webgiadung.webgiadung.model.Product;
+import com.webgiadung.webgiadung.model.Slide; // Giả định bạn có model Slide
+import com.webgiadung.webgiadung.services.ProductService;
+import com.webgiadung.webgiadung.services.SlideService; // Cần service để lấy thông tin Slide
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;

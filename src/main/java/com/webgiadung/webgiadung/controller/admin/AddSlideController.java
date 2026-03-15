@@ -1,8 +1,8 @@
-package com.webgiadung.doanweb.controller.admin;
+package com.webgiadung.webgiadung.controller.admin;
 
-import com.webgiadung.doanweb.model.Slide;
-import com.webgiadung.doanweb.services.SlideService;
-import com.webgiadung.doanweb.utils.FileUtils;
+import com.webgiadung.webgiadung.model.Slide;
+import com.webgiadung.webgiadung.services.SlideService;
+import com.webgiadung.webgiadung.utils.FileUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;

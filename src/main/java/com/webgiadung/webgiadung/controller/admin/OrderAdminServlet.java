@@ -1,7 +1,7 @@
-package com.webgiadung.doanweb.controller.admin;
+package com.webgiadung.webgiadung.controller.admin;
 
-import com.webgiadung.doanweb.dao.OrderAdminDao;
-import com.webgiadung.doanweb.model.OrderAdmin;
+import com.webgiadung.webgiadung.dao.OrderAdminDao;
+import com.webgiadung.webgiadung.model.OrderAdmin;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;

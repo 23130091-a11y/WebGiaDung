@@ -1,4 +1,4 @@
-package com.webgiadung.doanweb.utils;
+package com.webgiadung.webgiadung.utils;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

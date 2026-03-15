@@ -1,6 +1,6 @@
-package com.webgiadung.doanweb.dao;
+package com.webgiadung.webgiadung.dao;
 
-import com.webgiadung.doanweb.model.OrderAdmin;
+import com.webgiadung.webgiadung.model.OrderAdmin;
 import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;

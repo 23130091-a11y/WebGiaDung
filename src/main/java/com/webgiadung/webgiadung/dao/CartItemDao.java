@@ -1,4 +1,4 @@
-package com.webgiadung.doanweb.dao;
+package com.webgiadung.webgiadung.dao;
 
 import java.util.List;
 

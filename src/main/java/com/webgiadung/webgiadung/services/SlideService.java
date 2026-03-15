@@ -1,9 +1,7 @@
-package com.webgiadung.doanweb.services;
+package com.webgiadung.webgiadung.services;
 
-import com.webgiadung.doanweb.dao.ProductDao;
-import com.webgiadung.doanweb.dao.SlideDao;
-import com.webgiadung.doanweb.model.Product;
-import com.webgiadung.doanweb.model.Slide;
+import com.webgiadung.webgiadung.dao.SlideDao;
+import com.webgiadung.webgiadung.model.Slide;
 
 import java.util.List;
 

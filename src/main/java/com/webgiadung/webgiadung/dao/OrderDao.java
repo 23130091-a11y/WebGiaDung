@@ -1,8 +1,8 @@
-package com.webgiadung.doanweb.dao;
+package com.webgiadung.webgiadung.dao;
 
-import com.webgiadung.doanweb.model.Cart;
-import com.webgiadung.doanweb.model.CartItem;
-import com.webgiadung.doanweb.model.User;
+import com.webgiadung.webgiadung.model.Cart;
+import com.webgiadung.webgiadung.model.CartItem;
+import com.webgiadung.webgiadung.model.User;
 import org.jdbi.v3.core.Handle;
 
 import java.util.*;

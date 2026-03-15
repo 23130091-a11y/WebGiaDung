@@ -1,7 +1,7 @@
-package com.webgiadung.doanweb.controller.admin;
+package com.webgiadung.webgiadung.controller.admin;
 
-import com.webgiadung.doanweb.dao.AuthDao;
-import com.webgiadung.doanweb.model.User;
+import com.webgiadung.webgiadung.dao.AuthDao;
+import com.webgiadung.webgiadung.model.User;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

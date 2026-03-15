@@ -1,7 +1,7 @@
-package com.webgiadung.doanweb.services;
+package com.webgiadung.webgiadung.services;
 
-import com.webgiadung.doanweb.dao.KeywordsDao;
-import com.webgiadung.doanweb.model.Keywords;
+import com.webgiadung.webgiadung.dao.KeywordsDao;
+import com.webgiadung.webgiadung.model.Keywords;
 import java.util.List;
 
 public class KeywordService {

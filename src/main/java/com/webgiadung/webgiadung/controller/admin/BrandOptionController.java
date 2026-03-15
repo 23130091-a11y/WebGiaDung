@@ -1,7 +1,7 @@
-package com.webgiadung.doanweb.controller.admin;
+package com.webgiadung.webgiadung.controller.admin;
 
-import com.webgiadung.doanweb.model.Brands;
-import com.webgiadung.doanweb.services.BrandService;
+import com.webgiadung.webgiadung.model.Brands;
+import com.webgiadung.webgiadung.services.BrandService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

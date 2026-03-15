@@ -1,4 +1,4 @@
-package com.webgiadung.doanweb.utils;
+package com.webgiadung.webgiadung.utils;
 
 public class SecurityUtils {
     public static String hashMD5(String password) {
