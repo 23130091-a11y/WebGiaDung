@@ -1,7 +1,7 @@
-package com.webgiadung.doanweb.services;
+package com.webgiadung.webgiadung.services;
 
-import com.webgiadung.doanweb.dao.BrandsDao;
-import com.webgiadung.doanweb.model.Brands;
+import com.webgiadung.webgiadung.dao.BrandsDao;
+import com.webgiadung.webgiadung.model.Brands;
 import java.util.List;
 
 public class BrandService {

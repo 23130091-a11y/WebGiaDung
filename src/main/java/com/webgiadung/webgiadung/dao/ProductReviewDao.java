@@ -1,6 +1,6 @@
-package com.webgiadung.doanweb.dao;
+package com.webgiadung.webgiadung.dao;
 
-import com.webgiadung.doanweb.model.ProductReview;
+import com.webgiadung.webgiadung.model.ProductReview;
 
 import java.sql.Timestamp;
 import java.util.List;

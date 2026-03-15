@@ -1,12 +1,12 @@
-package com.webgiadung.doanweb.controller;
+package com.webgiadung.webgiadung.controller;
 
-import com.webgiadung.doanweb.dao.ProductReviewDao;
-import com.webgiadung.doanweb.model.Categories;
-import com.webgiadung.doanweb.model.Product;
-import com.webgiadung.doanweb.model.ProductReview;
-import com.webgiadung.doanweb.services.CategoriesService;
-import com.webgiadung.doanweb.services.ProductService;
-import com.webgiadung.doanweb.utils.CookieUtils;
+import com.webgiadung.webgiadung.dao.ProductReviewDao;
+import com.webgiadung.webgiadung.model.Categories;
+import com.webgiadung.webgiadung.model.Product;
+import com.webgiadung.webgiadung.model.ProductReview;
+import com.webgiadung.webgiadung.services.CategoriesService;
+import com.webgiadung.webgiadung.services.ProductService;
+import com.webgiadung.webgiadung.utils.CookieUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -31,7 +31,7 @@ public class ProductController extends HttpServlet {
         ProductService pService = new ProductService();
         CategoriesService cService = new CategoriesService();
 
-        Product p = pService.getProductFull(id);
+        Product p = pService.getProductFullInfo(id);
         if (p == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;

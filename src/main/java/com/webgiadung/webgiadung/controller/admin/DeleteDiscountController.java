@@ -1,7 +1,7 @@
-package com.webgiadung.doanweb.controller.admin;
+package com.webgiadung.webgiadung.controller.admin;
 
-import com.webgiadung.doanweb.dao.ProductDao;
-import com.webgiadung.doanweb.dao.DiscountDao; // Giả sử bạn có DiscountDao
+import com.webgiadung.webgiadung.dao.ProductDao;
+import com.webgiadung.webgiadung.dao.DiscountDao; // Giả sử bạn có DiscountDao
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

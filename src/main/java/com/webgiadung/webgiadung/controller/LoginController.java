@@ -1,8 +1,8 @@
-package com.webgiadung.doanweb.controller;
+package com.webgiadung.webgiadung.controller;
 
-import com.webgiadung.doanweb.model.User;
-import com.webgiadung.doanweb.services.AuthService;
-import com.webgiadung.doanweb.utils.SecurityUtils;
+import com.webgiadung.webgiadung.model.User;
+import com.webgiadung.webgiadung.services.AuthService;
+import com.webgiadung.webgiadung.utils.SecurityUtils;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;

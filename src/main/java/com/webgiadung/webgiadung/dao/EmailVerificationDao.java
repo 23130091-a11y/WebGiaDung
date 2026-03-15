@@ -1,4 +1,4 @@
-package com.webgiadung.doanweb.dao;
+package com.webgiadung.webgiadung.dao;
 
 public class EmailVerificationDao extends BaseDao {
 

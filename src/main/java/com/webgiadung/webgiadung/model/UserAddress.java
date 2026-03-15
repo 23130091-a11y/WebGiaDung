@@ -1,4 +1,4 @@
-package com.webgiadung.doanweb.model;
+package com.webgiadung.webgiadung.model;
 
 public class UserAddress {
     private int id;

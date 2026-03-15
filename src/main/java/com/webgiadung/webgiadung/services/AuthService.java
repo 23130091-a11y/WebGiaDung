@@ -1,7 +1,7 @@
-package com.webgiadung.doanweb.services;
+package com.webgiadung.webgiadung.services;
 
-import com.webgiadung.doanweb.dao.AuthDao;
-import com.webgiadung.doanweb.model.User;
+import com.webgiadung.webgiadung.dao.AuthDao;
+import com.webgiadung.webgiadung.model.User;
 
 public class AuthService {
     AuthDao authDao = new AuthDao();

@@ -1,7 +1,6 @@
-package com.webgiadung.doanweb.dao;
+package com.webgiadung.webgiadung.dao;
 
-import com.webgiadung.doanweb.model.*;
-import org.jdbi.v3.core.Jdbi;
+import com.webgiadung.webgiadung.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,93 +17,7 @@ public class ProductDao extends BaseDao {
         );
     }
 
-    // Lấy chi tiết 1 sản phẩm kèm các bảng phụ
-    public Product getProduct(int id) {
-        return get().withHandle(h -> {
-            Product product = h.createQuery("""
-                    SELECT
-                        id,
-                        name,
-                        image,
-                        price_first AS firstPrice,
-                        price_total AS totalPrice,
-                        discounts_id AS discountsId,
-                        categories_id AS categoriesId,
-                        brands_id AS brandsId,
-                        keywords_id AS keywordsId,
-                        post,
-                        quantity,
-                        quantity_saled AS quantitySaled,
-                        created_at AS createdAt,
-                        updated_at AS updatedAt
-                    FROM products
-                    WHERE id = :id
-                """)
-                    .bind("id", id)
-                    .mapToBean(Product.class)
-                    .findOne()
-                    .orElse(null);
 
-            if (product != null) {
-                // Load attributes (thông số kỹ thuật)
-                List<ProductAttribute> attributes = h.createQuery("""
-                        SELECT *
-                        FROM product_attributes
-                        WHERE product_id = :id
-                    """)
-                        .bind("id", id)
-                        .mapToBean(ProductAttribute.class)
-                        .list();
-                product.setAttributes(attributes);
-
-                // Load options (tùy chọn sản phẩm)
-                List<ProductOption> options = h.createQuery("""
-                        SELECT *
-                        FROM product_options
-                        WHERE product_id = :id
-                    """)
-                        .bind("id", id)
-                        .mapToBean(ProductOption.class)
-                        .list();
-                product.setOptions(options);
-
-                // Load images phụ
-                List<ProductImage> images = h.createQuery("""
-                        SELECT *
-                        FROM product_images
-                        WHERE product_id = :id
-                    """)
-                        .bind("id", id)
-                        .mapToBean(ProductImage.class)
-                        .list();
-                product.setImages(images);
-
-                // Load đánh giá (reviews)
-                List<ProductReview> reviews = h.createQuery("""
-                        SELECT *
-                        FROM product_reviews
-                        WHERE product_id = :id
-                    """)
-                        .bind("id", id)
-                        .mapToBean(ProductReview.class)
-                        .list();
-                product.setReviews(reviews);
-
-                // Bổ sung load Description cho trang chi tiết
-                List<ProductDescriptions> descriptions = h.createQuery("""
-                        SELECT id, title, description, products_id AS productId
-                        FROM products_description
-                        WHERE products_id = :id
-                    """)
-                        .bind("id", id)
-                        .mapToBean(ProductDescriptions.class)
-                        .list();
-                product.setDescriptionsList(descriptions); // Đảm bảo tên setter đúng với class Product
-            }
-
-            return product;
-        });
-    }
     public int insert(Product p) {
         return get().withHandle(h -> {
             return h.createUpdate(
@@ -738,66 +651,7 @@ public class ProductDao extends BaseDao {
             return query.mapToBean(Product.class).list();
         });
     }
-    public Product getProductFull(int id) {
-        return get().withHandle(handle -> {
-            // 1. Lấy thông tin sản phẩm + Brand + Keyword + Discount
-            Product product = handle.createQuery("""
-            SELECT 
-                p.id, p.name, p.image, 
-                p.price_first AS firstPrice, 
-                p.price_total AS totalPrice, 
-                p.discounts_id AS discountsId, 
-                p.categories_id AS categoriesId, 
-                p.brands_id AS brandsId, 
-                p.keywords_id AS keywordsId, 
-                p.post, p.quantity, 
-                p.quantity_saled AS quantitySaled, 
-                p.created_at AS createdAt, 
-                p.updated_at AS updatedAt,
-                b.name AS brandName,
-                k.name AS keywordName,
-                d.discount AS discountPercent
-            FROM products p
-            LEFT JOIN brands b ON p.brands_id = b.id
-            LEFT JOIN keywords k ON p.keywords_id = k.id
-            LEFT JOIN discounts d ON p.discounts_id = d.id 
-            WHERE p.id = :id
-        """)
-                    .bind("id", id)
-                    .mapToBean(Product.class)
-                    .findOne()
-                    .orElse(null);
 
-            if (product != null) {
-                // 2. Lấy Descriptions
-                List<ProductDescriptions> descriptions = handle.createQuery("""
-                SELECT id, title, description, products_id AS productId, created_at AS createdAt, updated_at AS updatedAt
-                FROM products_description WHERE products_id = :pid
-            """).bind("pid", id).mapToBean(ProductDescriptions.class).list();
-
-                // 3. Lấy Details
-                List<ProductDetails> details = handle.createQuery("""
-                SELECT id, image, title, description, products_id AS productId, created_at AS createdAt, updated_at AS updatedAt
-                FROM products_detail WHERE products_id = :pid
-            """).bind("pid", id).mapToBean(ProductDetails.class).list();
-
-                List<ProductReview> reviews = handle.createQuery("""
-                SELECT * FROM product_reviews 
-                WHERE product_id = :pid
-                ORDER BY created_at DESC
-            """)
-                        .bind("pid", id)
-                        .mapToBean(ProductReview.class)
-                        .list();
-
-                product.setDescriptionsList(descriptions);
-                product.setDetailsList(details);
-                product.setReviews(reviews);
-            }
-
-            return product;
-        });
-    }
     public List<Product> findByName(String name) {
         return get().withHandle(h ->
                 h.createQuery("""

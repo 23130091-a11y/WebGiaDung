@@ -1,4 +1,4 @@
-package com.webgiadung.doanweb.services;
+package com.webgiadung.webgiadung.services;
 
 import java.util.Properties;
 import jakarta.mail.*;

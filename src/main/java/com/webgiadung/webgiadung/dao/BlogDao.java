@@ -1,6 +1,6 @@
-package com.webgiadung.doanweb.dao;
+package com.webgiadung.webgiadung.dao;
 
-import com.webgiadung.doanweb.model.Blog;
+import com.webgiadung.webgiadung.model.Blog;
 
 import java.util.List;
 

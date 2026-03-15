@@ -1,6 +1,6 @@
-package com.webgiadung.doanweb.dao;
+package com.webgiadung.webgiadung.dao;
 
-import com.webgiadung.doanweb.model.UserAddress;
+import com.webgiadung.webgiadung.model.UserAddress;
 
 import java.util.List;
 import java.util.Optional;

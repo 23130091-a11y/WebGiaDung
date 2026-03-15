@@ -1,7 +1,7 @@
-package com.webgiadung.doanweb.services;
+package com.webgiadung.webgiadung.services;
 
-import com.webgiadung.doanweb.dao.CategoriesDao;
-import com.webgiadung.doanweb.model.Categories;
+import com.webgiadung.webgiadung.dao.CategoriesDao;
+import com.webgiadung.webgiadung.model.Categories;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
-package com.webgiadung.doanweb.controller.cart;
+package com.webgiadung.webgiadung.controller.cart;
 
-import com.webgiadung.doanweb.model.Product;
-import com.webgiadung.doanweb.services.ProductService;
+import com.webgiadung.webgiadung.model.Product;
+import com.webgiadung.webgiadung.services.ProductService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -14,7 +14,7 @@ public class ProductDetailServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         ProductService productService = new ProductService();
-        Product product = productService.getProduct(id);
+        Product product = productService.getProductFullInfo(id);
         if (product != null) {
             request.setAttribute("product", product);
             request.getRequestDispatcher("/product.jsp").forward(request, response);

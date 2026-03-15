@@ -1,6 +1,6 @@
-package com.webgiadung.doanweb.dao;
+package com.webgiadung.webgiadung.dao;
 
-import com.webgiadung.doanweb.model.User;
+import com.webgiadung.webgiadung.model.User;
 
 import java.util.List;
 public class AuthDao extends BaseDao {

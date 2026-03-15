@@ -1,7 +1,7 @@
-package com.webgiadung.doanweb.controller;
+package com.webgiadung.webgiadung.controller;
 
-import com.webgiadung.doanweb.dao.BlogDao;
-import com.webgiadung.doanweb.model.Blog;
+import com.webgiadung.webgiadung.dao.BlogDao;
+import com.webgiadung.webgiadung.model.Blog;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

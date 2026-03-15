@@ -1,9 +1,7 @@
-package com.webgiadung.doanweb.dao;
+package com.webgiadung.webgiadung.dao;
 
-import com.webgiadung.doanweb.model.Brands;
+import com.webgiadung.webgiadung.model.Brands;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.List;
 
 public class BrandsDao extends BaseDao {

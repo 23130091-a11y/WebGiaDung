@@ -1,11 +1,11 @@
-package com.webgiadung.doanweb.services;
+package com.webgiadung.webgiadung.services;
 
-import com.webgiadung.doanweb.dao.ProductDao;
-import com.webgiadung.doanweb.dao.ProductDescriptionsDao;
-import com.webgiadung.doanweb.dao.ProductDetailsDao;
-import com.webgiadung.doanweb.model.Product;
-import com.webgiadung.doanweb.model.ProductDescriptions;
-import com.webgiadung.doanweb.model.ProductDetails;
+import com.webgiadung.webgiadung.dao.ProductDao;
+import com.webgiadung.webgiadung.dao.ProductDescriptionsDao;
+import com.webgiadung.webgiadung.dao.ProductDetailsDao;
+import com.webgiadung.webgiadung.model.Product;
+import com.webgiadung.webgiadung.model.ProductDescriptions;
+import com.webgiadung.webgiadung.model.ProductDetails;
 
 import java.util.List;
 
@@ -18,11 +18,6 @@ public class ProductService {
     // Lấy danh sách tất cả sản phẩm
     public List<Product> getListProduct() {
         return pdao.getListProduct();
-    }
-
-    // Lấy chi tiết một sản phẩm theo ID
-    public Product getProduct(int id) {
-        return pdao.getProduct(id);
     }
 
     // Thêm sản phẩm mới và trả về ID (Generated Key)
@@ -120,9 +115,7 @@ public class ProductService {
     public List<Product> searchWithFilters(String keyword, String[] brands, String[] priceRanges,String categoryId) {
         return pdao.searchWithFilters(keyword, brands, priceRanges,categoryId);
     }
-    public Product getProductFull(int id) {
-        return pdao.getProductFull(id);
-    }
+
 
     public List<Product> getProductsFromIds(List<Integer> viewedIds) {
         return pdao.getProductsFromIds(viewedIds);

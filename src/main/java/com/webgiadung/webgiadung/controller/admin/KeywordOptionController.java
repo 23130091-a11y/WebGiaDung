@@ -1,7 +1,7 @@
-package com.webgiadung.doanweb.controller.admin;
+package com.webgiadung.webgiadung.controller.admin;
 
-import com.webgiadung.doanweb.model.Keywords;
-import com.webgiadung.doanweb.services.KeywordService;
+import com.webgiadung.webgiadung.model.Keywords;
+import com.webgiadung.webgiadung.services.KeywordService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

@@ -1,4 +1,4 @@
-package com.webgiadung.doanweb.model;
+package com.webgiadung.webgiadung.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -26,8 +26,6 @@ public class Product implements Serializable {
     // Liên kết các bảng phụ
     private List<ProductDescriptions> descriptionsList;  // Thông số động
     private List<ProductDetails> detailsList;
-    private List<ProductAttribute> attributes;  // Thông số động
-    private List<ProductOption> options;        // Tùy chọn
     private List<ProductImage> images;          // Ảnh phụ
     private List<ProductReview> reviews;        // Đánh giá
 
@@ -102,8 +100,6 @@ public class Product implements Serializable {
         this.quantitySaled = quantitySaled;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.attributes = new ArrayList<>();
-        this.options = new ArrayList<>();
         this.images = new ArrayList<>();
         this.reviews = new ArrayList<>();
     }
@@ -244,21 +240,6 @@ public class Product implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public List<ProductAttribute> getAttributes() {
-        return attributes;
-    }
-
-    public void setAttributes(List<ProductAttribute> attributes) {
-        this.attributes = attributes;
-    }
-
-    public List<ProductOption> getOptions() {
-        return options;
-    }
-
-    public void setOptions(List<ProductOption> options) {
-        this.options = options;
-    }
 
     public List<ProductImage> getImages() {
         return images;
