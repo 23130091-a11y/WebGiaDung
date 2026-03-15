@@ -19,6 +19,11 @@ public class ProductService {
         return pdao.getListProduct();
     }
 
+    // Thêm sản phẩm mới và trả về ID (Generated Key)
+    public int addProduct(Product p) {
+        return pdao.insert(p);
+    }
+
     // Lấy chi tiết một sản phẩm theo ID
     public Product getProduct(int id) {
         return pdao.getProduct(id);
@@ -116,9 +121,6 @@ public class ProductService {
         return pdao.searchWithFilters(keyword, brands, priceRanges,categoryId);
     }
 
-    public Product getProductFull(int id) {
-        return pdao.getProductFull(id);
-    }
 
     public List<Product> getProductsFromIds(List<Integer> viewedIds) {
         return pdao.getProductsFromIds(viewedIds);

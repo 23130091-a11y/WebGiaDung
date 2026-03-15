@@ -46,7 +46,7 @@ public class CartServlet extends HttpServlet {
 
             cart = new Cart(); // build mới từ DB
             for (var r : rows) {
-                Product p = productService.getProduct(r.productId);
+                Product p = productService.getProductFullInfo(r.productId);
                 if (p != null) cart.addItem(p, r.quantity);
             }
 

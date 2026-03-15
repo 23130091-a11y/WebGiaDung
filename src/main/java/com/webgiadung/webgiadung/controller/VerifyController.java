@@ -1,12 +1,10 @@
 package com.webgiadung.webgiadung.controller;
 
-import com.webgiadung.webgiadung.dao.AuthDao;
-import com.webgiadung.webgiadung.dao.EmailVerificationDao;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import com.webgiadung.doanweb.dao.AuthDao;
+import com.webgiadung.doanweb.dao.EmailVerificationDao;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 // servlet này: verify email -> kích hoạt tk user khi đăng ký thành công

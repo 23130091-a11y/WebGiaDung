@@ -1,14 +1,12 @@
-package com.webgiadung.webgiadung.controller.cart;
+package com.webgiadung.doanweb.controller;
 
-import com.webgiadung.webgiadung.model.Product;
-import com.webgiadung.webgiadung.model.Slide;
-import com.webgiadung.webgiadung.services.ProductService;
-import com.webgiadung.webgiadung.services.SlideService;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import com.webgiadung.doanweb.model.Product;
+import com.webgiadung.doanweb.model.Slide; // Giả định bạn có model Slide
+import com.webgiadung.doanweb.services.ProductService;
+import com.webgiadung.doanweb.services.SlideService; // Cần service để lấy thông tin Slide
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 import java.util.List;

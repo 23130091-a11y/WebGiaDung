@@ -1,19 +1,16 @@
 package com.webgiadung.webgiadung.controller;
 
-import com.webgiadung.webgiadung.dao.CategoriesDao;
-import com.webgiadung.webgiadung.model.Categories;
-import com.webgiadung.webgiadung.model.Product;
-import com.webgiadung.webgiadung.model.Slide;
-import com.webgiadung.webgiadung.services.BlogService;
-import com.webgiadung.webgiadung.services.ProductService;
-import com.webgiadung.webgiadung.services.SlideService;
-import com.webgiadung.webgiadung.utils.CookieUtils;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
+import com.webgiadung.doanweb.dao.CategoriesDao;
+import com.webgiadung.doanweb.model.Categories;
+import com.webgiadung.doanweb.model.Product;
+import com.webgiadung.doanweb.model.Slide;
+import com.webgiadung.doanweb.services.ProductService;
+import com.webgiadung.doanweb.services.SlideService;
+import com.webgiadung.doanweb.utils.CookieUtils;
+import jakarta.servlet.*;
+import jakarta.servlet.annotation.*;
+import jakarta.servlet.http.*;
+import com.webgiadung.doanweb.services.BlogService;
 import java.io.IOException;
 import java.util.List;
 // servlet này: hiển thị list sp, theo từng mục

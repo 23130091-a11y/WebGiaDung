@@ -1,14 +1,11 @@
 package com.webgiadung.webgiadung.controller;
 
-import com.webgiadung.webgiadung.model.User;
-import com.webgiadung.webgiadung.services.AuthService;
-import com.webgiadung.webgiadung.utils.SecurityUtils;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import com.webgiadung.doanweb.model.User;
+import com.webgiadung.doanweb.services.AuthService;
+import com.webgiadung.doanweb.utils.SecurityUtils;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 

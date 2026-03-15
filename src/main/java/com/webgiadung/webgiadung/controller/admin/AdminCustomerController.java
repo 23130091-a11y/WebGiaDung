@@ -1,7 +1,8 @@
 package com.webgiadung.webgiadung.controller.admin;
 
-import com.webgiadung.webgiadung.dao.AuthDao;
-import com.webgiadung.webgiadung.model.User;
+import com.webgiadung.doanweb.dao.AuthDao;
+import com.webgiadung.doanweb.model.User;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

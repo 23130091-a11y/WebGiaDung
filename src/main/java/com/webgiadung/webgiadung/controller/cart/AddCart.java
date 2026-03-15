@@ -170,7 +170,7 @@ public class AddCart extends HttpServlet {
 
         // 4) get product
         ProductService productService = new ProductService();
-        Product product = productService.getProduct(productId);
+        Product product = productService.getProductFullInfo(productId);
         if (product == null) {
             if (ajax) writeJson(response, HttpServletResponse.SC_NOT_FOUND,
                     "{\"status\":\"error\",\"message\":\"Product not found\"}");

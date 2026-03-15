@@ -33,7 +33,7 @@ public class ProductController extends HttpServlet {
         ProductService pService = new ProductService();
         CategoriesService cService = new CategoriesService();
 
-        Product p = pService.getProductFull(id);
+        Product p = pService.getProductFullInfo(id);
         if (p == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;

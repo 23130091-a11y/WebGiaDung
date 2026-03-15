@@ -1,14 +1,12 @@
 package com.webgiadung.webgiadung.controller;
 
-import com.webgiadung.webgiadung.dao.CategoriesDao;
-import com.webgiadung.webgiadung.dao.ProductDao;
-import com.webgiadung.webgiadung.model.Categories;
-import com.webgiadung.webgiadung.model.Product;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import com.webgiadung.doanweb.dao.CategoriesDao;
+import com.webgiadung.doanweb.dao.ProductDao;
+import com.webgiadung.doanweb.model.Categories;
+import com.webgiadung.doanweb.model.Product;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 import java.util.List;

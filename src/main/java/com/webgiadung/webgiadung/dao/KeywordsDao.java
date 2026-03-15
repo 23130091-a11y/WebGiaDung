@@ -1,7 +1,6 @@
 package com.webgiadung.webgiadung.dao;
 
-import com.webgiadung.webgiadung.model.Keywords;
-
+import com.webgiadung.doanweb.model.Keywords;
 import java.util.List;
 
 public class KeywordsDao extends BaseDao {

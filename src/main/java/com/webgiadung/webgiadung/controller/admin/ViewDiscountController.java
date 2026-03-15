@@ -1,9 +1,10 @@
 package com.webgiadung.webgiadung.controller.admin;
 
-import com.webgiadung.webgiadung.model.Categories;
-import com.webgiadung.webgiadung.model.Discounts;
-import com.webgiadung.webgiadung.services.CategoriesService;
-import com.webgiadung.webgiadung.services.DiscountService;
+import com.webgiadung.doanweb.model.Discounts;
+import com.webgiadung.doanweb.model.Categories;
+import com.webgiadung.doanweb.services.DiscountService;
+import com.webgiadung.doanweb.services.CategoriesService; // Đảm bảo đã import
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

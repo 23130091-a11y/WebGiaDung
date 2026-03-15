@@ -1,11 +1,10 @@
 package com.webgiadung.webgiadung.controller;
 
-import com.webgiadung.webgiadung.dao.AuthDao;
-import com.webgiadung.webgiadung.dao.OrderDao;
-import com.webgiadung.webgiadung.model.Cart;
-import com.webgiadung.webgiadung.model.Product;
-import com.webgiadung.webgiadung.model.User;
-import jakarta.servlet.ServletException;
+import com.webgiadung.doanweb.dao.OrderDao;
+import com.webgiadung.doanweb.dao.AuthDao;
+import com.webgiadung.doanweb.model.User;
+
+import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,10 +12,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import com.webgiadung.doanweb.model.Cart;
+import com.webgiadung.doanweb.model.Product;
 
 @WebServlet("/account")
 public class AccountController extends HttpServlet {

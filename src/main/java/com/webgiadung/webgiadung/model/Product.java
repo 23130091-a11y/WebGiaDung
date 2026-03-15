@@ -21,11 +21,12 @@ public class Product implements Serializable {
     private LocalDateTime updatedAt; // ngày update
 
     // Liên kết các bảng phụ
-    private List<ProductDescriptions> descriptions = new ArrayList<>(); // mô tả sp
-    private List<ProductDetails> details = new ArrayList<>(); // chi tiết sp
-    private List<ProductImage> images = new ArrayList<>(); // Các ảnh khác của sp
-    private List<ProductReview> reviews = new ArrayList<>(); // Đánh giá
-    private List<Keywords> keywords = new ArrayList<>();
+    private List<ProductDescriptions> descriptionsList;  // Thông số động
+    private List<ProductDetails> detailsList;
+    private List<ProductAttribute> attributes;  // Thông số động
+    private List<ProductOption> options;        // Tùy chọn
+    private List<ProductImage> images;          // Ảnh phụ
+    private List<ProductReview> reviews;        // Đánh giá
 
     // rating tính sẵn từ SQL (dùng cho trang list)
     private Double ratingAvg;
@@ -96,6 +97,34 @@ public class Product implements Serializable {
         this.soldQuantity = soldQuantity;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.attributes = new ArrayList<>();
+        this.options = new ArrayList<>();
+        this.images = new ArrayList<>();
+        this.reviews = new ArrayList<>();
+    }
+
+    public Product(int id, String name, String image, double firstPrice, int discountsId, double totalPrice, int categoriesId, int brandsId, int keywordsId, String brandName, String keywordName, int post, int quantity, int quantitySaled, LocalDateTime createdAt, LocalDateTime updatedAt, List<ProductDescriptions> descriptionsList, List<ProductDetails> detailsList, List<ProductReview> reviews, Double discountPercent, String discountType) {
+        this.id = id;
+        this.name = name;
+        this.image = image;
+        this.firstPrice = firstPrice;
+        this.discountsId = discountsId;
+        this.totalPrice = totalPrice;
+        this.categoriesId = categoriesId;
+        this.brandsId = brandsId;
+        this.keywordsId = keywordsId;
+        this.brandName = brandName;
+        this.keywordName = keywordName;
+        this.post = post;
+        this.quantity = quantity;
+        this.quantitySaled = quantitySaled;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.descriptionsList = descriptionsList;
+        this.detailsList = detailsList;
+        this.reviews = reviews;
+        this.discountPercent = discountPercent;
+        this.discountType = discountType;
     }
 
     public int getId() {
@@ -194,12 +223,20 @@ public class Product implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public int getStatus() {
-        return status;
+    public List<ProductAttribute> getAttributes() {
+        return attributes;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setAttributes(List<ProductAttribute> attributes) {
+        this.attributes = attributes;
+    }
+
+    public List<ProductOption> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<ProductOption> options) {
+        this.options = options;
     }
 
     public List<ProductImage> getImages() {

@@ -1,11 +1,13 @@
 package com.webgiadung.webgiadung.controller;
 
-import com.webgiadung.webgiadung.dao.AuthDao;
-import com.webgiadung.webgiadung.dao.EmailVerificationDao;
-import com.webgiadung.webgiadung.model.User;
-import com.webgiadung.webgiadung.services.EmailService;
-import com.webgiadung.webgiadung.utils.SecurityUtils;
-import jakarta.servlet.ServletException;
+import com.webgiadung.doanweb.dao.AuthDao;
+import com.webgiadung.doanweb.dao.EmailVerificationDao;
+import com.webgiadung.doanweb.model.User;
+import java.util.regex.Pattern;
+import com.webgiadung.doanweb.services.EmailService;
+import com.webgiadung.doanweb.utils.SecurityUtils;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
