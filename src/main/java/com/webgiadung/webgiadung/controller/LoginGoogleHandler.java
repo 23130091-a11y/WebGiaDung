@@ -2,10 +2,10 @@ package com.webgiadung.webgiadung.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.webgiadung.doanweb.model.User;
-import com.webgiadung.doanweb.model.UserGoogleDto;
-import com.webgiadung.doanweb.model.Constants;
-import com.webgiadung.doanweb.services.AuthService;
+import com.webgiadung.webgiadung.model.User;
+import com.webgiadung.webgiadung.model.UserGoogleDto;
+import com.webgiadung.webgiadung.model.Constants;
+import com.webgiadung.webgiadung.services.AuthService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;

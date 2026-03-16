@@ -11,7 +11,7 @@ public class SlideDao extends BaseDao{
 
         List<Slide> slides=
                 jdbi.withHandle(h->{
-                    return h.createQuery("select * from slide where status = 1").mapToBean(Slide.class).list();
+                    return h.createQuery("select * from slides where status = 1").mapToBean(Slide.class).list();
                 });
 
         return slides;
@@ -19,7 +19,7 @@ public class SlideDao extends BaseDao{
 
     public static Slide getById(int id) {
         return get().withHandle(h -> {
-            return h.createQuery("SELECT * FROM slide WHERE id = :id AND status = 1")
+            return h.createQuery("SELECT * FROM slides WHERE id = :id AND status = 1")
                     .bind("id", id)
                     .mapToBean(Slide.class)
                     .findOne()
@@ -30,7 +30,7 @@ public class SlideDao extends BaseDao{
     public static int insert(Slide slide) {
         return get().withHandle(handle -> {
             return handle.createUpdate(
-                            "INSERT INTO slide (name, avatar, text, status, created_at, updated_at) " +
+                            "INSERT INTO slides (name, avatar, text, status, created_at, updated_at) " +
                                     "VALUES (:name, :avatar, :text, :status, NOW(), NOW())"
                     )
                     .bindBean(slide)

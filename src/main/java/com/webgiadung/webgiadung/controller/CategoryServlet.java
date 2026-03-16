@@ -1,9 +1,9 @@
 package com.webgiadung.webgiadung.controller;
 
-import com.webgiadung.doanweb.dao.CategoriesDao;
-import com.webgiadung.doanweb.dao.ProductDao;
-import com.webgiadung.doanweb.model.Categories;
-import com.webgiadung.doanweb.model.Product;
+import com.webgiadung.webgiadung.dao.CategoriesDao;
+import com.webgiadung.webgiadung.dao.ProductDao;
+import com.webgiadung.webgiadung.model.Categories;
+import com.webgiadung.webgiadung.model.Product;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;

@@ -1,10 +1,10 @@
 package com.webgiadung.webgiadung.controller;
 
-import com.webgiadung.doanweb.dao.CartItemDao;
-import com.webgiadung.doanweb.dao.OrderDao;
-import com.webgiadung.doanweb.model.Cart;
-import com.webgiadung.doanweb.model.CartItem;
-import com.webgiadung.doanweb.model.User;
+import com.webgiadung.webgiadung.dao.CartItemDao;
+import com.webgiadung.webgiadung.dao.OrderDao;
+import com.webgiadung.webgiadung.model.Cart;
+import com.webgiadung.webgiadung.model.CartItem;
+import com.webgiadung.webgiadung.model.User;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -17,8 +17,8 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.webgiadung.doanweb.dao.UserAddressDao;
-import com.webgiadung.doanweb.model.UserAddress;
+import com.webgiadung.webgiadung.dao.UserAddressDao;
+import com.webgiadung.webgiadung.model.UserAddress;
 
 
 import java.util.List;

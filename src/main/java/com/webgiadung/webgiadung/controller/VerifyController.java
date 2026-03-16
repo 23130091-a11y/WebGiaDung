@@ -1,7 +1,7 @@
 package com.webgiadung.webgiadung.controller;
 
-import com.webgiadung.doanweb.dao.AuthDao;
-import com.webgiadung.doanweb.dao.EmailVerificationDao;
+import com.webgiadung.webgiadung.dao.AuthDao;
+import com.webgiadung.webgiadung.dao.EmailVerificationDao;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;

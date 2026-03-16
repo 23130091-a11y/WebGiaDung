@@ -1,6 +1,6 @@
 package com.webgiadung.webgiadung.dao;
 
-import com.webgiadung.doanweb.model.ProductDetails;
+import com.webgiadung.webgiadung.model.ProductDetails;
 import java.util.List;
 
 public class ProductDetailsDao extends BaseDao {

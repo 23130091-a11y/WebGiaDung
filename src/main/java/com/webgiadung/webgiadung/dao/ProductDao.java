@@ -146,9 +146,9 @@ public class ProductDao extends BaseDao {
             p.sold_quantity AS soldQuantity,
             p.created_at AS createdAt,
             p.updated_at AS updatedAt,
-            IFNULL(d.discount_value, 0) AS discountPercent, --Đảm bảo không bị NULL
+            IFNULL(d.discount_value, 0) AS discountPercent,
             d.discount_type AS discountType,
-            IFNULL(pr.ratingAvg, 0.0) AS ratingAvg -- truy vấn lúc này lấy avgrating tính trực tiếp ở dưới luôn
+            IFNULL(pr.ratingAvg, 0.0) AS ratingAvg
         FROM products p
             LEFT JOIN discounts d ON p.is_visible = 1 AND p.discounts_id = d.id
         LEFT JOIN (
@@ -177,14 +177,14 @@ public class ProductDao extends BaseDao {
             d.discount_type AS discountType,
             IFNULL(pr.ratingAvg, 0.0) AS ratingAvg
         FROM products p
-        INNER JOIN discounts d ON p.discounts_id = d.id -- Dùng INNER JOIN để bắt buộc phải có discount
+        INNER JOIN discounts d ON p.discounts_id = d.id
         LEFT JOIN (
             SELECT product_id, ROUND(AVG(rating), 1) AS ratingAvg 
             FROM product_reviews 
             GROUP BY product_id
         ) pr ON p.id = pr.product_id
         WHERE p.is_visible = 1 
-          AND NOW() BETWEEN d.start_date AND d.end_date -- Chỉ lấy khuyến mãi còn hạn
+          AND NOW() BETWEEN d.start_date AND d.end_date
         GROUP BY p.id
     """;
 
@@ -310,7 +310,6 @@ public class ProductDao extends BaseDao {
                 p.created_at AS createdAt, 
                 p.updated_at AS updatedAt,
                 
-                -- Lấy thêm tên từ bảng phụ
                 b.name AS brandName,
                 k.name AS keywordName
 
@@ -529,8 +528,8 @@ public class ProductDao extends BaseDao {
             SET discounts_id = :discountId,
                 updated_at = NOW()
             WHERE categories_id = :categoryId
-            AND status = 1 -- chỉ áp dụng cho sản phẩm đang bán
-            AND is_visible = 1 -- chỉ áp dụng cho sản phẩm đang hiển thị
+            AND status = 1
+            AND is_visible = 1
         """)
                     .bind("categoryId", categoryId)
                     .bind("discountId", newDiscountId)
@@ -608,67 +607,6 @@ public class ProductDao extends BaseDao {
                 }
             }
             return query.mapToBean(Product.class).list();
-        });
-    }
-
-    // lấy thông tin sp full
-    public Product getProductFull(int id) {
-        return get().withHandle(handle -> {
-            // 1. Lấy thông tin sản phẩm + Brand + Keyword + Discount
-            Product product = handle.createQuery("""
-            SELECT 
-                p.id, p.name, p.image, 
-                p.price_first AS firstPrice, 
-                p.price_total AS totalPrice, 
-                p.discounts_id AS discountsId, 
-                p.categories_id AS categoriesId, 
-                p.brands_id AS brandsId, 
-                p.keywords_id AS keywordsId, 
-                p.post, p.quantity, 
-                p.quantity_saled AS quantitySaled, 
-                p.created_at AS createdAt, 
-                p.updated_at AS updatedAt,
-                b.name AS brandName,
-                k.name AS keywordName,
-                d.discount AS discountPercent
-            FROM products p
-            LEFT JOIN brands b ON p.brands_id = b.id
-            LEFT JOIN keywords k ON p.keywords_id = k.id
-            LEFT JOIN discounts d ON p.discounts_id = d.id 
-            WHERE p.id = :id
-        """)
-                    .bind("id", id)
-                    .mapToBean(Product.class)
-                    .findOne()
-                    .orElse(null);
-
-            if (product != null) {
-                // 2. Lấy Descriptions
-                List<ProductDescriptions> descriptions = handle.createQuery("""
-                SELECT id, title, description, products_id AS productId, created_at AS createdAt, updated_at AS updatedAt
-                FROM products_description WHERE products_id = :pid
-            """).bind("pid", id).mapToBean(ProductDescriptions.class).list();
-
-                // 3. Lấy Details
-                List<ProductDetails> details = handle.createQuery("""
-                SELECT id, image, title, description, products_id AS productId, created_at AS createdAt, updated_at AS updatedAt
-                FROM products_detail WHERE products_id = :pid
-            """).bind("pid", id).mapToBean(ProductDetails.class).list();
-
-                List<ProductReview> reviews = handle.createQuery("""
-                SELECT * FROM product_reviews 
-                WHERE product_id = :pid
-                ORDER BY created_at DESC
-            """)
-                        .bind("pid", id)
-                        .mapToBean(ProductReview.class)
-                        .list();
-
-                product.setDescriptions(descriptions);
-                product.setDetails(details);
-                product.setReviews(reviews);
-            }
-            return product;
         });
     }
 
