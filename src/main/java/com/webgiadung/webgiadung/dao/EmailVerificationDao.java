@@ -5,7 +5,7 @@ public class EmailVerificationDao extends BaseDao {
     public void saveToken(String email, String token) {
         get().useHandle(h ->
                 h.createUpdate(
-                                "INSERT INTO email_verification (email, token) VALUES (:email, :token)"
+                        "INSERT INTO email_verification (email, token) VALUES (:email, :token)"
                         )
                         .bind("email", email)
                         .bind("token", token)
@@ -16,7 +16,7 @@ public class EmailVerificationDao extends BaseDao {
     public String getEmailByToken(String token) {
         return get().withHandle(h ->
                 h.createQuery(
-                                "SELECT email FROM email_verification WHERE token = :token"
+                        "SELECT email FROM email_verification WHERE token = :token"
                         )
                         .bind("token", token)
                         .mapTo(String.class)
@@ -28,7 +28,7 @@ public class EmailVerificationDao extends BaseDao {
     public void deleteToken(String token) {
         get().useHandle(h ->
                 h.createUpdate(
-                                "DELETE FROM email_verification WHERE token = :token"
+                        "DELETE FROM email_verification WHERE token = :token"
                         )
                         .bind("token", token)
                         .execute()

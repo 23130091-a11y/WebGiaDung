@@ -7,16 +7,16 @@ import java.util.List;
 public class DiscountDao extends BaseDao {
 
     public int insertDiscount(Discounts d) {
-        return get().withHandle(handle -> {
-            return handle.createUpdate("""
-            INSERT INTO discounts (name, type_discount, discount, description, start_date, end_date, id_cate) 
-            VALUES (:name, :typeDiscount, :discount, :description, :startDate, :endDate, :id_cate)
-            """)
-                    .bindBean(d)
-                    .executeAndReturnGeneratedKeys("id")
-                    .mapTo(Integer.class)
-                    .one();
-        });
+        return get().withHandle(handle ->
+                handle.createUpdate("""
+                INSERT INTO discounts (name, discount_type, discount_value, description, start_date, end_date, category_id, status) 
+                VALUES (:name, :discountType, :discountValue, :description, :startDate, :endDate, :categoryId, :status)
+                """)
+                        .bindBean(d)
+                        .executeAndReturnGeneratedKeys("id")
+                        .mapTo(Integer.class)
+                        .one()
+        );
     }
 
     public Discounts getDiscountById(int id) {
@@ -38,22 +38,22 @@ public class DiscountDao extends BaseDao {
     }
 
     public boolean updateDiscount(Discounts d) {
-        return get().withHandle(handle -> {
-            int rowsAffected = handle.createUpdate("""
-            UPDATE discounts 
-            SET name = :name, 
-                type_discount = :typeDiscount, 
-                discount = :discount, 
-                description = :description, 
-                start_date = :startDate, 
-                end_date = :endDate 
-            WHERE id = :id
-            """)
-                    .bindBean(d)
-                    .execute();
-
-            return rowsAffected > 0;
-        });
+        return get().withHandle(handle ->
+                handle.createUpdate("""
+                UPDATE discounts 
+                SET name = :name, 
+                    discount_type = :discountType, 
+                    discount_value = :discountValue, 
+                    description = :description, 
+                    start_date = :startDate, 
+                    end_date = :endDate,
+                    category_id = :categoryId,
+                    status = :status
+                WHERE id = :id
+                """)
+                        .bindBean(d)
+                        .execute() > 0
+        );
     }
 
     public boolean deleteDiscount(int id) {

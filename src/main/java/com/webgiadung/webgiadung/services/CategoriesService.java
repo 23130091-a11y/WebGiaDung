@@ -24,13 +24,15 @@ public class CategoriesService {
         return categoriesDao.getCategoriesByParentId(parentId);
     }
 
-    public int insertCategory(String name, String description) {
+    public int insertCategory(String name, String description, Integer parentId) {
         Categories exist = categoriesDao.findByName(name);
-
         if (exist != null) {
-            return 0;
+            return -2; // nếu trùng tên trả về -2
         }
+        // nếu mà không truyền parentId vào thì mặc định nó là cha
+        int finalParentId = (parentId == null) ? 0 : parentId;
 
-        return categoriesDao.insertCategory(name, description);
+        // gọi dao
+        return categoriesDao.insertCategory(name, description, finalParentId);
     }
 }

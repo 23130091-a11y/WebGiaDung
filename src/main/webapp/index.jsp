@@ -90,7 +90,7 @@
               <c:forEach var="slide" items="${slides}">
                 <a class="slide"
                    href="view-slide?id=${slide.id}"
-                   style="background-image: url('${slide.avatar}')">
+                   style="background-image: url('${slide.banner}')">
                 </a>
               </c:forEach>
             </div>
@@ -408,7 +408,7 @@
                       <div class="blog-item__meta">
                         <span class="blog-item__time">
                           <i class="fa-regular fa-clock"></i>
-                          <fmt:formatDate value="${b.createdAtDate}" pattern="dd/MM/yyyy • HH:mm"/>
+                          ${b.createdAt}
                         </span>
                       </div>
                     </div>

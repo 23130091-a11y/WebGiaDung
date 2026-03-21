@@ -14,7 +14,7 @@ public class KeywordsDao extends BaseDao {
         );
     }
 
-    // HÀM INSERT TRẢ VỀ INT
+    // hàm insert trả về int
     public int insert(Keywords keyword) {
         return get().withHandle(h ->
                 h.createUpdate("INSERT INTO keywords (name, description, created_at, updated_at) " +
@@ -67,4 +67,36 @@ public class KeywordsDao extends BaseDao {
         );
     }
 
+    // Lấy danh sách từ khóa của một sản phẩm cụ thể
+    public List<Keywords> getByProductId(int productId) {
+        return get().withHandle(h ->
+                h.createQuery("""
+                    SELECT k.* FROM keywords k
+                    JOIN product_keywords pk ON k.id = pk.keyword_id
+                    WHERE pk.product_id = :productId
+                    """)
+                        .bind("productId", productId)
+                        .mapToBean(Keywords.class)
+                        .list()
+        );
+    }
+
+    // Thêm liên kết giữa sản phẩm và từ khóa
+    public void addKeywordToProduct(int productId, int keywordId) {
+        get().useHandle(h ->
+                h.createUpdate("INSERT IGNORE INTO product_keywords (product_id, keyword_id) VALUES (:pid, :kid)")
+                        .bind("pid", productId)
+                        .bind("kid", keywordId)
+                        .execute()
+        );
+    }
+
+    // Xóa tất cả liên kết từ khóa của một sản phẩm (Dùng khi cập nhật lại sản phẩm)
+    public void removeAllKeywordsFromProduct(int productId) {
+        get().useHandle(h ->
+                h.createUpdate("DELETE FROM product_keywords WHERE product_id = :pid")
+                        .bind("pid", productId)
+                        .execute()
+        );
+    }
 }

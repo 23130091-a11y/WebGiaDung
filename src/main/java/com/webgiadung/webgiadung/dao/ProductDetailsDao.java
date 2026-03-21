@@ -9,10 +9,10 @@ public class ProductDetailsDao extends BaseDao {
     public int insert(ProductDetails detail) {
         return get().withHandle(h ->
                 h.createUpdate(
-                                "INSERT INTO products_detail (image, title, description, products_id, created_at, updated_at) " +
+                                "INSERT INTO product_details (image, title, description, product_id, created_at, updated_at) " +
                                         "VALUES (:image, :title, :description, :productId, NOW(), NOW())"
                         )
-                        .bindBean(detail) // Tự động map :image, :title, :description, :productId
+                        .bindBean(detail)
                         .executeAndReturnGeneratedKeys("id")
                         .mapTo(Integer.class)
                         .one()
@@ -21,8 +21,8 @@ public class ProductDetailsDao extends BaseDao {
 
     public List<ProductDetails> findByProductId(int productId) {
         return get().withHandle(h ->
-                h.createQuery("SELECT * FROM product_details WHERE id = :id ORDER BY id ASC")
-                        .bind("id", productId)
+                h.createQuery("SELECT * FROM product_details WHERE product_id = :productId ORDER BY id ASC")
+                        .bind("productId", productId)
                         .mapToBean(ProductDetails.class)
                         .list()
         );
@@ -38,13 +38,10 @@ public class ProductDetailsDao extends BaseDao {
 
     public boolean update(ProductDetails detail) {
         return get().withHandle(h ->
-                h.createUpdate("UPDATE products_detail " +
+                h.createUpdate("UPDATE product_details " +
                                 "SET title = :title, description = :description, image = :image, updated_at = NOW() " +
                                 "WHERE id = :id")
-                        .bind("id", detail.getId())
-                        .bind("title", detail.getTitle())
-                        .bind("description", detail.getDescription())
-                        .bind("image", detail.getImage())
+                        .bindBean(detail)
                         .execute() > 0
         );
     }
@@ -53,7 +50,7 @@ public class ProductDetailsDao extends BaseDao {
     // Dùng cho trường hợp user bấm nút xóa 1 dòng chi tiết
     public boolean delete(int id) {
         return get().withHandle(h ->
-                h.createUpdate("DELETE FROM products_detail WHERE id = :id")
+                h.createUpdate("DELETE FROM product_details WHERE id = :id")
                         .bind("id", id)
                         .execute() > 0
         );

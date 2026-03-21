@@ -4,7 +4,7 @@ import com.webgiadung.webgiadung.model.OrderAdmin;
 import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
-
+// Thảo luận lại OrderAdminDao
 public class OrderAdminDao extends BaseDao {
     private Jdbi jdbi;
 

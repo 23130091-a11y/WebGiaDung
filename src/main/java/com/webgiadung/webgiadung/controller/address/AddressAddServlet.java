@@ -78,7 +78,17 @@ public class AddressAddServlet extends HttpServlet {
         }
 
         UserAddressDao dao = new UserAddressDao();
-        int newId = dao.insert(u.getId(), fullName.trim(), phone.trim(), address.trim(), makeDefault);
+
+        // Tạo đối tượng UserAddress và set các giá trị
+        UserAddress newAddr = new UserAddress();
+        newAddr.setUserId(u.getId());
+        newAddr.setFullName(fullName.trim());
+        newAddr.setPhone(phone.trim());
+        newAddr.setAddress(address.trim());
+        newAddr.setIsDefault(makeDefault); // makeDefault thường là 0 hoặc 1
+
+        // Gọi hàm insert với đối tượng vừa tạo
+        int newId = dao.insert(newAddr);
 
         // sau khi insert -> lấy list mới
         List<UserAddress> addresses = dao.listByUser(u.getId());

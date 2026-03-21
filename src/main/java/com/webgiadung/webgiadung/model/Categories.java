@@ -11,7 +11,7 @@ public class Categories implements Serializable {
     private int isVisible; // 0 - ẩn, 1 - hiện
     private LocalDateTime createdAt; // ngày tạo
     private LocalDateTime updatedAt; // ngày update
-    private int parentId; // id danh mục cha
+    private Integer parentId; // id danh mục cha
 
     private List<Categories> children; // danh sách danh mục con
 
@@ -23,7 +23,7 @@ public class Categories implements Serializable {
         this.children = children;
     }
 
-    public Categories(int id, String name, String description, int isVisible, LocalDateTime createdAt, LocalDateTime updatedAt, int parentId) {
+    public Categories(int id, String name, String description, int isVisible, LocalDateTime createdAt, LocalDateTime updatedAt, Integer parentId) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -83,11 +83,11 @@ public class Categories implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public int getParentId() {
+    public Integer getParentId() {
         return parentId;
     }
 
-    public void setParentId(int parentId) {
+    public void setParentId(Integer parentId) {
         this.parentId = parentId;
     }
 

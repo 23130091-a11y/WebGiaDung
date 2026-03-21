@@ -10,8 +10,8 @@ public class ProductDescriptionsDao extends BaseDao {
         return get().withHandle(h ->
                 h.createUpdate(
 
-                                "INSERT INTO products_description (title, description, products_id, created_at, updated_at) " +
-                                        "VALUES (:title, :description, :productId, NOW(), NOW())"
+                                "INSERT INTO product_descriptions (attr_name, value, product_id, created_at, updated_at) " +
+                                        "VALUES (:attrName, :value, :productId, NOW(), NOW())"
                         )
                         .bindBean(desc)
                         .executeAndReturnGeneratedKeys("id")
@@ -22,7 +22,7 @@ public class ProductDescriptionsDao extends BaseDao {
 
     public List<ProductDescriptions> findByProductId(int productId) {
         return get().withHandle(h ->
-                h.createQuery("SELECT * FROM product_descriptions WHERE product_id = :productId")
+                h.createQuery("SELECT * FROM product_descriptions WHERE product_id = :productId ORDER BY id ASC")
                         .bind("productId", productId)
                         .mapToBean(ProductDescriptions.class)
                         .list()
@@ -31,12 +31,10 @@ public class ProductDescriptionsDao extends BaseDao {
 
     public boolean update(ProductDescriptions desc) {
         return get().withHandle(h ->
-                h.createUpdate("UPDATE products_description " +
-                                "SET title = :title, description = :description, updated_at = NOW() " +
+                h.createUpdate("UPDATE product_descriptions " +
+                                "SET attr_name = :attrName, value = :value, updated_at = NOW() " +
                                 "WHERE id = :id")
-                        .bind("id", desc.getId())
-                        .bind("name", desc.getAttrName())
-                        .bind("value", desc.getValue())
+                        .bindBean(desc)
                         .execute() > 0
         );
     }
@@ -45,7 +43,7 @@ public class ProductDescriptionsDao extends BaseDao {
     // Dùng khi người dùng bấm nút "Xóa dòng này" trên giao diện sửa
     public boolean delete(int id) {
         return get().withHandle(h ->
-                h.createUpdate("DELETE FROM products_description WHERE id = :id")
+                h.createUpdate("DELETE FROM product_descriptions WHERE id = :id")
                         .bind("id", id)
                         .execute() > 0
         );
@@ -55,7 +53,7 @@ public class ProductDescriptionsDao extends BaseDao {
     // Dùng khi xóa hoàn toàn sản phẩm khỏi hệ thống
     public boolean deleteByProductId(int productId) {
         return get().withHandle(h ->
-                h.createUpdate("DELETE FROM products_description WHERE products_id = :productId")
+                h.createUpdate("DELETE FROM product_descriptions WHERE product_id = :productId")
                         .bind("productId", productId)
                         .execute() > 0
         );

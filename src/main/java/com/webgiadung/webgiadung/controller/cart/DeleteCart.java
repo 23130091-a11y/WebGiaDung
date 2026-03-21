@@ -1,9 +1,6 @@
 package com.webgiadung.webgiadung.controller.cart;
 
-import com.webgiadung.webgiadung.dao.CartDao;
-import com.webgiadung.webgiadung.dao.CartItemDao;
 import com.webgiadung.webgiadung.model.Cart;
-import com.webgiadung.webgiadung.model.User;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -25,46 +22,29 @@ public class DeleteCart extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String raw = request.getParameter("id");
-        int productId;
-        try {
-            productId = Integer.parseInt(raw);
-        } catch (Exception e) {
-            response.sendRedirect(request.getContextPath() + "/cart");
-            return;
-        }
-
-        HttpSession session = request.getSession();
-        Cart cart = (Cart) session.getAttribute("cart");
-        if (cart == null) cart = new Cart();
-
-        cart.deleteItem(productId);
-        session.setAttribute("cart", cart);
-
-        User user = (User) session.getAttribute("user");
-        if (user != null) {
-            Integer cartId = (Integer) session.getAttribute("CART_ID");
-            CartDao cartDao = new CartDao();
-            if (cartId == null) {
-                cartId = cartDao.getOrCreateCartId(user.getId());
-                session.setAttribute("CART_ID", cartId);
-            }
-            new CartItemDao().deleteItem(cartId, productId);
-        }
-
-        response.sendRedirect(request.getContextPath() + "/cart");
+        processDelete(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String raw = request.getParameter("productId");
-        if (raw == null) raw = request.getParameter("id");
+        processDelete(request, response);
+    }
+
+    private void processDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String raw = request.getParameter("productId"); // post
+        if (raw == null) raw = request.getParameter("id"); // get
 
         int productId;
         try {
             productId = Integer.parseInt(raw);
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid id");
+            if(isAjax(request)) {
+                response.setStatus(400); // báo lỗi 400
+                response.getWriter().print("{\"status\":\"error\"}");
+            }
+            else {
+                response.sendRedirect(request.getContextPath() + "/cart");
+            }
             return;
         }
 
@@ -72,26 +52,23 @@ public class DeleteCart extends HttpServlet {
         Cart cart = (Cart) session.getAttribute("cart");
         if (cart == null) cart = new Cart();
 
+        // xóa sp ra khỏi session
         cart.deleteItem(productId);
         session.setAttribute("cart", cart);
-
-        User user = (User) session.getAttribute("user");
-        if (user != null) {
-            Integer cartId = (Integer) session.getAttribute("CART_ID");
-            CartDao cartDao = new CartDao();
-            if (cartId == null) {
-                cartId = cartDao.getOrCreateCartId(user.getId());
-                session.setAttribute("CART_ID", cartId);
-            }
-            new CartItemDao().deleteItem(cartId, productId);
-        }
 
         if (isAjax(request)) {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
+
+            java.text.DecimalFormat df = new java.text.DecimalFormat("###,###");
+            String formattedTotal = df.format(cart.getTotalPrice()) + " đ";
+
             PrintWriter out = response.getWriter();
-            out.print("{\"status\":\"success\",\"cartQty\":" + cart.getTotalQuantity()
-                    + ",\"cartTotal\":" + cart.getTotalPrice() + "}");
+            out.print("{"
+                    + "\"status\":\"success\","
+                    + "\"cartQty\":" + cart.getTotalQuantity() + ","
+                    + "\"cartTotal\":\"" + formattedTotal + "\""
+                    + "}");
             out.flush();
             return;
         }

@@ -35,23 +35,20 @@ public class CategoriesDao extends BaseDao {
     // trả về ds các danh mục cha
     public List<Categories> getCategoriesParent() {
         return get().withHandle(h ->
-                h.createQuery("""
-                SELECT *
-                FROM categories
-                WHERE parent_id IS NULL OR parent_id = 0
-            """)
+                h.createQuery("SELECT * FROM categories WHERE parent_id = 0 AND is_visible = 1")
                         .mapToBean(Categories.class)
                         .list()
         );
     }
 
-    // Lấy danh sách danh mục con theo parent_id
-    public List<Categories> getCategoriesByParentId(int parentId) {
+    // Lấy danh sách danh mục con theo parent_id,
+    // Toán tử <=> sẽ hiểu được cả trường hợp so sánh với số và so sánh với NULL
+    public List<Categories> getCategoriesByParentId(Integer parentId) {
         return get().withHandle(h ->
                 h.createQuery("""
                     SELECT *
                     FROM categories
-                    WHERE parent_id = :parentId
+                    WHERE parent_id <=> :parentId
                 """)
                         .bind("parentId", parentId)
                         .mapToBean(Categories.class)
@@ -70,32 +67,48 @@ public class CategoriesDao extends BaseDao {
         });
     }
 
-    public int insertCategory(String name, String description) {
-        try {
-            return get().withHandle(h ->
-                    h.createUpdate("""
-                    INSERT INTO categories (name, description,  parent_id, created_at, updated_at) 
-                    VALUES (:name, :description,  0, NOW(), NOW())
+    public int insertCategory(String name, String description, Integer parentId) {
+        return get().withHandle(h ->
+                h.createUpdate("""
+                    INSERT INTO categories (name, description, parent_id, is_visible, created_at, updated_at) 
+                    VALUES (:name, :description, :parentId, 1, NOW(), NOW())
                 """)
-                            .bind("name", name)
-                            .bind("description", description)
-                            .executeAndReturnGeneratedKeys("id")
-                            .mapTo(Integer.class)
-                            .one() // Dùng .one(): phải có đúng 1 kq -> JDBI sẽ ném Exception
-            );
-        } catch (Exception e) {
-            e.printStackTrace();
-            return -1;
-        }
+                        .bind("name", name)
+                        .bind("description", description)
+                        .bind("parentId", parentId)
+                        .executeAndReturnGeneratedKeys("id")
+                        .mapTo(Integer.class)
+                        .one()
+        );
     }
 
+    // hàm này lấy cây danh mục lưu thành list
     public List<Categories> getCategoryTree() {
         List<Categories> parents = getCategoriesParent();
         for (Categories parent : parents) {
-            List<Categories> children =
-                    getCategoriesByParentId(parent.getId());
+            // Chỉ lấy con của những danh mục đang hiển thị
+            List<Categories> children = get().withHandle(h ->
+                    h.createQuery("SELECT * FROM categories WHERE parent_id = :pid AND is_visible = 1")
+                            .bind("pid", parent.getId())
+                            .mapToBean(Categories.class)
+                            .list()
+            );
             parent.setChildren(children);
         }
         return parents;
+    }
+
+    // thêm hàm cập nhật danh mục
+    public boolean updateCategory(Categories cat) {
+        return get().withHandle(h ->
+                h.createUpdate("""
+                    UPDATE categories 
+                    SET name = :name, description = :description, 
+                        parent_id = :parentId, is_visible = :isVisible, updated_at = NOW() 
+                    WHERE id = :id
+                """)
+                        .bindBean(cat)
+                        .execute() > 0
+        );
     }
 }

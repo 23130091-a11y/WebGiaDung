@@ -1,4 +1,4 @@
-package com.webgiadung.webgiadung.controller.cart;
+package com.webgiadung.webgiadung.controller;
 
 import com.webgiadung.webgiadung.model.Product;
 import com.webgiadung.webgiadung.model.Slide; // Giả định bạn có model Slide

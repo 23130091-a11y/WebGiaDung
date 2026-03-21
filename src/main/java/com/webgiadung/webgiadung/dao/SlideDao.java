@@ -30,8 +30,8 @@ public class SlideDao extends BaseDao{
     public static int insert(Slide slide) {
         return get().withHandle(handle -> {
             return handle.createUpdate(
-                            "INSERT INTO slides (name, avatar, text, status, created_at, updated_at) " +
-                                    "VALUES (:name, :avatar, :text, :status, NOW(), NOW())"
+                            "INSERT INTO slides (title, banner, description, status, created_at, updated_at) " +
+                                    "VALUES (:title, :banner, :description, :status, NOW(), NOW())"
                     )
                     .bindBean(slide)
                     .execute();

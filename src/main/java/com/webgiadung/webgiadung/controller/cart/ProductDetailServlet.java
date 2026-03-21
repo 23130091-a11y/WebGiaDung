@@ -9,20 +9,34 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-
+// lấy id sản phẩm được chọn và hiển thị chi tiết
 @WebServlet(name = "ProductDetailServlet", value = "/product-detail")
 public class ProductDetailServlet extends HttpServlet {
+    private final ProductService productService = new ProductService();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        ProductService productService = new ProductService();
-        Product product = productService.getProductFullInfo(id);
-        if (product != null) {
-            request.setAttribute("product", product);
-            request.getRequestDispatcher("/product.jsp").forward(request, response);
-        } else {
+        String idRaw = request.getParameter("id");
+
+        // kiểm tra id
+        if (idRaw == null || idRaw.trim().isEmpty()) {
+            response.sendRedirect("index.jsp");
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(idRaw.trim());
+            Product product = productService.getProductFullInfo(id);
+
+            if (product != null) {
+                request.setAttribute("product", product);
+                request.getRequestDispatcher("/product.jsp").forward(request, response);
+            } else {
+                response.sendRedirect("index.jsp");
+            }
+        } catch (NumberFormatException e) {
             response.sendRedirect("index.jsp");
         }
+
     }
 
     @Override

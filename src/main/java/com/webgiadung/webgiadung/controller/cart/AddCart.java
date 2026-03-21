@@ -1,7 +1,5 @@
 package com.webgiadung.webgiadung.controller.cart;
 
-import com.webgiadung.webgiadung.dao.CartDao;
-import com.webgiadung.webgiadung.dao.CartItemDao;
 import com.webgiadung.webgiadung.model.Cart;
 import com.webgiadung.webgiadung.model.CartItem;
 import com.webgiadung.webgiadung.model.Product;
@@ -21,11 +19,13 @@ import java.text.DecimalFormat;
 @WebServlet(name = "AddCart", value = "/add-cart")
 public class AddCart extends HttpServlet {
 
-    private boolean isAjax(HttpServletRequest req) {
-        String x = req.getHeader("X-Requested-With");
-        return "XMLHttpRequest".equalsIgnoreCase(x) || "1".equals(req.getParameter("ajax"));
+    // hàm xác định có trả về json để ajax xử lý không
+    private boolean isAjax(HttpServletRequest request) {
+        String x = request.getHeader("X-Requested-With");
+        return "XMLHttpRequest".equalsIgnoreCase(x) || "1".equals(request.getParameter("ajax"));
     }
 
+    // set các thông số để trình duyệt hiểu đây là dl json
     private void writeJson(HttpServletResponse resp, int status, String json) throws IOException {
         resp.setStatus(status);
         resp.setContentType("application/json");
@@ -35,6 +35,7 @@ public class AddCart extends HttpServlet {
         out.flush();
     }
 
+    // chuyển đổi các ký tự của html thành các chuỗi đại diện để tránh lỗi giao diện
     private static String htmlEscape(String s) {
         if (s == null) return "";
         return s.replace("&", "&amp;")
@@ -44,6 +45,7 @@ public class AddCart extends HttpServlet {
                 .replace("'", "&#39;");
     }
 
+    // biến đoạn mã html thành chuỗi hợp lệ đưa vào gói json
     private static String jsonEscape(String s) {
         if (s == null) return "";
         StringBuilder sb = new StringBuilder(s.length() + 16);
@@ -63,7 +65,7 @@ public class AddCart extends HttpServlet {
         return sb.toString();
     }
 
-    /** Build lại HTML dropdown mini-cart để client update ngay (không cần reload). */
+    /* build drop down cart */
     private String buildMiniCartHtml(HttpServletRequest request, Cart cart) {
         String ctx = request.getContextPath();
         if (cart == null || cart.getItems() == null || cart.getItems().isEmpty()) {
@@ -89,7 +91,7 @@ public class AddCart extends HttpServlet {
             int pid = p.getId();
 
             String name = htmlEscape(p.getName());
-            String img = htmlEscape(p.getImage()); // tên file (xxx.jpg / xxx.png)
+            String img = htmlEscape(p.getImage()); // tên file ảnh .jpg, .png
             String cate = String.valueOf(p.getCategoriesId());
 
             String totalPrice;
@@ -139,7 +141,7 @@ public class AddCart extends HttpServlet {
         HttpSession session = request.getSession();
         boolean ajax = isAjax(request);
 
-        // 1) check login
+        // kiểm tra user đăng nhập
         User user = (User) session.getAttribute("user");
         if (user == null) {
             if (ajax) writeJson(response, HttpServletResponse.SC_UNAUTHORIZED, "{\"status\":\"unauthorized\"}");
@@ -147,7 +149,7 @@ public class AddCart extends HttpServlet {
             return;
         }
 
-        // 2) validate params
+        // lấy tham số đầu vào
         int productId;
         int quantity = 1;
 
@@ -161,14 +163,24 @@ public class AddCart extends HttpServlet {
         }
 
         try { quantity = Integer.parseInt(request.getParameter("quantity")); }
-        catch (Exception ignored) { }
+        catch (NumberFormatException e) {
+            if (ajax) {
+                // gửi mã lỗi 400
+                writeJson(response, HttpServletResponse.SC_BAD_REQUEST,
+                        "{\"status\":\"error\", \"message\":\"Số lượng phải là số nguyên dương!\"}");
+            } else {
+                // báo lỗi
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Số lượng không hợp lệ");
+                return;
+            }
+        };
         if (quantity <= 0) quantity = 1;
 
-        // 3) get/create cart in session
+        // lấy, tạo giỏ hàng từ session
         Cart cart = (Cart) session.getAttribute("cart");
         if (cart == null) cart = new Cart();
 
-        // 4) get product
+        // lấy sp có id
         ProductService productService = new ProductService();
         Product product = productService.getProductFullInfo(productId);
         if (product == null) {
@@ -178,18 +190,11 @@ public class AddCart extends HttpServlet {
             return;
         }
 
-        // 5) add to session cart
+        // thêm vào giỏ hàng
         cart.addItem(product, quantity);
         session.setAttribute("cart", cart);
 
-        // 6) save to DB
-        CartDao cartDao = new CartDao();
-        CartItemDao itemDao = new CartItemDao();
-        int cartId = cartDao.getOrCreateCartId(user.getId());
-        itemDao.addOrInc(cartId, productId, quantity);
-        session.setAttribute("CART_ID", cartId);
-
-        // 7) response
+        // trả về cập nhật giỏ hàng sau khi thêm
         if (ajax) {
             String miniHtml = buildMiniCartHtml(request, cart);
             writeJson(response, HttpServletResponse.SC_OK,

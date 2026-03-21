@@ -40,7 +40,7 @@ public class AddCategoriesController extends HttpServlet {
 
             // 4. Gọi Service để lưu vào Database
             // Giả sử hàm insertCategory trả về ID (int) của dòng vừa thêm
-            int resultId = categoriesService.insertCategory(cateName, cateDesc);
+            int resultId = categoriesService.insertCategory(cateName, cateDesc, 0);
 
             // DEBUG: Kiểm tra ID sau khi lưu
             System.out.println("DEBUG CATEGORY - ID sau lưu: " + resultId);

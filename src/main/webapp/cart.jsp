@@ -47,99 +47,98 @@
     <main class="main" style=" background-color: #ffff; padding: 20px 0;">
         <div class="grid wide">
             <div class="cart-container">
-                <!-- Header -->
                 <c:set var="cart" value="${sessionScope.cart}" />
-                <div class="cart-header flex">
-                    <div class="colum product-col">Sản phẩm</div>
-                    <div class="colum price-col">Đơn giá</div>
-                    <div class="colum qty-col">Số lượng</div>
-                    <div class="colum total-col">Số tiền</div>
-                    <div class="colum action-col">Thao tác</div>
-                </div>
-                <!-- cart list product theo ngày -->
-                <c:forEach var="entry" items="${itemsByDate}">
-                    <div class="shop-block">
-                        <div class="shop-title flex">
-                            <input type="checkbox" class="shop-checkbox">
-                            <span class="date-add">${entry.key}</span>
+                    <c:choose>
+                        <!-- TH giỏ hàng trống -->
+                    <c:when test="${empty cart.items}">
+                        <div class="empty-cart-style" style="text-align: center; padding: 50px;">
+                            <img src="assets/img/empty-cart.png" alt="Empty" style="width: 200px;">
+                            <p>Giỏ hàng của bạn đang trống.</p>
+                            <a href="index.jsp" class="buy-btn">Mua sắm ngay</a>
                         </div>
-                        <!-- Cart Items -->
-                        <c:forEach var="item" items="${entry.value}">
-                            <div class="cart-item flex"
-                                 id="product-row-${item.product.id}"
-                                 data-subtotal="${item.totalPrice}"
-                                 data-qty="${item.quantity}">
-                                <div class="colum product-col flex">
-                                    <input type="checkbox"
-                                           class="item-checkbox"
-                                           value="${item.product.id}"
-                                           data-id="${item.product.id}">
-                                    <a href="${pageContext.request.contextPath}/product?id=${item.product.id}">
-                                        <img src="${pageContext.request.contextPath}/assets/img/products/${item.product.image}">
-                                    </a>
-                                    <a href="${pageContext.request.contextPath}/product?id=${item.product.id}">
-                                        <div class="item-info">
-                                            <p>${item.product.name}</p>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="colum price-col">
-                                    <div class="price-wrapper ">
-                                        <div class="old-price-box">
-                                            <span class="old-price">${item.originalPrice} đ</span>
-                                            <div class="price-discount">Discount </div>
-                                        </div>
-                                        <div class="new-price-box">
-                                            <div class="new-price-row">
-                                                <span class="new-price">${item.discountPrice}</span>
-                                                <span class="currency">đ</span>
+                    </c:when>
+                    <!-- TH có sản phẩm -->
+                    <c:otherwise>
+                        <!-- Header -->
+                        <div class="cart-header flex">
+                            <div class="colum product-col">Sản phẩm</div>
+                            <div class="colum price-col">Đơn giá</div>
+                            <div class="colum qty-col">Số lượng</div>
+                            <div class="colum total-col">Số tiền</div>
+                            <div class="colum action-col">Thao tác</div>
+                        </div>
+                        <div class="shop-block">
+                            <!-- Cart Items -->
+                            <c:forEach var="item" items="${cart.items}">
+                                <div class="cart-item flex"
+                                     id="product-row-${item.product.id}"
+                                     data-subtotal="${item.totalPrice}"
+                                     data-qty="${item.quantity}">
+                                    <div class="colum product-col flex">
+                                        <input type="checkbox"
+                                               class="item-checkbox"
+                                               value="${item.product.id}">
+                                        <a href="${pageContext.request.contextPath}/product?id=${item.product.id}">
+                                            <img src="${pageContext.request.contextPath}/assets/img/products/${item.product.image}">
+                                        </a>
+                                        <a href="${pageContext.request.contextPath}/product?id=${item.product.id}">
+                                            <div class="item-info">
+                                                <p>${item.product.name}</p>
                                             </div>
-                                            <div class="price-note">Đã cập nhật</div>
+                                        </a>
+                                    </div>
+
+                                    <div class="colum price-col">
+                                        <div class="price-wrapper ">
+                                            <div class="old-price-box">
+                                                <fmt:formatNumber value="${item.originalPrice}" type="number"/> đ
+                                            </div>
+                                            <div class="new-price-box">
+                                                <span class="new-price" id="price-${item.product.id}">
+                                                    <fmt:formatNumber value="${item.discountPrice}" type="number"/>
+                                                </span> đ
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <!-- Quantity -->
-                                <div class="colum qty-col item-qty">
-                                    <button type="button" onclick="handleUpdate(${item.product.id}, 'dec')">-</button>
-                                    <input class="text" type="text" id="qty-input-${item.product.id}" value="${item.quantity}" readonly>
-                                    <button type="button" onclick="handleUpdate(${item.product.id}, 'inc')">+</button>
-                                </div>
+                                    <!-- Quantity -->
+                                    <div class="colum qty-col item-qty">
+                                        <button type="button" onclick="handleUpdate(${item.product.id}, 'dec')">-</button>
+                                        <input class="text" type="text" id="qty-input-${item.product.id}" value="${item.quantity}" readonly>
+                                        <button type="button" onclick="handleUpdate(${item.product.id}, 'inc')">+</button>
+                                    </div>
 
-                                <!-- Total -->
-                                <div class="colum total-col">
-                                    <span id="subtotal-${item.product.id}">
-                                        <fmt:formatNumber value="${item.totalPrice}" type="number"/>
-                                    </span>
-                                    <span class="currency">đ</span>
-                                </div>
+                                    <!-- Total -->
+                                    <div class="colum total-col">
+                                        <span id="subtotal-${item.product.id}">
+                                            <fmt:formatNumber value="${item.totalPrice}" type="number"/>
+                                        </span> đ
+                                    </div>
 
-                                <!-- Action -->
-                                <div class="colum action-col">
-                                    <button type="button" class="item-delete" onclick="deleteItem(${item.product.id})">Xóa</button>
+                                    <!-- Action -->
+                                    <div class="colum action-col">
+                                        <button type="button" class="item-delete" onclick="deleteItem(${item.product.id})">Xóa</button>
+                                    </div>
                                 </div>
+                            </c:forEach>
+                        </div>
+                        <!-- Footer -->
+                        <div class="cart-footer flex">
+                            <input type="checkbox" id="select-all" class="select-all-footer"> Chọn tất cả
+                            <button type="button" class="footer-btn"onclick="deleteSelected()">Xóa</button>
+                            <button type="button" class="footer-btn">Lưu vào mục yêu thích</button>
+
+                            <div class="cart-summary">
+                                Tổng cộng (<span id="cart-qty-total" class="total-items">${cart.totalQuantity}</span> sản phẩm):
+                                <span id="cart-grand-total" class="total-price">
+                                    <fmt:formatNumber value="${cart.totalPrice}" type="number"/> đ
+                                </span>
                             </div>
-                        </c:forEach>
-                    </div>
-                </c:forEach>
-                <!-- Footer -->
-                <div class="cart-footer flex">
-                    <input type="checkbox" class="select-all-footer"> Chọn tất cả
-                    <button type="button" class="footer-btn"onclick="deleteSelected()">Xóa</button>
-                    <button type="button" class="footer-btn">Lưu vào mục yêu thích</button>
 
-                    <div class="cart-summary">
-                        Tổng cộng (<span id="cart-qty-total" class="total-items">${cart.totalQuantity}</span> sản phẩm):
-                        <span id="cart-grand-total" class="total-price">
-                            <fmt:formatNumber value="${cart.totalPrice}" type="number"/> đ
-                        </span>
-                    </div>
-
-                    <button type="button" class="buy-btn" onclick="checkoutSelected()">Thanh toán</button>
-                </div>
-                <p class="empty-message">
-                    Không có sản phẩm nào trong giỏ hàng
-                </p>
+                            <button type="button" class="buy-btn" onclick="checkoutSelected()">Thanh toán</button>
+                        </div>
+                    </c:otherwise>
+                    </c:choose>
             </div>
 
             <div class="featured-list">
@@ -369,23 +368,22 @@
 
 <script>
 
-function goCheckoutSelected() {
-    const checked = Array.from(document.querySelectorAll('.item-checkbox:checked'))
-        .map(cb => cb.value);
+    function goCheckoutSelected() {
+        const checked = Array.from(document.querySelectorAll('.item-checkbox:checked'))
+            .map(cb => cb.value);
 
-    const base = '${pageContext.request.contextPath}/checkout';
+        const base = '${pageContext.request.contextPath}/checkout';
 
-    // Không chọn gì => checkout tất cả
-    if (checked.length === 0) {
-        window.location.href = base;
-        return;
+        // Không chọn gì => checkout tất cả
+        if (checked.length === 0) {
+            window.location.href = base;
+            return;
+        }
+        // Có chọn => gửi ids
+        window.location.href = base + '?ids=' + checked.join(',');
     }
-    // Có chọn => gửi ids
-    window.location.href = base + '?ids=' + checked.join(',');
-}
 
-
-    // Tăng giảm
+    // update
     function handleUpdate(pId, actionType) {
         const params = new URLSearchParams();
         params.append('productId', pId);
@@ -406,7 +404,6 @@ function goCheckoutSelected() {
                 document.getElementById('qty-input-' + pId).value = data.newQuantity;
                 document.getElementById('subtotal-' + pId).innerText = data.newSubtotal.toLocaleString('vi-VN');
 
-                // update dataset để tính tổng theo checkbox
                 const row = document.getElementById('product-row-' + pId);
                 if (row) {
                     row.dataset.subtotal = data.newSubtotal;
@@ -421,7 +418,7 @@ function goCheckoutSelected() {
             const headerCartNotify = document.querySelector('#headerCartQty') || document.querySelector('.header__cart-notice');
             if (headerCartNotify) headerCartNotify.innerText = data.cartQty;
 
-            // tính lại tổng theo checkbox
+            // tính lại tổng tiền
             recalcSelectedTotals();
         })
         .catch(err => console.error('Lỗi Cart:', err));
@@ -433,47 +430,53 @@ function goCheckoutSelected() {
 
         const params = new URLSearchParams();
         params.append('productId', pId);
-        params.append('ajax', '1');
+        params.append('ajax', '1'); // yêu cầu này là ajax (tự đặt)
 
+        // gửi yêu cầu lên server đến đường dẫn /delete-cart
         fetch('${pageContext.request.contextPath}/delete-cart', {
             method: 'POST',
             body: params,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'X-Requested-With': 'XMLHttpRequest'
+                'X-Requested-With': 'XMLHttpRequest' // yêu cầu ajax
             }
         })
         .then(r => r.json())
         .then(data => {
+            // xóa
             const row = document.getElementById('product-row-' + pId);
             if (row) row.remove();
 
+            // cập nhật tổng số sản phẩm
             const headerCartNotify = document.querySelector('.header__cart-notice');
             if (headerCartNotify) headerCartNotify.innerText = data.cartQty;
 
+            // tính lại tổng tiền
             recalcSelectedTotals();
 
             if (data.cartQty === 0) location.reload();
         })
         .catch(err => console.error('Lỗi xóa sản phẩm:', err));
     }
-function recalcSelectedTotals() {
-   const checked = document.querySelectorAll('.item-checkbox:checked');
-   let total = 0;
-   let qty = 0;
 
-   checked.forEach(cb => {
-     const id = cb.dataset.id || cb.value;
-     const row = document.getElementById('product-row-' + id);
-     if (!row) return;
+    // hàm cập nhật tổng tiền và tổng số lượng sau mỗi lần update và xóa
+    function recalcSelectedTotals() {
+       const checked = document.querySelectorAll('.item-checkbox:checked');
+       let total = 0;
+       let qty = 0;
 
-     total += Number(row.dataset.subtotal || 0);
-     qty += Number(row.dataset.qty || 0);
-   });
+       checked.forEach(cb => {
+         const id = cb.dataset.id || cb.value;
+         const row = document.getElementById('product-row-' + id);
+         if (!row) return;
 
-   document.getElementById('cart-grand-total').innerText = total.toLocaleString('vi-VN') + ' đ';
-   document.getElementById('cart-qty-total').innerText = qty;
- }
+         total += Number(row.dataset.subtotal || 0);
+         qty += Number(row.dataset.qty || 0);
+       });
+
+       document.getElementById('cart-grand-total').innerText = total.toLocaleString('vi-VN') + ' đ';
+       document.getElementById('cart-qty-total').innerText = qty;
+     }
 
 document.addEventListener('change', function(e){
   if (e.target.classList.contains('item-checkbox')) {
@@ -566,7 +569,8 @@ function deleteSelected() {
 
 </script>
 
-    <script src="assets/js/script.js"></script>
+<script src="assets/js/script.js"></script>
+
 </body>
 
 </html>

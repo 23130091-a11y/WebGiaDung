@@ -1,10 +1,7 @@
 package com.webgiadung.webgiadung.controller.cart;
 
-import com.webgiadung.webgiadung.dao.CartDao;
-import com.webgiadung.webgiadung.dao.CartItemDao;
 import com.webgiadung.webgiadung.model.Cart;
 import com.webgiadung.webgiadung.model.CartItem;
-import com.webgiadung.webgiadung.model.User;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -37,53 +34,60 @@ public class UpdateCart extends HttpServlet {
         }
 
         HttpSession session = request.getSession();
+        // kiểm tra đăng nhập của thằng user
+        if (session.getAttribute("user") == null) {
+            if (isAjax(request)) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().print("{\"status\":\"unauthorized\"}");
+            } else {
+                response.sendRedirect(request.getContextPath() + "/login");
+            }
+            return;
+        }
+        // lấy cart từ session
         Cart cart = (Cart) session.getAttribute("cart");
         if (cart == null) cart = new Cart();
 
-        // update session cart
+        // update, inc là tăng, dec là giảm
         if ("inc".equals(action)) cart.increaseQuantity(productId);
         else if ("dec".equals(action)) cart.decreaseQuantity(productId);
 
+        // cập nhật lại session
         session.setAttribute("cart", cart);
 
-        int newQuantity = 0;
-        double newSubtotal = 0;
+        int newQuantity = 0; // số lượng mới
+        double newSubtotal = 0; // tổng tiền của riêng sp
+        boolean removed = true; // nếu ko tìm thấy sp trong ds cart => đơn bị xóa
 
         for (CartItem item : cart.getItems()) {
             if (item.getProduct().getId() == productId) {
                 newQuantity = item.getQuantity();
                 newSubtotal = item.getTotalPrice();
+                removed = false;
                 break;
             }
         }
 
-        double cartTotal = cart.getTotalPrice();
-        int cartQty = cart.getTotalQuantity();
+        double cartTotal = cart.getTotalPrice(); // tổng tiền tất cả sp
+        int cartQty = cart.getTotalQuantity(); // tổng số lượng
 
-        // sync DB nếu login
-        User user = (User) session.getAttribute("user");
-        if (user != null) {
-            Integer cartId = (Integer) session.getAttribute("CART_ID");
-            CartDao cartDao = new CartDao();
-            if (cartId == null) {
-                cartId = cartDao.getOrCreateCartId(user.getId());
-                session.setAttribute("CART_ID", cartId);
-            }
-
-            CartItemDao itemDao = new CartItemDao();
-            if (newQuantity <= 0) itemDao.deleteItem(cartId, productId);
-            else itemDao.setQuantity(cartId, productId, newQuantity);
-        }
-
-        // response
+        // trả về sau cập nhật dạng json
+        java.text.DecimalFormat df = new java.text.DecimalFormat("###,###");
         if (isAjax(request)) {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
+            StringBuilder json = new StringBuilder();
+            json.append("{");
+            json.append("\"status\":\"success\",");
+            json.append("\"newQuantity\":").append(newQuantity).append(",");
+            json.append("\"newSubtotal\":\"").append(df.format(newSubtotal)).append(" đ\",");
+            json.append("\"cartTotal\":\"").append(df.format(cart.getTotalPrice())).append(" đ\",");
+            json.append("\"cartQty\":").append(cart.getTotalQuantity()).append(",");
+            json.append("\"removed\":").append(removed);
+            json.append("}");
+
             PrintWriter out = response.getWriter();
-            out.print("{\"newQuantity\":" + newQuantity
-                    + ",\"newSubtotal\":" + newSubtotal
-                    + ",\"cartTotal\":" + cartTotal
-                    + ",\"cartQty\":" + cartQty + "}");
+            out.print(json.toString());
             out.flush();
         } else {
             response.sendRedirect(request.getContextPath() + "/cart");
